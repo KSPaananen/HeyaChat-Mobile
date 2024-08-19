@@ -1,0 +1,38 @@
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../App';
+
+type LeaderboardsPageRouteProp = RouteProp<RootStackParamList, "Leaderboards">;
+type LeaderboardsPageNavigationProp = StackNavigationProp<RootStackParamList, "Leaderboards">;
+
+type Props = {
+    route: LeaderboardsPageRouteProp;
+    navigation: LeaderboardsPageNavigationProp;
+};
+
+const LeaderboardsPage: React.FC<Props> = ({ navigation }) => {
+
+  const DoStuff = () => {
+    
+  }
+
+  return (
+    <View style={styles.container}>
+        <Text>Leaderboards</Text>
+        <Button title="Return" onPress={() => navigation.goBack()} />
+    </View>
+  );
+}
+
+export default LeaderboardsPage
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
