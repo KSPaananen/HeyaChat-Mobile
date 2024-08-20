@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../App';
+import { RootStackParamList } from '../../App';
 
 type HomePageNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 

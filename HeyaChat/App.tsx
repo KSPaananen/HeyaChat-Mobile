@@ -8,9 +8,9 @@ import HomePage from './components/HomePage/HomePage'
 import StatsPage from './components/StatsPage/StatsPage'
 import LeaderboardsPage from './components/Leaderboards/Leaderboards'
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
-  Stats: { username: string; };
+  Stats: { username: string };
   Leaderboards: undefined;
 };
 

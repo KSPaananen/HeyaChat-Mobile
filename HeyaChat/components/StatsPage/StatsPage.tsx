@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../App';
+import { RootStackParamList } from '../../App';
 
 type StatsPageRouteProp = RouteProp<RootStackParamList, "Stats">;
 type StatsPageNavigationProp = StackNavigationProp<RootStackParamList, "Stats">;
@@ -12,7 +12,7 @@ type Props = {
   navigation: StatsPageNavigationProp;
 };
 
-const StatsPage: React.FC<Props> = ({ route, navigation }) => {
+function StatsPage({ route, navigation }: Props) {
     const { username } = route.params
 
   const DoStuff = () => {
