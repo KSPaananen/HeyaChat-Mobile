@@ -1,7 +1,7 @@
 import { Text, View, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/native'
-import { styles } from '../../assets/styles/styles'
+import { modals } from '../../assets/styles/styles'
 
 export default function UserDetailsModal() {
   const navigation = useNavigation()
@@ -14,11 +14,19 @@ export default function UserDetailsModal() {
     navigation.navigate("Users", { screen: "DirectMessagePage"})
   }
 
+  function EvaluatePress() {
+    navigation.getParent()?.goBack();
+    
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={modals.shadow}>
+      <View style={modals.modal}>
         <Text>User details modal</Text>
         <Button title="Send a message" onPress={() => Navigate()} />
         <Button title="Add friend" />
+        <Button title="Return" onPress={() => navigation.goBack()} />
+      </View>
     </View>
   );
 }

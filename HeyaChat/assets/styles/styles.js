@@ -1,12 +1,102 @@
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 15,
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingTop: 20,
+  },
+  })
+
+export const modals = StyleSheet.create({
+  shadow: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     },
-  });
-  
+  modal: {
+    flex: 1,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#000000',
+    backgroundColor: '#fff',
+    marginTop: 60,
+    marginRight: 25,
+    marginBottom: 60,
+    marginLeft: 25,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+  },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    top: 100,
+    right:10,
+    bottom: 10,
+    left: 0,
+
+  },
+  title: {
+    alignItems: 'flex-start',
+    fontFamily: '',
+    fontSize: 25,
+    fontWeight: 'bold',
+    padding: 5,
+    paddingBottom: 10
+  },
+  closingIcon: {
+    borderRadius: 100,
+    height: 55,
+    width: 55,
+    top: -120,
+    right: -300,
+  }
+})
+
+export const summaryCard = StyleSheet.create({
+  card: {
+    borderRadius: 5,
+    margin: 5,
+    padding: 5,
+    height: 65,
+    backgroundColor: '#0011',
+  },
+  cardItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  itemLeft: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  itemMiddle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  itemRight: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  text: {
+    fontFamily: '',
+    fontSize: 16,
+    paddingTop: 5,
+    paddingRight: 0,
+    paddingBottom: 0,
+    paddingLeft: 5
+  },
+  icon: {
+    height: 50,
+    width: 50,
+    marginRight: 5,
+    borderRadius: 100,
+  }
+})
