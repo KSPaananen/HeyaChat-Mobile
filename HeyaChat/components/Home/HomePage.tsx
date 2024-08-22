@@ -7,6 +7,9 @@ export default function HomePage() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.overlay}>
+        
+      </View>
         <Text>Home page</Text>
         <Text>Here you can see names or characters of the people you've met and 
           click them individually to see more details or click on summary to see them in a list.</Text>

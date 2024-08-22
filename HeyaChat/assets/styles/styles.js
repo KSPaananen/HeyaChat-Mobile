@@ -8,7 +8,11 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 20,
   },
-  })
+  overlay: {
+    position: 'absolute',
+    
+  },
+})
 
 export const modals = StyleSheet.create({
   shadow: {
@@ -33,11 +37,6 @@ export const modals = StyleSheet.create({
   overlay: {
     flex: 1,
     position: 'absolute',
-    top: 100,
-    right:10,
-    bottom: 10,
-    left: 0,
-
   },
   title: {
     alignItems: 'flex-start',
@@ -51,8 +50,8 @@ export const modals = StyleSheet.create({
     borderRadius: 100,
     height: 55,
     width: 55,
-    top: -205,
-    right: -295,
+    top: -106,
+    right: -293
   }
 })
 

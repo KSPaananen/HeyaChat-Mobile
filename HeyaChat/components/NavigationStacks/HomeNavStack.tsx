@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 
 import HomePage from '../Home/HomePage'
-import SummaryModal from '../Home/SummaryModal'
+import SummaryModal from '../Summary/SummaryModal'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
 
 const Stack = createStackNavigator();
