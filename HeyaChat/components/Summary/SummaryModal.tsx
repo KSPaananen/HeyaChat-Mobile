@@ -4,7 +4,7 @@ import { modals } from '../../assets/styles/styles'
 
 import SummaryCard from './SummaryCard'
 
-export default function SummaryPage() {
+export default function SummaryModal() {
   const navigation = useNavigation()
 
   let titles: string[] = [

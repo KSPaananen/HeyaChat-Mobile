@@ -2,7 +2,7 @@ import { Text, View, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { styles } from '../../assets/styles/styles'
 
-export default function StatsPage() {
+export default function ProfilePage() {
   const navigation = useNavigation()
 
   return (

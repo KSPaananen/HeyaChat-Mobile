@@ -1,10 +1,13 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
-import { Button } from 'react-native'
+import { Button, Image, TouchableOpacity, View } from 'react-native'
+import { TextInput } from "react-native-paper"
+import { header } from '../../assets/styles/styles'
 
 import UsersPage from '../Users/UsersPage'
 import DirectMessagePage from '../Users/DirectMessagePage'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
+import UserDetailsPage from '../UserDetails/UserDetailsPage'
 import UserSearchModal from '../Search/SearchModal'
 
 // Test
@@ -15,13 +18,26 @@ const Stack = createStackNavigator()
 export default function UsersNavStack() {
     const navigation = useNavigation()
 
+    function onSubmit(text: string) {
+
+    }
+
     return (
         <Stack.Navigator>
             <Stack.Group>
                 <Stack.Screen name="UsersSubNavStack" component={UsersSubNavStack} options={{
                     headerTitle: "Users",
                     headerRight: () => (
-                        <Button title="Search" onPress={() => navigation.navigate("UserSearchModal")} />
+                        <View style={header.headerRight}>
+                            <TextInput style={header.input}
+                            dense
+                            mode="outlined"
+                            activeOutlineColor="#0330fc"
+                            placeholder="Search" 
+                            right={<TextInput.Icon icon="eye" style={header.inputIcon} />} 
+                            onSubmitEditing={(value) => onSubmit(value.nativeEvent.text)}
+                            />
+                        </View>
                     ),
                 }}/>
             </Stack.Group>
@@ -34,7 +50,7 @@ export default function UsersNavStack() {
                         <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage")}/>
                     ),
                 }}/>
-                <Stack.Screen name="UserDetailsPage" component={UserDetailsModal} options={{
+                <Stack.Screen name="UserDetailsPage" component={UserDetailsPage} options={{
                     headerTitle: "Username's details (page)",
                 }}/>
             </Stack.Group>

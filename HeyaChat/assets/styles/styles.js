@@ -3,8 +3,6 @@ import { StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#fff',
     paddingTop: 20,
   },
@@ -12,6 +10,28 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     
   },
+})
+
+export const header = StyleSheet.create({
+  headerRight: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    fontSize: 15,
+    backgroundColor: '#0011',
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    backgroundColor: '#0011',
+  },
+  inputIcon: {
+    
+  }
 })
 
 export const modals = StyleSheet.create({
@@ -40,7 +60,6 @@ export const modals = StyleSheet.create({
   },
   title: {
     alignItems: 'flex-start',
-    fontFamily: '',
     fontSize: 25,
     fontWeight: 'bold',
     padding: 5,
@@ -85,7 +104,6 @@ export const summaryCard = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    fontFamily: '',
     fontSize: 16,
     paddingTop: 5,
     paddingRight: 0,
@@ -95,7 +113,64 @@ export const summaryCard = StyleSheet.create({
   icon: {
     height: 50,
     width: 50,
-    marginRight: 5,
+    marginRight: 7.5,
     borderRadius: 100,
+  }
+})
+
+export const userCard = StyleSheet.create({
+  card: {
+    borderRadius: 5,
+    marginTop: 5,
+    height: 75,
+    backgroundColor: '#0011',
+  },
+  cardItem: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  itemLeft: {
+    flex: 0.4,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  itemMiddle: {
+    flex: 1.3,
+    paddingLeft: 5,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  itemRight: {
+    flex: 0.4,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  title: {
+    fontSize: 18,
+    paddingTop: 5,
+  },
+  status: {
+    fontSize: 10,
+    paddingTop: 5,
+    fontStyle: 'italic'
+  },
+  text: {
+    fontSize: 13,
+    paddingTop: 0
+  },
+  icon: {
+    borderRadius: 100,
+    height: 60,
+    width: 60,
+    marginTop: 7.5,
+    marginLeft: 7.5,
+  },
+  dmIcon: {
+    borderRadius: 5,
+    height: 75,
+    width: 60,
   }
 })
