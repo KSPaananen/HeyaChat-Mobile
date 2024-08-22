@@ -51,8 +51,8 @@ export const modals = StyleSheet.create({
     borderRadius: 100,
     height: 55,
     width: 55,
-    top: -120,
-    right: -300,
+    top: -205,
+    right: -295,
   }
 })
 

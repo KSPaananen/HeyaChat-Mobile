@@ -13,7 +13,6 @@ export default function SummaryPage() {
 
   // Evaluate whre user pressed
   function EvaluatePress(id: string) {
-    console.log(id)
     if (id == "shadow") {
       navigation.goBack()
     } else if (id == "close") {
@@ -30,13 +29,14 @@ export default function SummaryPage() {
               <Text style={modals.title}>{titles[0]}</Text>
             </View>
             <View>
+              <View style={modals.overlay}>
+                <TouchableOpacity  onPress={() => EvaluatePress("close")}>
+                  <Image style={modals.closingIcon} source={require('../../assets/icons/icon.png')} />
+                </TouchableOpacity>
+              </View>
               <SummaryCard />
             </View>
-            <View style={modals.overlay}>
-              <TouchableOpacity hitSlop={{top: 25, right: 25, bottom: 25, left: 25 }} onPress={() => EvaluatePress("close")}>
-                <Image style={modals.closingIcon} source={require('../../assets/icons/icon.png')} />
-              </TouchableOpacity>
-            </View>
+            
           </View>
         </TouchableWithoutFeedback>
       </View>
