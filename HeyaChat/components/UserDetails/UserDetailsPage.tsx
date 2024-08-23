@@ -7,7 +7,7 @@ export default function UserDetailsPage() {
 
   return (
     <View style={styles.container}>
-        <Text>User details page1</Text>
+        <Text>User details page</Text>
         <Button title="Send a message" onPress={() => navigation.navigate("Users", { screen: "DirectMessagePage"})} />
         <Button title="Add friend" />
     </View>

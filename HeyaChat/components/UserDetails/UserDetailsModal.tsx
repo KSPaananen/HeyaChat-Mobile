@@ -1,4 +1,4 @@
-import { Text, View, Button } from 'react-native'
+import { Text, View, Button, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/native'
 import { modals } from '../../assets/styles/styles'
@@ -14,19 +14,29 @@ export default function UserDetailsModal() {
     navigation.navigate("Users", { screen: "DirectMessagePage"})
   }
 
-  function EvaluatePress() {
-    navigation.getParent()?.goBack();
+  function EvaluatePress(close: boolean) {
+    if (close) {
+      navigation.getParent()?.goBack();
+    }
     
   }
 
   return (
-    <View style={modals.shadow}>
-      <View style={modals.modal}>
-        <Text>User details modal</Text>
-        <Button title="Send a message" onPress={() => Navigate()} />
-        <Button title="Add friend" />
-        <Button title="Return" onPress={() => navigation.goBack()} />
+    <TouchableWithoutFeedback onPress={() => EvaluatePress(true)}>
+      <View style={modals.shadow}>
+        <TouchableWithoutFeedback onPress={() => EvaluatePress(false)}>
+          <View style={modals.modal}>
+            <Text>User details modal</Text>
+            <Button title="Send a message" onPress={() => Navigate()} />
+            <Button title="Add friend" />
+            <View style={modals.ol}>
+              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => EvaluatePress(true)}>
+                <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }

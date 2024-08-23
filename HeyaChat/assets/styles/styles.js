@@ -6,9 +6,18 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: 20,
   },
-  overlay: {
+  ol: {
+    flex: 1,
     position: 'absolute',
-    
+    width: 0,
+  },
+  olSummaryIcon: {
+    borderRadius: 100,
+    height: 150,
+    width: 45,
+    top: 650,
+    left: 10
+
   },
 })
 
@@ -54,10 +63,6 @@ export const modals = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 10,
   },
-  overlay: {
-    flex: 1,
-    position: 'absolute',
-  },
   title: {
     alignItems: 'flex-start',
     fontSize: 25,
@@ -65,12 +70,18 @@ export const modals = StyleSheet.create({
     padding: 5,
     paddingBottom: 10
   },
-  closingIcon: {
+  ol: { // Overlay
+    flex: 1,
+    position: 'absolute',
+    width: 0,
+  },
+  olExitIcon: {
+    flex: 1,
     borderRadius: 100,
     height: 55,
     width: 55,
-    top: -106,
-    right: -293
+    top: -18,
+    left: 322
   }
 })
 

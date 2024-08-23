@@ -6,16 +6,13 @@ import { userCard } from '../../assets/styles/styles'
 export default function UserCard() {
   const navigation = useNavigation()
 
-  function EvaluatePress(id: string) {
-    if (id == "UserDetails") {
-        navigation.navigate("UserDetailsPage")
-    } else if (id == "DirectMessage") {
-        navigation.navigate("DirectMessagePage")
-    }
+  function NavigateTo(destination: string) {
+    navigation.navigate(destination)
+
   }
 
   return (
-    <TouchableHighlight onPress={() => EvaluatePress("UserDetails")}>
+    <TouchableHighlight onPress={() => NavigateTo("UserDetailsPage")}>
       <View style={userCard.card}>
         <View style={userCard.cardItem}>
           <View style={userCard.itemLeft}>
@@ -27,7 +24,7 @@ export default function UserCard() {
             <Text style={userCard.text}>Last message</Text>
           </View>
           <View style={userCard.itemRight}>
-            <TouchableOpacity onPress={() => EvaluatePress("DirectMessage")}>
+            <TouchableOpacity onPress={() => NavigateTo("DirectMessagePage")}>
                 <Image style={userCard.dmIcon} source={require('../../assets/icons/icon.png')} />
             </TouchableOpacity>
           </View>

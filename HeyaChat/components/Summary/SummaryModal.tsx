@@ -12,31 +12,25 @@ export default function SummaryModal() {
   ]
 
   // Evaluate whre user pressed
-  function EvaluatePress(id: string) {
-    if (id == "shadow") {
-      navigation.goBack()
-    } else if (id == "close") {
+  function EvaluatePress(close: boolean) {
+    if (close) {
       navigation.goBack()
     }
+
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => EvaluatePress("shadow")}>
+    <TouchableWithoutFeedback onPress={() => EvaluatePress(true)}>
       <View style={modals.shadow}>
-        <TouchableWithoutFeedback onPress={() => EvaluatePress("modal")}>
+        <TouchableWithoutFeedback onPress={() => EvaluatePress(false)}>
           <View style={modals.modal}>
-            <View>
               <Text style={modals.title}>{titles[0]}</Text>
-            </View>
-            <View>
-              <View style={modals.overlay}>
-                <TouchableOpacity  onPress={() => EvaluatePress("close")}>
-                  <Image style={modals.closingIcon} source={require('../../assets/icons/icon.png')} />
-                </TouchableOpacity>
-              </View>
               <SummaryCard />
+              <View style={modals.ol}>
+              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => EvaluatePress(true)}>
+                <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />
+              </TouchableOpacity>
             </View>
-            
           </View>
         </TouchableWithoutFeedback>
       </View>

@@ -8,7 +8,7 @@ import UsersPage from '../Users/UsersPage'
 import DirectMessagePage from '../Users/DirectMessagePage'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
 import UserDetailsPage from '../UserDetails/UserDetailsPage'
-import UserSearchModal from '../Search/SearchModal'
+import SearchModal from '../Search/SearchModal'
 
 // Test
 import UsersSubNavStack from './UsersSubNavStack'
@@ -19,7 +19,8 @@ export default function UsersNavStack() {
     const navigation = useNavigation()
 
     function onSubmit(text: string) {
-
+        // Open up search modal with text parameter
+        navigation.navigate("SearchModal")
     }
 
     return (
@@ -58,7 +59,7 @@ export default function UsersNavStack() {
                 <Stack.Screen name="UserDetailsModal" component={UserDetailsModal} options={{
                     headerTitle: "Username's details (modal)",
                 }}/>
-                <Stack.Screen name="UserSearchModal" component={UserSearchModal} />
+                <Stack.Screen name="SearchModal" component={SearchModal} />
             </Stack.Group>
         </Stack.Navigator>
     )
