@@ -1,24 +1,31 @@
 import { createStackNavigator } from '@react-navigation/stack'
 
 import HomePage from '../Home/HomePage'
-import SummaryModal from '../Summary/SummaryModal'
+import SummaryModal from '../Home/Summary/SummaryModal'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
 
-const Stack = createStackNavigator();
+export type RootStackParams = {
+    HomePage: undefined
+    SummaryModal: undefined
+    UserDetailsModal: {
+        userId: string
+    }
+}
 
-export default function HomeNavStack() {
+const Stack = createStackNavigator<RootStackParams>();
+
+const HomeNavStack = () => {
     const MessagerNotifications = 0
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="HomePage">
             <Stack.Group screenOptions={{ headerShown: false }} >
                 <Stack.Screen name="HomePage" component={HomePage} />
             </Stack.Group>
             <Stack.Group screenOptions={{ 
                 headerShown: false,
                 presentation: "transparentModal" 
-                
-            }} >
+            }}>
                 <Stack.Screen name="SummaryModal" component={SummaryModal} options={{
                         headerTitle: "Summary of users seen",
                 }}/>
@@ -29,3 +36,5 @@ export default function HomeNavStack() {
         </Stack.Navigator>
     )
 }
+
+export default HomeNavStack
