@@ -5,7 +5,7 @@ import UsersPage from '../Users/UsersPage'
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function UsersSubNavStack() {
+const UsersSubNavStack = () => {
     const navigation = useNavigation()
 
     return (
@@ -19,3 +19,5 @@ export default function UsersSubNavStack() {
         </Tab.Navigator>
     )
 }
+
+export default UsersSubNavStack

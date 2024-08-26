@@ -2,7 +2,7 @@ import { Text, View, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
 import { styles } from '../../assets/styles/styles'
 
-export default function UserDetailsPage() {
+const UserDetailsPage = () => {
   const navigation = useNavigation()
 
   return (
@@ -13,3 +13,5 @@ export default function UserDetailsPage() {
     </View>
   );
 }
+
+export default UserDetailsPage

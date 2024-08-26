@@ -3,7 +3,7 @@ import { Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 
 import { useNavigation } from '@react-navigation/core'
 import { userCard } from '../../assets/styles/styles'
 
-export default function UserCard() {
+const UserCard = () => {
   const navigation = useNavigation()
 
   function NavigateTo(destination: string) {
@@ -33,3 +33,5 @@ export default function UserCard() {
     </TouchableHighlight>
   )
 }
+
+export default UserCard

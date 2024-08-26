@@ -7,8 +7,6 @@ type Props = NativeStackScreenProps<RootStackParams, "LeaderboardsPage">
 
 const LeaderboardsPage: React.FC<Props> = ({ navigation }) => {
 
-
-
   return (
     <View style={styles.container}>
         <Text>Leaderboards</Text>

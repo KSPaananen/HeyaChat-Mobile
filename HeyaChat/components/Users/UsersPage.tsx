@@ -4,7 +4,7 @@ import { styles } from '../../assets/styles/styles'
 
 import UserCard from './UserCard'
 
-export default function UserPage() {
+const UserPage = () => {
   const navigation = useNavigation()
 
   return (
@@ -13,3 +13,5 @@ export default function UserPage() {
     </View>
   );
 }
+
+export default UserPage

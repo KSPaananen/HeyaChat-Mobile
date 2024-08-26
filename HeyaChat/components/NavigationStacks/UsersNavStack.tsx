@@ -15,7 +15,7 @@ import UsersSubNavStack from './UsersSubNavStack'
 
 const Stack = createStackNavigator()
 
-export default function UsersNavStack() {
+const UsersNavStack = () => {
     const navigation = useNavigation()
 
     function onSubmit(text: string) {
@@ -64,3 +64,5 @@ export default function UsersNavStack() {
         </Stack.Navigator>
     )
 }
+
+export default UsersNavStack
