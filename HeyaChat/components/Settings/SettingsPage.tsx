@@ -1,9 +1,11 @@
 import { Text, View, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParams } from '../NavigationStacks/ProfileNavStack'
 import { styles } from '../../assets/styles/styles'
 
-export default function SettingsPage() {
-  const navigation = useNavigation()
+type Props = NativeStackScreenProps<RootStackParams, "SettingsPage">
+
+const SettingsPage: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
@@ -11,3 +13,5 @@ export default function SettingsPage() {
     </View>
   );
 }
+
+export default SettingsPage

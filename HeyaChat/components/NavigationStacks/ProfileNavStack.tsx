@@ -1,17 +1,26 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Button } from 'react-native'
 
 import ProfilePage from '../Profile/ProfilePage'
 import LeaderboardsPage from '../Leaderboards/LeaderboardsPage'
-import UserDetailsModal from '../UserDetails/UserDetailsModal'
 import LiteUserDetailsModal from '../UserDetails/LiteUserDetailsModal'
 import SettingsPage from '../Settings/SettingsPage'
 
-const Stack = createStackNavigator();
+export type RootStackParams = {
+    ProfilePage: undefined
+    LeaderboardsPage: undefined
+    SettingsPage: undefined
+    LiteUserDetailsModal: {
+        userId: string
+    }
+}
+
+const Stack = createStackNavigator<RootStackParams>();
 
 export default function HomeNavStack() {
-    const navigation = useNavigation()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
 
     return (
         <Stack.Navigator>
@@ -31,10 +40,7 @@ export default function HomeNavStack() {
                     headerTitle: "Settings",
                 }}/>
             <Stack.Group screenOptions={{ presentation: "modal" }} >
-                <Stack.Screen name="DetailsModal" component={UserDetailsModal} options={{
-                    headerTitle: "Username's details (modal)",
-                }}/>
-                <Stack.Screen name="LiteDetailsModal" component={LiteUserDetailsModal} options={{
+                <Stack.Screen name="LiteUserDetailsModal" component={LiteUserDetailsModal} options={{
                     headerTitle: "Username's details (liteModal)",
                 }}/>
             </Stack.Group>

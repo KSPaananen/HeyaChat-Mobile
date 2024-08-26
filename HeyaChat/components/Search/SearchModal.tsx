@@ -1,14 +1,19 @@
 import { Text, View, Button, TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParams } from '../NavigationStacks/UsersNavStack'
 import { styles } from '../../assets/styles/styles'
 
-export default function SearchModal() {
-  const navigation = useNavigation()
+type Props = NativeStackScreenProps<RootStackParams, "SearchModal">
+
+const SearchModal: React.FC<Props> = ({ route, navigation }) => {
+  const { query } = route.params
 
   return (
     <View style={styles.container}>
-        <Text>Search modal</Text>
-        <TextInput placeholder="A list of users matching search query" />
+        <Text>Search modal. Click on users to open modal</Text>
+        <Text>{query}</Text>
     </View>
   );
 }
+
+export default SearchModal

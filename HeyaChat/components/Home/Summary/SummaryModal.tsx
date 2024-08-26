@@ -11,15 +11,16 @@ export type summaryUser = {
   username: string
   dateMet: string
   title: string
+  icon: string
 }
 
 type Props = NativeStackScreenProps<RootStackParams, "SummaryModal">
 
-const SummaryModal= ({ navigation }: Props) => {
+const SummaryModal: React.FC<Props> = ({ navigation }) => {
   const usersList: summaryUser[] = [
-    { userId: "0", username: "username0", dateMet: "1/1/1111", title: "title0"},
-    { userId: "1", username: "username1", dateMet: "1/1/1111", title: "title1"},
-    { userId: "2", username: "username2", dateMet: "1/1/1111", title: "title2"}
+    { userId: "0", username: "username0", dateMet: "1/1/1111", title: "title0", icon: ""},
+    { userId: "1", username: "username1", dateMet: "1/1/1111", title: "title1", icon: ""},
+    { userId: "2", username: "username2", dateMet: "1/1/1111", title: "title2", icon: ""}
   ]
 
   const titles: string[] = [
