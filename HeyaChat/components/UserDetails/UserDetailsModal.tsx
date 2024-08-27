@@ -19,12 +19,12 @@ const UserDetailsModal: React.FC<Props> = ({ route, navigation }) => {
     // Reset Home to first page
     navigation.dispatch(StackActions.popToTop())
     // Navigate first to bottom page and then to direct messages to maintain navigation stack
-    navigation.navigate("Users", { screen: "UsersPage"})
+    navigation.navigate("Users", { screen: "UsersPage", userId: "0"})
     navigation.navigate("Users", { screen: "DirectMessagePage"})
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.getParent()?.goBack()}>
+    <TouchableWithoutFeedback onPress={() => navigation.dispatch(StackActions.popToTop())}>
       <View style={modals.shadow}>
         <TouchableWithoutFeedback>
           <View style={modals.modal}>
@@ -32,7 +32,7 @@ const UserDetailsModal: React.FC<Props> = ({ route, navigation }) => {
             <Button title="Send a message" onPress={() => Navigate()} />
             <Button title="Add friend" />
             <View style={modals.ol}>
-              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.getParent()?.goBack()}>
+              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.goBack()}>
                 <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />
               </TouchableOpacity>
             </View>

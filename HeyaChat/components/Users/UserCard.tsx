@@ -1,30 +1,31 @@
 import { useEffect } from 'react';
 import { Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
+import { user } from '../Users/UsersPage'
 import { userCard } from '../../assets/styles/styles'
 
-const UserCard = () => {
-  const navigation = useNavigation()
+interface Props {
+  user: user
+  onPress1: (userId: string) => void // "UserDetailsPage"
+  onPress2: (userId: string) => void // "DirectMessagePage"
+}
 
-  function NavigateTo(destination: string) {
-    navigation.navigate(destination)
-
-  }
+const UserCard: React.FC<Props> = ({user, onPress1, onPress2 }) => {
 
   return (
-    <TouchableHighlight onPress={() => NavigateTo("UserDetailsPage")}>
+    <TouchableHighlight onPress={() => onPress1 }>
       <View style={userCard.card}>
         <View style={userCard.cardItem}>
           <View style={userCard.itemLeft}>
             <Image style={userCard.icon} source={require('../../assets/icons/favicon.png')} />
           </View>
           <View style={userCard.itemMiddle}>
-            <Text style={userCard.title}>Profile name</Text>
-            <Text style={userCard.status}>Last seen: 13:08</Text>
-            <Text style={userCard.text}>Last message</Text>
+            <Text style={userCard.title}>{user.username}</Text>
+            <Text style={userCard.status}>Last message: {user.lastMessageDT}</Text>
+            <Text style={userCard.text}>{user.lastMessage}</Text>
           </View>
           <View style={userCard.itemRight}>
-            <TouchableOpacity onPress={() => NavigateTo("DirectMessagePage")}>
+            <TouchableOpacity onPress={() => onPress2}>
                 <Image style={userCard.dmIcon} source={require('../../assets/icons/icon.png')} />
             </TouchableOpacity>
           </View>
