@@ -19,8 +19,8 @@ const UserDetailsModal: React.FC<Props> = ({ route, navigation }) => {
     // Reset Home to first page
     navigation.dispatch(StackActions.popToTop())
     // Navigate first to bottom page and then to direct messages to maintain navigation stack
-    navigation.navigate("Users", { screen: "UsersPage", userId: "0"})
-    navigation.navigate("Users", { screen: "DirectMessagePage"})
+    navigation.navigate("Users", { screen: "UsersPage"})
+    navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: userId }})
   }
 
   return (

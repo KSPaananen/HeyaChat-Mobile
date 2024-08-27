@@ -1,11 +1,11 @@
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { useNavigation } from '@react-navigation/core'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { styles } from '../../assets/styles/styles'
 import { RootStackParams } from '../NavigationStacks/HomeNavStack'
 
-const HomePage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
+type Props = NativeStackScreenProps<RootStackParams, "HomePage">
+
+const HomePage: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>

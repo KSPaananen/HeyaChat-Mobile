@@ -9,6 +9,8 @@ type Props = NativeStackScreenProps<RootStackParams, "SearchModal">
 const SearchModal: React.FC<Props> = ({ route, navigation }) => {
   const { query } = route.params
 
+  let userId = "1"
+
   return (
     <TouchableWithoutFeedback onPress={() => navigation.dispatch(StackActions.popToTop())}>
       <View style={modals.shadow}>
@@ -16,7 +18,7 @@ const SearchModal: React.FC<Props> = ({ route, navigation }) => {
           <View style={modals.modal}>
             <Text>Search modal. Click on users to open modal</Text>
             <Text>{query}</Text>
-            <Button title="User details" onPress={() => navigation.navigate("UserDetailsModal", { userId: "0"})} />
+            <Button title="User details" onPress={() => navigation.navigate("UserDetailsModal", { userId: userId })} />
             <View style={modals.ol}>
               <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.goBack()}>
                 <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />

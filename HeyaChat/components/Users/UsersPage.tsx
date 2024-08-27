@@ -1,6 +1,6 @@
-import { Text, View, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
-import { styles } from '../../assets/styles/styles'
+import { View } from 'react-native'
+import { RootStackParams } from '../NavigationStacks/UsersSubNavStack'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import UserCard from './UserCard'
 
@@ -12,8 +12,9 @@ export type user = {
   icon: string
 }
 
-const UserPage = () => {
-  const navigation = useNavigation()
+type Props = NativeStackScreenProps<RootStackParams, "MetUsers" | "Friendlist">
+
+const UserPage: React.FC<Props> = ({ navigation }) => {
 
   let user: user = {
     userId: "0",
@@ -27,11 +28,11 @@ const UserPage = () => {
     <View>
         <UserCard 
         user={user}
-        onPress1={() => {
-          navigation.navigate("UserDetailsPage", { userId: user.userId })
+        onPress1={(value) => {
+          navigation.navigate("Users", { screen: "UserDetailsPage", params: { userId: value }})
         }}
-        onPress2={() => {
-          navigation.navigate("DirectMessagePage", { userId: user.userId })
+        onPress2={(value) => {
+          navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: value }})
         }}
         />
     </View>

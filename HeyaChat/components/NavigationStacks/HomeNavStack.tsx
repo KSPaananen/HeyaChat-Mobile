@@ -1,4 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/core'
 
 import HomePage from '../Home/HomePage'
 import SummaryModal from '../Home/Summary/SummaryModal'
@@ -15,6 +17,7 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>();
 
 const HomeNavStack = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
     const MessagerNotifications = 0
 
     return (

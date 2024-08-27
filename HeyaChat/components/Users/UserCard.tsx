@@ -13,7 +13,7 @@ interface Props {
 const UserCard: React.FC<Props> = ({user, onPress1, onPress2 }) => {
 
   return (
-    <TouchableHighlight onPress={() => onPress1 }>
+    <TouchableHighlight onPress={() => onPress1(user.userId)}>
       <View style={userCard.card}>
         <View style={userCard.cardItem}>
           <View style={userCard.itemLeft}>
@@ -25,7 +25,7 @@ const UserCard: React.FC<Props> = ({user, onPress1, onPress2 }) => {
             <Text style={userCard.text}>{user.lastMessage}</Text>
           </View>
           <View style={userCard.itemRight}>
-            <TouchableOpacity onPress={() => onPress2}>
+            <TouchableOpacity onPress={() => onPress2(user.userId)}>
                 <Image style={userCard.dmIcon} source={require('../../assets/icons/icon.png')} />
             </TouchableOpacity>
           </View>

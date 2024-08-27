@@ -1,14 +1,18 @@
 import { Text, View, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParams } from '../NavigationStacks/UsersNavStack'
 import { styles } from '../../assets/styles/styles'
 
-const UserDetailsPage = () => {
-  const navigation = useNavigation()
+type Props = NativeStackScreenProps<RootStackParams, "UserDetailsPage">
+
+const UserDetailsPage: React.FC<Props> = ({ route, navigation }) => {
+  const { userId } = route.params
 
   return (
     <View style={styles.container}>
         <Text>User details page</Text>
-        <Button title="Send a message" onPress={() => navigation.navigate("Users", { screen: "DirectMessagePage"})} />
+        <Text>UserID: {userId}</Text>
+        <Button title="Send a message" onPress={() => navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: userId }})} />
         <Button title="Add friend" />
     </View>
   );

@@ -1,26 +1,44 @@
 import { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
-import { Button, Image, TouchableOpacity, View } from 'react-native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { Button, View } from 'react-native'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
 import UsersSubNavStack from './UsersSubNavStack'
-import UsersPage from '../Users/UsersPage'
 import DirectMessagePage from '../Users/DirectMessagePage'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
 import UserDetailsPage from '../UserDetails/UserDetailsPage'
 import SearchModal from '../Search/SearchModal'
 
-const Stack = createStackNavigator()
+export type RootStackParams = {
+    UsersSubNavStack: undefined
+    DirectMessagePage: {
+        userId: string
+    }
+    UserDetailsPage: {
+        userId: string
+    }
+    UserDetailsModal: {
+        userId: string
+    }
+    SearchModal: {
+        query: string
+    }
+}
+
+const Stack = createStackNavigator<RootStackParams>()
 
 const UsersNavStack = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
     const [query, setQuery] = useState("")
 
-    function onSubmit(text: string) {
+    function onSubmit() {
         // Open up search modal with text parameter
-        navigation.navigate("SearchModal")
+        navigation.navigate("SearchModal", { query: query })
+        // Clear search field
+        setQuery("")
     }
 
     return (
@@ -38,7 +56,7 @@ const UsersNavStack = () => {
                             activeOutlineColor="#0330fc"
                             placeholder="Search" 
                             right={<TextInput.Icon icon="eye" style={header.inputIcon} />} 
-                            onSubmitEditing={(value) => onSubmit(value.nativeEvent.text)}
+                            onSubmitEditing={() => onSubmit()}
                             />
                         </View>
                     ),
@@ -48,14 +66,14 @@ const UsersNavStack = () => {
                 <Stack.Screen name="DirectMessagePage" component={DirectMessagePage} options={{
                     headerTitle: "Username DM's",
                     headerRight: () => (
-                        <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage")}/>
+                        <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage", { userId: "0" })}/>
                     ),
                 }}/>
                 <Stack.Screen name="UserDetailsPage" component={UserDetailsPage} options={{
                     headerTitle: "Username's details (page)",
                 }}/>
             </Stack.Group>
-            <Stack.Group screenOptions={{ presentation: "modal" }}>
+            <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
                 <Stack.Screen name="UserDetailsModal" component={UserDetailsModal} options={{
                     headerTitle: "Username's details (modal)",
                 }}/>
