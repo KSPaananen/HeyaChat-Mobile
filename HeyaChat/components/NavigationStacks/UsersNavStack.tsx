@@ -1,22 +1,22 @@
+import { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { Button, Image, TouchableOpacity, View } from 'react-native'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
+import UsersSubNavStack from './UsersSubNavStack'
 import UsersPage from '../Users/UsersPage'
 import DirectMessagePage from '../Users/DirectMessagePage'
 import UserDetailsModal from '../UserDetails/UserDetailsModal'
 import UserDetailsPage from '../UserDetails/UserDetailsPage'
 import SearchModal from '../Search/SearchModal'
 
-// Test
-import UsersSubNavStack from './UsersSubNavStack'
-
 const Stack = createStackNavigator()
 
 const UsersNavStack = () => {
     const navigation = useNavigation()
+    const [query, setQuery] = useState("")
 
     function onSubmit(text: string) {
         // Open up search modal with text parameter
@@ -32,6 +32,8 @@ const UsersNavStack = () => {
                         <View style={header.headerRight}>
                             <TextInput style={header.input}
                             dense
+                            value={query}
+                            onChangeText={(value) => setQuery(value)}
                             mode="outlined"
                             activeOutlineColor="#0330fc"
                             placeholder="Search" 
@@ -43,8 +45,6 @@ const UsersNavStack = () => {
                 }}/>
             </Stack.Group>
             <Stack.Group>
-                {/* Keep this Screen so UserDetailsModal works properly */}
-                <Stack.Screen name="UsersPage" component={UsersPage} /> 
                 <Stack.Screen name="DirectMessagePage" component={DirectMessagePage} options={{
                     headerTitle: "Username DM's",
                     headerRight: () => (
