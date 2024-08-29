@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { UsersSubStackParams } from '../NavigationStacks/UsersSubNavStack'
+import { UsersTopTabStackParams } from '../NavigationStacks/UsersTopTabNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import UserCard from './UserCard'
@@ -12,7 +12,7 @@ export type user = {
   icon: string
 }
 
-type Props = NativeStackScreenProps<UsersSubStackParams, "MetUsers" | "Friendlist">
+type Props = NativeStackScreenProps<UsersTopTabStackParams, "MetUsers" | "Friendlist">
 
 const UserPage: React.FC<Props> = ({ navigation }) => {
 
@@ -29,7 +29,7 @@ const UserPage: React.FC<Props> = ({ navigation }) => {
         <UserCard 
         user={user}
         onPress1={(value) => {
-          navigation.navigate("Users", { screen: "UserDetailsPage", params: { userId: value }})
+          navigation.navigate("Users", { screen: "UserProfile", params: { userId: value }})
         }}
         onPress2={(value) => {
           navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: value }})

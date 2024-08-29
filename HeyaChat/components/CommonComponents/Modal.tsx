@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { Text, View, Button, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
-import { StackActions } from '@react-navigation/native'
+import { RootStackParams } from '../../App'
+import { StackActions, CommonActions } from '@react-navigation/native'
 import { modals } from '../../assets/styles/styles'
 
-type Props = NativeStackScreenProps<HomeStackParams, "Modal">
+type Props = NativeStackScreenProps<RootStackParams, "Modal">
 
 const Modal: React.FC<Props> = ({ route, navigation }) => {
   const { param, Component } = route.params
@@ -16,7 +16,7 @@ const Modal: React.FC<Props> = ({ route, navigation }) => {
   })
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.dispatch(StackActions.popToTop())}>
+    <TouchableWithoutFeedback onPress={() => navigation.dispatch(CommonActions.goBack())}>
       <View style={modals.shadow}>
         <TouchableWithoutFeedback>
           <View style={modals.modal}>
@@ -25,7 +25,7 @@ const Modal: React.FC<Props> = ({ route, navigation }) => {
                 navigation={navigation}
             />
             <View style={modals.ol}>
-              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.goBack()}>
+              <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.dispatch(CommonActions.goBack())}>
                 <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />
               </TouchableOpacity>
             </View>

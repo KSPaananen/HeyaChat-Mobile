@@ -13,7 +13,7 @@ const LeaderboardsPage: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       <Text>Leaderboards</Text>
       <Button title="Sort by top 100 etc" />
-      <Button title="Details" onPress={() => navigation.navigate("Modal", { param: 111, Component: LiteUserDetails })} />
+      <Button title="Details" onPress={() => navigation.navigate("Modal", { param: 11, Component: LiteUserDetails })} />
     </View>
   );
 }

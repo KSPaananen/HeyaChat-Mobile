@@ -1,26 +1,44 @@
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
 
-import HomeNavStack from './components/NavigationStacks/HomeNavStack'
-import ProfileNavStack from './components/NavigationStacks/ProfileNavStack'
-import UsersNavStack from './components/NavigationStacks/UsersNavStack'
+import AppBottomTabNavStack from './components/NavigationStacks/AppBottomTabNavStack'
+import Modal from './components/CommonComponents/Modal'
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ])
 
-const Tab = createBottomTabNavigator()
+export type RootStackParams = {
+  AppBottomTabs: undefined
+  Modal: {
+    param?: any
+    Component: React.ComponentType<any>
+  }
+}
 
-export default function App() {
+const Stack = createStackNavigator<RootStackParams>()
+
+// Nav stack structure
+// 
+//                             -> HomeNavStack
+// App -> AppBottomTabNavStack -> UsersNavStack -> UsersTopTabNavStack
+//                             -> ProfileNavStack
+
+const App = () => {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="Home" component={HomeNavStack} />
-        <Tab.Screen name="Users" component={UsersNavStack} />
-        <Tab.Screen name="Profile" component={ProfileNavStack} />
-      </Tab.Navigator>
+      <Stack.Navigator initialRouteName="AppBottomTabs" screenOptions={{ headerShown: false }}>
+        <Stack.Group>
+          <Stack.Screen name="AppBottomTabs" component={AppBottomTabNavStack} />
+        </Stack.Group>
+        <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
+          <Stack.Screen name="Modal" component={Modal} />
+        </Stack.Group>
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
+
+export default App

@@ -56,7 +56,7 @@ export const modals = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 60,
     marginRight: 25,
-    marginBottom: 60,
+    marginBottom: 120,
     marginLeft: 25,
     paddingTop: 10,
     paddingRight: 10,

@@ -6,23 +6,18 @@ import { Button, View } from 'react-native'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
-import UsersSubNavStack from './UsersSubNavStack'
+import UsersTopTabNavStack from './UsersTopTabNavStack'
 import DirectMessagePage from '../Users/DirectMessagePage'
 import UserProfile from '../Users/../UserDetails/UserProfile'
 import Search from '../Users/Search/Search'
-import Modal from '../CommonComponents/Modal'
 
 export type UsersStackParams = {
-    UsersSubNavStack: undefined
+    UsersTopTabNavStack: undefined
     DirectMessagePage: {
         userId: number
     }
-    UserDetailsPage: {
+    UserProfile: {
         userId: number
-    }
-    Modal: {
-        param?: any
-        Component: React.ComponentType<any>
     }
 }
 
@@ -33,7 +28,7 @@ const UsersNavStack = () => {
     const [query, setQuery] = useState("")
 
     function onSubmit() {
-        // Open search modal with query string & clear search field (query)
+        // Open search modal with query parameter, component and clear search field
         navigation.navigate("Modal", { param: query, Component: Search })
         setQuery("")
     }
@@ -41,7 +36,7 @@ const UsersNavStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Group>
-                <Stack.Screen name="UsersSubNavStack" component={UsersSubNavStack} options={{
+                <Stack.Screen name="UsersTopTabNavStack" component={UsersTopTabNavStack} options={{
                     headerTitle: "Users",
                     headerRight: () => (
                         <View style={header.headerRight}>
@@ -63,15 +58,12 @@ const UsersNavStack = () => {
                 <Stack.Screen name="DirectMessagePage" component={DirectMessagePage} options={{
                     headerTitle: "Username DM's (needs userId implementation)",
                     headerRight: () => (
-                        <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage", { userId: 10 })}/>
+                        <Button title="Profile" onPress={() => navigation.navigate("UserProfile", { userId: 10 })}/>
                     ),
                 }}/>
-                <Stack.Screen name="UserDetailsPage" component={UserProfile} options={{
+                <Stack.Screen name="UserProfile" component={UserProfile} options={{
                     headerTitle: "Username's details (page)",
                 }}/>
-            </Stack.Group>
-            <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
-                <Stack.Screen name="Modal" component={Modal} />
             </Stack.Group>
         </Stack.Navigator>
     )

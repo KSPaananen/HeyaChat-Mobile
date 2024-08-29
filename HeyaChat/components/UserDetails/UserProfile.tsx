@@ -3,10 +3,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { UsersStackParams } from '../NavigationStacks/UsersNavStack'
 import { styles } from '../../assets/styles/styles'
 
-type Props = NativeStackScreenProps<UsersStackParams, "UserDetailsPage">
+type Props = NativeStackScreenProps<UsersStackParams, "UserProfile">
 
 const UserProfile: React.FC<Props> = ({ route, navigation }) => {
   const { userId } = route.params
+
 
   return (
     <View style={styles.container}>

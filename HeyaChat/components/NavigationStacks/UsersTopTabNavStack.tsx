@@ -2,14 +2,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import UsersPage from '../Users/UsersPage'
 
-export type UsersSubStackParams = {
+export type UsersTopTabStackParams = {
     MetUsers: undefined
     Friendlist: undefined
 }
 
-const Tab = createMaterialTopTabNavigator<UsersSubStackParams>();
+const Tab = createMaterialTopTabNavigator<UsersTopTabStackParams>();
 
-const UsersSubNavStack = () => {
+const UsersTopTabNavStack = () => {
 
     return (
         <Tab.Navigator>
@@ -23,4 +23,4 @@ const UsersSubNavStack = () => {
     )
 }
 
-export default UsersSubNavStack
+export default UsersTopTabNavStack

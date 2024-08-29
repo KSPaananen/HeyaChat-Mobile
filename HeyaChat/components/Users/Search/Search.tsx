@@ -6,11 +6,11 @@ import SearchCard from './SearchCard'
 import UserDetails from '../../UserDetails/UserDetails'
 
 type Props = {
-    query?: string
+    param?: string
     navigation: any
 }
 
-const Search: React.FC<Props> = ({ query, navigation }) => {
+const Search: React.FC<Props> = ({ param, navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
   
@@ -22,7 +22,7 @@ const Search: React.FC<Props> = ({ query, navigation }) => {
   return (
         <View>
           {!layer && <View>
-            <Text>Searched for: {query}</Text>
+            <Text>Searched for: {param}</Text>
             <SearchCard 
               userId={testUser.userId}
               onPress={(userId) => {
