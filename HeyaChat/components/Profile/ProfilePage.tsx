@@ -1,11 +1,11 @@
 import { Text, View, Button } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/core'
-import { RootStackParams } from '../NavigationStacks/ProfileNavStack'
+import { ProfileStackParams } from '../NavigationStacks/ProfileNavStack'
 import { styles } from '../../assets/styles/styles'
 
 const ProfilePage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
+  const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParams>>()
 
   return (
     <View style={styles.container}>

@@ -1,9 +1,9 @@
-import { Text, View, Button } from 'react-native'
+import { Text, View } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../NavigationStacks/ProfileNavStack'
-import { styles } from '../../assets/styles/styles'
+import { ProfileStackParams } from '../..//NavigationStacks/ProfileNavStack'
+import { styles } from '../../../assets/styles/styles'
 
-type Props = NativeStackScreenProps<RootStackParams, "SettingsPage">
+type Props = NativeStackScreenProps<ProfileStackParams, "SettingsPage">
 
 const SettingsPage: React.FC<Props> = ({ navigation }) => {
 

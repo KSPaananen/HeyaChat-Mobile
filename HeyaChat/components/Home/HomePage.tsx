@@ -1,9 +1,11 @@
 import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { styles } from '../../assets/styles/styles'
-import { RootStackParams } from '../NavigationStacks/HomeNavStack'
+import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
 
-type Props = NativeStackScreenProps<RootStackParams, "HomePage">
+import Summary from './Summary/Summary'
+
+type Props = NativeStackScreenProps<HomeStackParams, "HomePage">
 
 const HomePage: React.FC<Props> = ({ navigation }) => {
 
@@ -14,7 +16,7 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
           click them individually to see more details or click on summary to see them in a list.</Text>
         <View style={styles.ol}>
           <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => 
-            navigation.navigate("SummaryModal")
+            navigation.navigate("Modal", { Component: Summary })
           }>
             <Image style={styles.olSummaryIcon} source={require('../../assets/icons/icon.png')} />
           </TouchableOpacity>

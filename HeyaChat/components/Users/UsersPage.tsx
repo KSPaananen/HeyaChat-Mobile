@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { RootStackParams } from '../NavigationStacks/UsersSubNavStack'
+import { UsersSubStackParams } from '../NavigationStacks/UsersSubNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import UserCard from './UserCard'
@@ -12,7 +12,7 @@ export type user = {
   icon: string
 }
 
-type Props = NativeStackScreenProps<RootStackParams, "MetUsers" | "Friendlist">
+type Props = NativeStackScreenProps<UsersSubStackParams, "MetUsers" | "Friendlist">
 
 const UserPage: React.FC<Props> = ({ navigation }) => {
 

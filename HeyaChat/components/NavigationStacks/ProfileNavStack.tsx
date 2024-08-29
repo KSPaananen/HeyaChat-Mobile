@@ -4,23 +4,24 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Button } from 'react-native'
 
 import ProfilePage from '../Profile/ProfilePage'
-import LeaderboardsPage from '../Leaderboards/LeaderboardsPage'
-import LiteUserDetailsModal from '../UserDetails/LiteUserDetailsModal'
-import SettingsPage from '../Settings/SettingsPage'
+import LeaderboardsPage from '../Profile/Leaderboards/LeaderboardsPage'
+import SettingsPage from '../Profile/Settings/SettingsPage'
+import Modal from '../CommonComponents/Modal'
 
-export type RootStackParams = {
+export type ProfileStackParams = {
     ProfilePage: undefined
     LeaderboardsPage: undefined
     SettingsPage: undefined
-    LiteUserDetailsModal: {
-        userId: string
+    Modal: {
+        param?: any
+        Component: React.ComponentType<any>
     }
 }
 
-const Stack = createStackNavigator<RootStackParams>();
+const Stack = createStackNavigator<ProfileStackParams>();
 
 export default function HomeNavStack() {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
+    const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParams>>()
 
     return (
         <Stack.Navigator>
@@ -39,11 +40,14 @@ export default function HomeNavStack() {
                 <Stack.Screen name="SettingsPage" component={SettingsPage} options={{
                     headerTitle: "Settings",
                 }}/>
-            <Stack.Group screenOptions={{ presentation: "modal" }} >
-                <Stack.Screen name="LiteUserDetailsModal" component={LiteUserDetailsModal} options={{
-                    headerTitle: "Username's details (liteModal)",
-                }}/>
             </Stack.Group>
+            <Stack.Group screenOptions={{ 
+                headerShown: false,
+                presentation: "transparentModal" 
+            }}>
+                <Stack.Screen name="Modal" component={Modal} options={{
+                    headerTitle: "",
+                }}/>
             </Stack.Group>
         </Stack.Navigator>
     )

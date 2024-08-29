@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/core'
 import { user } from '../Users/UsersPage'
 import { userCard } from '../../assets/styles/styles'
 

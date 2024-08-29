@@ -8,36 +8,33 @@ import { header } from '../../assets/styles/styles'
 
 import UsersSubNavStack from './UsersSubNavStack'
 import DirectMessagePage from '../Users/DirectMessagePage'
-import UserDetailsModal from '../UserDetails/UserDetailsModal'
-import UserDetailsPage from '../UserDetails/UserDetailsPage'
-import SearchModal from '../Search/SearchModal'
+import UserProfile from '../Users/../UserDetails/UserProfile'
+import Search from '../Users/Search/Search'
+import Modal from '../CommonComponents/Modal'
 
-export type RootStackParams = {
+export type UsersStackParams = {
     UsersSubNavStack: undefined
     DirectMessagePage: {
-        userId: string
+        userId: number
     }
     UserDetailsPage: {
-        userId: string
+        userId: number
     }
-    UserDetailsModal: {
-        userId: string
-    }
-    SearchModal: {
-        query: string
+    Modal: {
+        param?: any
+        Component: React.ComponentType<any>
     }
 }
 
-const Stack = createStackNavigator<RootStackParams>()
+const Stack = createStackNavigator<UsersStackParams>()
 
 const UsersNavStack = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
+    const navigation = useNavigation<NativeStackNavigationProp<UsersStackParams>>()
     const [query, setQuery] = useState("")
 
     function onSubmit() {
-        // Open up search modal with text parameter
-        navigation.navigate("SearchModal", { query: query })
-        // Clear search field
+        // Open search modal with query string & clear search field (query)
+        navigation.navigate("Modal", { param: query, Component: Search })
         setQuery("")
     }
 
@@ -64,20 +61,17 @@ const UsersNavStack = () => {
             </Stack.Group>
             <Stack.Group>
                 <Stack.Screen name="DirectMessagePage" component={DirectMessagePage} options={{
-                    headerTitle: "Username DM's",
+                    headerTitle: "Username DM's (needs userId implementation)",
                     headerRight: () => (
-                        <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage", { userId: "0" })}/>
+                        <Button title="Profile" onPress={() => navigation.navigate("UserDetailsPage", { userId: 10 })}/>
                     ),
                 }}/>
-                <Stack.Screen name="UserDetailsPage" component={UserDetailsPage} options={{
+                <Stack.Screen name="UserDetailsPage" component={UserProfile} options={{
                     headerTitle: "Username's details (page)",
                 }}/>
             </Stack.Group>
             <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
-                <Stack.Screen name="UserDetailsModal" component={UserDetailsModal} options={{
-                    headerTitle: "Username's details (modal)",
-                }}/>
-                <Stack.Screen name="SearchModal" component={SearchModal} />
+                <Stack.Screen name="Modal" component={Modal} />
             </Stack.Group>
         </Stack.Navigator>
     )

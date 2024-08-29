@@ -1,24 +1,29 @@
-import { Text, View, Button, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
-import { StackActions } from '@react-navigation/native'
+import { useEffect } from 'react';
+import { Text, View, Button, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../NavigationStacks/UsersNavStack'
+import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
+import { StackActions } from '@react-navigation/native'
 import { modals } from '../../assets/styles/styles'
 
-type Props = NativeStackScreenProps<RootStackParams, "SearchModal">
+type Props = NativeStackScreenProps<HomeStackParams, "Modal">
 
-const SearchModal: React.FC<Props> = ({ route, navigation }) => {
-  const { query } = route.params
+const Modal: React.FC<Props> = ({ route, navigation }) => {
+  const { param, Component } = route.params
 
-  let userId = "1"
+  useEffect(() => {
+    // Take userId and get user data from db
+    
+  })
 
   return (
     <TouchableWithoutFeedback onPress={() => navigation.dispatch(StackActions.popToTop())}>
       <View style={modals.shadow}>
         <TouchableWithoutFeedback>
           <View style={modals.modal}>
-            <Text>Search modal. Click on users to open modal</Text>
-            <Text>{query}</Text>
-            <Button title="User details" onPress={() => navigation.navigate("UserDetailsModal", { userId: userId })} />
+            <Component
+                param={param}
+                navigation={navigation}
+            />
             <View style={modals.ol}>
               <TouchableOpacity hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.goBack()}>
                 <Image style={modals.olExitIcon} source={require('../../assets/icons/icon.png')} />
@@ -31,4 +36,4 @@ const SearchModal: React.FC<Props> = ({ route, navigation }) => {
   );
 }
 
-export default SearchModal
+export default Modal

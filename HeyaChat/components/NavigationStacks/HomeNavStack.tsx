@@ -3,21 +3,20 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/core'
 
 import HomePage from '../Home/HomePage'
-import SummaryModal from '../Home/Summary/SummaryModal'
-import UserDetailsModal from '../UserDetails/UserDetailsModal'
+import Modal from '../CommonComponents/Modal'
 
-export type RootStackParams = {
+export type HomeStackParams = {
     HomePage: undefined
-    SummaryModal: undefined
-    UserDetailsModal: {
-        userId: string
+    Modal: {
+        param?: any
+        Component: React.ComponentType<any>
     }
 }
 
-const Stack = createStackNavigator<RootStackParams>();
+const Stack = createStackNavigator<HomeStackParams>();
 
 const HomeNavStack = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>()
+    const navigation = useNavigation<NativeStackNavigationProp<HomeStackParams>>()
     const MessagerNotifications = 0
 
     return (
@@ -29,12 +28,7 @@ const HomeNavStack = () => {
                 headerShown: false,
                 presentation: "transparentModal" 
             }}>
-                <Stack.Screen name="SummaryModal" component={SummaryModal} options={{
-                        headerTitle: "Summary of users seen",
-                }}/>
-                <Stack.Screen name="UserDetailsModal" component={UserDetailsModal} options={{
-                    headerTitle: "Username's details (modal)",
-                }}/>
+                <Stack.Screen name="Modal" component={Modal} />
             </Stack.Group>
         </Stack.Navigator>
     )

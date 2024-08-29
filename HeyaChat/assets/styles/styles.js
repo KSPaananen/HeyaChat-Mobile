@@ -185,3 +185,47 @@ export const userCard = StyleSheet.create({
     width: 60,
   }
 })
+
+export const searchCard = StyleSheet.create({
+  card: {
+    borderRadius: 5,
+    margin: 5,
+    padding: 5,
+    height: 65,
+    backgroundColor: '#0011',
+  },
+  cardItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  itemLeft: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  itemMiddle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  itemRight: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 16,
+    paddingTop: 5,
+    paddingRight: 0,
+    paddingBottom: 0,
+    paddingLeft: 5
+  },
+  icon: {
+    height: 50,
+    width: 50,
+    marginRight: 7.5,
+    borderRadius: 100,
+  }
+})

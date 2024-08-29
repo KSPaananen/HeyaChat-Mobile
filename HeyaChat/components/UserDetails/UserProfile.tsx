@@ -1,11 +1,11 @@
 import { Text, View, Button } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../NavigationStacks/UsersNavStack'
+import { UsersStackParams } from '../NavigationStacks/UsersNavStack'
 import { styles } from '../../assets/styles/styles'
 
-type Props = NativeStackScreenProps<RootStackParams, "UserDetailsPage">
+type Props = NativeStackScreenProps<UsersStackParams, "UserDetailsPage">
 
-const UserDetailsPage: React.FC<Props> = ({ route, navigation }) => {
+const UserProfile: React.FC<Props> = ({ route, navigation }) => {
   const { userId } = route.params
 
   return (
@@ -18,4 +18,4 @@ const UserDetailsPage: React.FC<Props> = ({ route, navigation }) => {
   );
 }
 
-export default UserDetailsPage
+export default UserProfile
