@@ -43,6 +43,147 @@ export const header = StyleSheet.create({
   }
 })
 
+export const profile = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+    margin: 0,
+    borderRadius: 10,
+    backgroundColor: 'black',
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  }
+
+})
+
+export const settings = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  wrapper: {
+    backgroundColor: 'lightgray',
+    marginBottom: 10,
+
+  },
+  head: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+  },
+  body: {
+    padding: 10,
+    flexDirection: 'column',
+  },
+  section: {
+    marginTop: 10,
+  },
+  separator: {
+    flex: 1,
+    height: 1,
+    marginTop: 17,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  banner: {
+    flex: 1,
+    justifyContent: 'center',
+    height: 75
+  },
+  profileIcon: {
+    position: 'absolute',
+    borderRadius: 100,
+    height: 75,
+    width: 75,
+    marginTop: -38,
+    marginLeft: 300,
+    
+    
+  },
+  profileIconBackground: {
+    position: 'absolute',
+    borderRadius: 100,
+    height: 85,
+    width: 85,
+    marginTop: -43,
+    marginLeft: 295,
+    backgroundColor: 'lightgray'
+    
+    
+  },
+  h1: {
+    fontSize: 25,
+  },
+  h2: {
+    fontSize: 15,
+  },
+  h3: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  h4: {
+    fontSize: 15,
+  },
+  input: {
+    flex: 1,
+    fontSize: 15,
+    height: 40,
+    marginTop: 5,
+    marginRight: 100,
+    borderRadius: 5,
+  },
+  bodyTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  bodyText: {
+    fontSize: 15,
+  },
+  button: {
+    flex: 1,
+    padding: 10,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginHorizontal: 10,
+    borderRadius: 5,
+    borderWidth: 2,
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  }
+
+})
+
+export const search = StyleSheet.create({
+  header: {
+    marginTop: 10,
+    marginRight: 5,
+    marginBottom: 10,
+    marginLeft: 5
+  },
+  title: {
+    fontSize: 20
+  },
+  separator: {
+    flex: 1,
+    padding: 0.5,
+    marginTop: 10,
+    backgroundColor: 'black'
+  }
+})
+
 export const modals = StyleSheet.create({
   shadow: {
     flex: 1,
@@ -85,7 +226,7 @@ export const modals = StyleSheet.create({
   }
 })
 
-export const summaryCard = StyleSheet.create({
+export const modalCard = StyleSheet.create({
   card: {
     borderRadius: 5,
     margin: 5,
@@ -97,28 +238,33 @@ export const summaryCard = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   itemLeft: {
-    flex: 1,
+    flex: 2,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-  itemMiddle: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
   itemRight: {
-    flex: 1,
+    flex: 0.5,
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 16,
+  username: {
+    fontSize: 18,
     paddingTop: 5,
-    paddingRight: 0,
-    paddingBottom: 0,
+    paddingLeft: 5
+  },
+  date: {
+    fontSize: 11,
+    fontStyle: 'italic',
+    paddingTop: 5,
+    paddingLeft: 5
+  },
+  title: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    paddingTop: 2,
     paddingLeft: 5
   },
   icon: {
@@ -183,49 +329,5 @@ export const userCard = StyleSheet.create({
     borderRadius: 5,
     height: 75,
     width: 60,
-  }
-})
-
-export const searchCard = StyleSheet.create({
-  card: {
-    borderRadius: 5,
-    margin: 5,
-    padding: 5,
-    height: 65,
-    backgroundColor: '#0011',
-  },
-  cardItem: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  itemLeft: {
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
-  itemMiddle: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  itemRight: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 16,
-    paddingTop: 5,
-    paddingRight: 0,
-    paddingBottom: 0,
-    paddingLeft: 5
-  },
-  icon: {
-    height: 50,
-    width: 50,
-    marginRight: 7.5,
-    borderRadius: 100,
   }
 })

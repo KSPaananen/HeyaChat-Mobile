@@ -21,10 +21,13 @@ const AppBottomTabNavStack = () => {
     return (
       <Tab.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Tab.Screen name="Home" component={HomeNavStack} />
-        <Tab.Screen name="Users" component={UsersNavStack} />
+        <Tab.Screen name="Users" component={UsersNavStack} options={{ 
+          tabBarBadge: 1 
+          }}
+        />
         <Tab.Screen name="Profile" component={ProfileNavStack} />
       </Tab.Navigator>
-      )
+    )
 }
 
 export default AppBottomTabNavStack

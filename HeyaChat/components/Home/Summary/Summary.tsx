@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native'
+import { Text, View, ScrollView } from 'react-native'
 import { modals } from '../../../assets/styles/styles'
 import { user } from '../../../models/user'
 import { testUser } from '../../../models/testUser'
@@ -16,10 +16,8 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
 
-  const usersList: user[] = [
-    { userId: 0, username: "username0", email: "TestEmail0", interactions: null, profile: null },
-    { userId: 1, username: "username1", email: "TestEmail1", interactions: null, profile: null },
-  ]
+  const usersList: user[] = []
+  usersList.push(testUser)
   usersList.push(testUser)
 
   const titles: string[] = [
@@ -39,7 +37,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View>
-      {!layer && <View>
+      {!layer && <ScrollView>
         <Text style={modals.title}>{titles[0]}</Text>
           {usersList.map((user, index) => (
             <SummaryCard 
@@ -50,7 +48,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
               }}
             />
           ))}
-      </View>}
+      </ScrollView>}
       {layer && <View>
         <UserDetails 
           userId={userId}

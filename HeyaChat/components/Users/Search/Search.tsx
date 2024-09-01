@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Text, View, Button } from 'react-native'
+import { Text, View, Button, ScrollView } from 'react-native'
+import { search } from '../../../assets/styles/styles'
 import { testUser } from '../../../models/testUser'
 
 import SearchCard from './SearchCard'
@@ -22,13 +23,18 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
   return (
         <View>
           {!layer && <View>
-            <Text>Searched for: {param}</Text>
-            <SearchCard 
-              userId={testUser.userId}
-              onPress={(userId) => {
-                OpenUserDetails(userId)
-              }}
-            />
+            <View style={search.header}>
+              <Text style={search.title}>Search results for {param}</Text>
+              <View style={search.separator} />
+            </View>
+            <ScrollView>
+              <SearchCard 
+                userId={testUser.userId}
+                onPress={(userId) => {
+                  OpenUserDetails(userId)
+                }}
+              />
+            </ScrollView>
           </View>}
           {layer && <View>
             <UserDetails 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { View, Button, Alert } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Button, View } from 'react-native'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
@@ -28,9 +28,10 @@ const UsersNavStack = () => {
     const [query, setQuery] = useState("")
 
     function onSubmit() {
-        // Open search modal with query parameter, component and clear search field
-        navigation.navigate("Modal", { param: query, Component: Search })
-        setQuery("")
+        if (query != "") {
+            navigation.navigate("Modal", { param: query, Component: Search })
+            setQuery("")
+        } 
     }
 
     return (

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Text, View, Image, TouchableHighlight } from 'react-native'
 import { user } from '../../../models/user'
 import { testUser } from '../../../models/testUser'
-import { searchCard } from '../../../assets/styles/styles'
+import { modalCard } from '../../../assets/styles/styles'
 
 interface Props {
   userId: number
@@ -15,18 +15,14 @@ const SearchCard: React.FC<Props> = ({ userId, onPress }) => {
 
   return (
     <TouchableHighlight onPress={() => onPress(user.userId)}>
-      <View style={searchCard.card}>
-        <View style={searchCard.cardItem}>
-          <View style={searchCard.itemLeft}>
-            <Text style={searchCard.text}>{user.username}</Text>
-            <Text style={searchCard.text}>{user.interactions?.dateMet.toLocaleString('en-GB', { timeZone: 'UTC' })}</Text>
+      <View style={modalCard.card}>
+        <View style={modalCard.cardItem}>
+          <View style={modalCard.itemLeft}>
+            <Text style={modalCard.username}>{user.username}</Text>
+            <Text style={modalCard.title}>{user.profile?.title}</Text>
           </View>
-          <View style={searchCard.itemMiddle}>
-            <Text style={searchCard.text}></Text>
-            <Text style={searchCard.text}>{user.profile?.title}</Text>
-          </View>
-          <View style={searchCard.itemRight}>
-            <Image style={searchCard.icon} source={require('../../../assets/icons/favicon.png')} />
+          <View style={modalCard.itemRight}>
+            <Image style={modalCard.icon} source={require('../../../assets/icons/favicon.png')} />
           </View>
         </View>
       </View>
