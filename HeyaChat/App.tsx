@@ -1,3 +1,4 @@
+import './gesture-handler';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -23,7 +24,7 @@ const Stack = createStackNavigator<RootStackParams>()
 // 
 //                             -> HomeNavStack
 // App -> AppBottomTabNavStack -> UsersNavStack -> UsersTopTabNavStack
-//                             -> ProfileNavStack
+//                             -> ProfileNavStack -> SettingsNavStack
 
 const App = () => {
 

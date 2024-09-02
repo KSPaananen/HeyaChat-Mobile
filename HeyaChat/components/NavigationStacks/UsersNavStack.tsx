@@ -40,8 +40,8 @@ const UsersNavStack = () => {
                 <Stack.Screen name="UsersTopTabNavStack" component={UsersTopTabNavStack} options={{
                     headerTitle: "Users",
                     headerRight: () => (
-                        <View style={header.headerRight}>
-                            <TextInput style={header.input}
+                        <View style={header.textInputRight}>
+                            <TextInput style={header.textInput}
                             dense
                             value={query}
                             onChangeText={(value) => setQuery(value)}

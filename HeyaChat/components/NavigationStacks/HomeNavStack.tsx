@@ -8,7 +8,7 @@ export type HomeStackParams = {
     HomePage: undefined
 }
 
-const Stack = createStackNavigator<HomeStackParams>();
+const Stack = createStackNavigator<HomeStackParams>()
 
 const HomeNavStack = () => {
     const navigation = useNavigation<NativeStackNavigationProp<HomeStackParams>>()

@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, Image, ImageBackground, Pressable, ImageSourcePropType } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ProfileStackParams } from '../..//NavigationStacks/ProfileNavStack'
+import { SettingsStackParams } from '../../NavigationStacks/SettingsNavStack'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TextInput } from "react-native-paper"
 import { settings } from '../../../assets/styles/styles'
 
 import { testUser } from '../../../models/testUser'
 
-type Props = NativeStackScreenProps<ProfileStackParams, "SettingsPage">
 
-const SettingsPage: React.FC<Props> = ({ navigation }) => {
+type Props = NativeStackScreenProps<SettingsStackParams, "ProfileSettings">
+
+const ProfileSettingsPage: React.FC<Props> = ({ navigation }) => {
   // GUI state stuff
   const [profileButtons, setProfileButtons] = useState<boolean>(false)
   const [mfaStatus, setMfaStatus] = useState<boolean>(false)
@@ -212,64 +213,7 @@ const SettingsPage: React.FC<Props> = ({ navigation }) => {
       </View>
 
     </ScrollView>
-    // <ScrollView style={settings.container}>
-
-    //   <View style={settings.card}>
-    //     <View style={settings.sectionHead}>
-    //       <Text style={settings.title}>My details</Text>
-    //     </View>
-    //     <View style={settings.sectionBody}>
-    //       <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start',}}>
-    //         <View style={settings.section}>
-    //           <Text style={settings.header}>Display name</Text>
-    //         </View>
-    //         <View style={settings.section}>
-    //           <Text style={settings.header}>Username</Text>
-    //           <Text style={settings.text}>Username 0</Text>
-    //         </View>
-    //         <View style={settings.section}>
-    //           <Text style={settings.header}>Email</Text>
-    //           <Text style={settings.text}>*****.****@***.com</Text>
-    //         </View>
-    //         <View style={settings.section}>
-    //           <Text style={settings.header}>Phone number</Text>
-    //           <Text style={settings.text}>********423</Text>
-    //         </View>
-    //       </View>
-    //       <View style={{ flex: 0.5, flexDirection: 'column', alignItems: 'flex-end',}}>
-    //         <View style={settings.section}>
-    //           <TouchableOpacity>
-    //             <Image style={settings.profilePic} source={require('../../../assets/icons/favicon.png')} />
-    //           </TouchableOpacity>
-    //         </View>
-    //         <View style={settings.section}>
-              
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </View>
-
-    //   <View style={settings.card}>
-    //     <View style={settings.sectionHead}>
-    //       <Text style={settings.title}>Authentication</Text>
-    //     </View>
-    //     <View style={settings.sectionBody}>
-
-    //     </View>
-    //   </View>
-
-    //   <View style={settings.card}>
-    //     <View style={settings.sectionHead}>
-    //       <Text style={settings.title}>Your data</Text>
-    //     </View>
-    //     <View style={settings.sectionBody}>
-    //       <Text>Request your data etc</Text>
-
-    //     </View>
-
-    //   </View>
-    // </ScrollView>
   )
 }
 
-export default SettingsPage
+export default ProfileSettingsPage

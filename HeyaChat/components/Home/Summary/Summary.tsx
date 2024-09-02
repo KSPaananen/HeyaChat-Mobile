@@ -49,13 +49,13 @@ const Summary: React.FC<Props> = ({ navigation }) => {
             />
           ))}
       </ScrollView>}
-      {layer && <View>
+      {layer && <ScrollView>
         <UserDetails 
           userId={userId}
           navigation={navigation}
           onPress={() => setLayer(value => !value)}
         />
-      </View>}
+      </ScrollView>}
     </View>
   );
 }

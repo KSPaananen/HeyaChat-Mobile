@@ -1,16 +1,17 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Button } from 'react-native'
+import { Text, Pressable, Image, Button } from 'react-native'
+import { header } from '../../assets/styles/styles'
 
 import ProfilePage from '../Profile/ProfilePage'
 import LeaderboardsPage from '../Profile/Leaderboards/LeaderboardsPage'
-import SettingsPage from '../Profile/Settings/SettingsPage'
+import SettingsNavStack from '../NavigationStacks/SettingsNavStack'
 
 export type ProfileStackParams = {
     ProfilePage: undefined
     LeaderboardsPage: undefined
-    SettingsPage: undefined
+    SettingsNavStack: undefined
 }
 
 const Stack = createStackNavigator<ProfileStackParams>();
@@ -24,16 +25,25 @@ export default function HomeNavStack() {
                 <Stack.Screen name="ProfilePage" component={ProfilePage} options={{
                     headerTitle: "My profile",
                     headerRight: () => (
-                        <Button title="Settings" onPress={() => navigation.navigate("SettingsPage")} />
+                        <Pressable onPress={() => navigation.navigate("SettingsNavStack")}>
+                            <Image style={header.iconRight} source={require('../../assets/icons/icon.png')} />
+                        </Pressable>
                     ),
                 }}/>
                 <Stack.Screen name="LeaderboardsPage" component={LeaderboardsPage} options={{
                     headerRight: () => (
-                        <Button title="Region" />
+                        <Pressable style={header.buttonRight}>
+                            <Text style={header.buttonTextRight}>Region</Text>    
+                        </Pressable>
                     ),
                 }}/>
-                <Stack.Screen name="SettingsPage" component={SettingsPage} options={{
+            </Stack.Group>
+            <Stack.Group screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="SettingsNavStack" component={SettingsNavStack} options={{
                     headerTitle: "Settings",
+                    headerRight: () => (
+                        <Button title="Settings" onPress={() => navigation.navigate("SettingsNavStack")} />
+                    ),
                 }}/>
             </Stack.Group>
         </Stack.Navigator>
