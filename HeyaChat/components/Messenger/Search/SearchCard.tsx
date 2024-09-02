@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Text, View, Image, TouchableHighlight } from 'react-native'
 import { user } from '../../../models/user'
-import { testUser } from '../../../models/testUser'
 import { modalCard } from '../../../assets/styles/styles'
+
+import { testUser } from '../../../models/testUser'
 
 interface Props {
   userId: number

@@ -52,17 +52,17 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
         <View style={profile.head}>
 
           <ImageBackground style={profile.banner} imageStyle={{ borderRadius: 15 }} source={banner} resizeMode="cover" />
-
-          {title != "" && <View style={profile.titleBackground}>
-            <Text style={profile.title}>{title}</Text>
-          </View>}
         
           <View style={{ position: 'absolute', top: 70, left: 0, right: 0, bottom: 0, alignItems: 'center' }}>
             <View style={profile.profileIconBackground} />
             <Image style={profile.profileIcon} source={icon} />
           </View>
 
-          <View style={{ ...profile.headSection, ...{ marginTop: 50, alignItems: 'center', } }}>
+          {title != "" && <View style={profile.titleBackground}>
+            <Text style={profile.title}>{title}</Text>
+          </View>}
+
+          <View style={{ ...profile.headSection, ...{ marginTop: 55, alignItems: 'center', } }}>
             <Text style={profile.displayname}>{displayname}</Text>
             <Text style={profile.username}>{username}</Text>
 

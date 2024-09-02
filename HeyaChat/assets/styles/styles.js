@@ -183,8 +183,8 @@ export const profile = StyleSheet.create({
   },
   titleBackground: {
     position: 'absolute', 
-    marginTop: 7,
-    top: 0, 
+    marginTop: 0,
+    top: 150, 
     left: 0, 
     right: 0, 
     bottom: 0, 

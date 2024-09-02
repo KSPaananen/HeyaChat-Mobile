@@ -38,10 +38,6 @@ const ProfilePage = () => {
             <ImageBackground style={profile.banner} source={banner} resizeMode="cover" />
           </TouchableOpacity>
 
-          {title != "" && <View style={profile.titleBackground}>
-            <Text style={profile.title}>{title}</Text>
-          </View>}
-
           <View style={{position: 'absolute', top: 70, left: 0, right: 0, bottom: 0, alignItems: 'center'}}>
             <View style={profile.profileIconBackground} />
             <TouchableOpacity>
@@ -49,7 +45,11 @@ const ProfilePage = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ ...profile.headSection, ...{ marginTop: 50, alignItems: 'center', } }}>
+          {title != "" && <View style={profile.titleBackground}>
+            <Text style={profile.title}>{title}</Text>
+          </View>}
+
+          <View style={{ ...profile.headSection, ...{ marginTop: 55, alignItems: 'center', } }}>
             <Pressable style={{ flexDirection: 'row'}}>
               <Text style={profile.displayname}>{displayname}</Text>
               <Image style={profile.editIcon} source={require('../../assets/icons/icon.png')} />

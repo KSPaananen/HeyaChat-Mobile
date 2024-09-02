@@ -7,9 +7,9 @@ import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
 import MessengerTopTabNavStack from './MessengerTopTabNavStack'
-import DirectMessagePage from '../Users/DirectMessagePage'
+import DirectMessagePage from '../Messenger/DirectMessagePage'
 import UserProfile from '../UserDetails/UserProfile'
-import Search from '../Users/Search/Search'
+import Search from '../Messenger/Search/Search'
 
 export type MessengerStackParams = {
     MessengerTopTabNavStack: undefined
