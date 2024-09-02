@@ -28,6 +28,7 @@ export const header = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
+    marginRight: 5,
     backgroundColor: 'blue'
   },
   buttonTextRight: {
@@ -38,6 +39,7 @@ export const header = StyleSheet.create({
     height: 45,
     width: 45,
     margin: 5,
+    borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -50,7 +52,10 @@ export const header = StyleSheet.create({
   textInput: {
     flex: 1,
     flexDirection: 'row',
-    margin: 10,
+    marginTop: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    marginLeft: 0,
     fontSize: 15,
     backgroundColor: '#0011',
     alignItems: 'stretch',
@@ -77,7 +82,10 @@ export const modals = StyleSheet.create({
     marginRight: 25,
     marginBottom: 120,
     marginLeft: 25,
-    padding: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 0,
+    paddingLeft: 10,
   },
   title: {
     alignItems: 'flex-start',
@@ -153,7 +161,6 @@ export const modalCard = StyleSheet.create({
 export const profile = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 
   // Head
@@ -209,8 +216,12 @@ export const profile = StyleSheet.create({
   },
   editIcon: {
     marginTop: 10,
+    marginLeft: 5,
     height: 20,
     width: 20,
+    borderRadius: 5,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   dropdownIcon: {
     height: 35,
@@ -239,8 +250,7 @@ export const profile = StyleSheet.create({
     borderRadius: 15,
     bottom: 0,
     left: 0,
-    right: 0,
-    height: 60,  
+    right: 0, 
   },
 
   // Body

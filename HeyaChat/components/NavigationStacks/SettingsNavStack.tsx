@@ -30,6 +30,7 @@ const SettingsNavStack = () => {
             <Drawer.Group>
                 <Drawer.Screen name="AppSettings" component={AppSettingsPage} options={{
                     headerTitle: "Application settings",
+                    drawerLabel: "Application",
                     headerLeft: () => (
                         <Pressable onPress={() => {
                             navigation.goBack()
@@ -47,6 +48,7 @@ const SettingsNavStack = () => {
                 }}/>
                 <Drawer.Screen name="AccountSettings" component={AccountSettingsPage} options={{
                     headerTitle: "My account",
+                    drawerLabel: "My account",
                     headerLeft: () => (
                         <Pressable onPress={() => {
                             navigation.goBack()

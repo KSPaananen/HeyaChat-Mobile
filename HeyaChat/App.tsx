@@ -23,7 +23,7 @@ const Stack = createStackNavigator<RootStackParams>()
 // Nav stack structure
 // 
 //                             -> HomeNavStack
-// App -> AppBottomTabNavStack -> UsersNavStack -> UsersTopTabNavStack
+// App -> AppBottomTabNavStack -> MessengerNavStack -> MessengerTopTabNavStack
 //                             -> ProfileNavStack -> SettingsNavStack
 
 const App = () => {

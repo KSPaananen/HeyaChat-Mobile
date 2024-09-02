@@ -12,6 +12,10 @@ const SummaryCard: React.FC<Props> = ({ user, onPress }) => {
   let localization: string = "fi-FIN"
   let timeZone: string = "UTC"
 
+  useEffect(() => {
+
+  }, [])
+
   return (
     <TouchableHighlight onPress={() => onPress(user.userId)}>
       <View style={modalCard.card}>

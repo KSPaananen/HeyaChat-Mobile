@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Text, View, Button, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
+import { View, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../App'
 import { StackActions, CommonActions } from '@react-navigation/native'

@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { UsersTopTabStackParams } from '../NavigationStacks/UsersTopTabNavStack'
+import { MessengerTopTabStackParams } from '../NavigationStacks/MessengerTopTabNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 import UserCard from './UserCard'
@@ -12,7 +12,7 @@ export type user = {
   icon: string
 }
 
-type Props = NativeStackScreenProps<UsersTopTabStackParams, "MetUsers" | "Friendlist">
+type Props = NativeStackScreenProps<MessengerTopTabStackParams, "MetUsers" | "Chat">
 
 const UserPage: React.FC<Props> = ({ navigation }) => {
 
@@ -29,10 +29,10 @@ const UserPage: React.FC<Props> = ({ navigation }) => {
         <UserCard 
         user={user}
         onPress1={(value) => {
-          navigation.navigate("Users", { screen: "UserProfile", params: { userId: value }})
+          navigation.navigate("Messenger", { screen: "UserProfile", params: { userId: value }})
         }}
         onPress2={(value) => {
-          navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: value }})
+          navigation.navigate("Messenger", { screen: "DirectMessagePage", params: { userId: value }})
         }}
         />
     </View>

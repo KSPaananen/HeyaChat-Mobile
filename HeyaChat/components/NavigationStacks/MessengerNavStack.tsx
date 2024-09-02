@@ -6,13 +6,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
-import UsersTopTabNavStack from './UsersTopTabNavStack'
+import MessengerTopTabNavStack from './MessengerTopTabNavStack'
 import DirectMessagePage from '../Users/DirectMessagePage'
-import UserProfile from '../Users/../UserDetails/UserProfile'
+import UserProfile from '../UserDetails/UserProfile'
 import Search from '../Users/Search/Search'
 
-export type UsersStackParams = {
-    UsersTopTabNavStack: undefined
+export type MessengerStackParams = {
+    MessengerTopTabNavStack: undefined
     DirectMessagePage: {
         userId: number
     }
@@ -21,10 +21,10 @@ export type UsersStackParams = {
     }
 }
 
-const Stack = createStackNavigator<UsersStackParams>()
+const Stack = createStackNavigator<MessengerStackParams>()
 
-const UsersNavStack = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<UsersStackParams>>()
+const MessengerNavStack = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<MessengerStackParams>>()
     const [query, setQuery] = useState("")
 
     function onSubmit() {
@@ -37,8 +37,8 @@ const UsersNavStack = () => {
     return (
         <Stack.Navigator>
             <Stack.Group>
-                <Stack.Screen name="UsersTopTabNavStack" component={UsersTopTabNavStack} options={{
-                    headerTitle: "Users",
+                <Stack.Screen name="MessengerTopTabNavStack" component={MessengerTopTabNavStack} options={{
+                    headerTitle: "Messenger",
                     headerRight: () => (
                         <View style={header.textInputRight}>
                             <TextInput style={header.textInput}
@@ -70,4 +70,4 @@ const UsersNavStack = () => {
     )
 }
 
-export default UsersNavStack
+export default MessengerNavStack

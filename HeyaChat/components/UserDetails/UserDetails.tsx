@@ -17,7 +17,7 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
   // GUI related variables
   const [isFriends, setIsFriends] = useState<boolean>(false)
   const [expandedDescription, setExpandedDescription] = useState<boolean>(false)
-  const [fadeValue, setFadeValue] = useState<number>(0.9)
+  const [fadeHeight, setFadeHeight] = useState<number>(60)
 
   const [user, setUser] = useState<user>(testUser)
 
@@ -40,14 +40,14 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
     // Reset Home to first page
     navigation.dispatch(StackActions.popToTop())
     // Navigate first to bottom page and then to direct messages to maintain navigation stack
-    navigation.navigate("Users")
+    navigation.navigate("Messenger")
     setTimeout(
-      () => navigation.navigate("Users", { screen: "DirectMessagePage", params: { userId: userId }}), 
+      () => navigation.navigate("Messenger", { screen: "DirectMessagePage", params: { userId: userId }}), 
     50)
   }
 
   return (
-    <View>
+    <View style={profile.container}>
       <View style={profile.descriptionWrapper}>
         <View style={profile.head}>
 
@@ -93,7 +93,7 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
                     <Text style={profile.description}>{shortDescription}...</Text>
                 </View>}
                 {expandedDescription && <View>
-                  <Pressable onPress={() => {setExpandedDescription(false); setFadeValue(0.9)}}>
+                  <Pressable onPress={() => {setExpandedDescription((value) => !value); setFadeHeight(60)}}>
                     <Text style={profile.descriptionTitle}>About me</Text>
                     <Text style={profile.description}>{description}</Text>
                   </Pressable>
@@ -102,10 +102,10 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
             </View>
 
             {/* Move descriptions expanding pressable here because lineargradient blocks the original */}
-            <Pressable onPress={() => {setExpandedDescription(true); setFadeValue(0)}}>
+            <Pressable onPress={() => {setExpandedDescription((value) => !value); setFadeHeight(0)}}>
               <LinearGradient
-                colors={['transparent', `rgba(0, 0, 0, ${fadeValue})`]}
-                style={profile.descriptionFade}
+                colors={['transparent', `rgba(0, 0, 0, 0.9)`]}
+                style={{ ...profile.descriptionFade, ...{ height: fadeHeight } }}
               />
             </Pressable>
       </View>

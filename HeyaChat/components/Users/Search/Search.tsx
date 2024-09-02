@@ -21,31 +21,31 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
   }
 
   return (
-        <View>
-          {!layer && <View>
-            <View style={search.header}>
-              <Text style={search.title}>Search results for {param}</Text>
-              <View style={search.separator} />
-            </View>
-            <ScrollView>
-              <SearchCard 
-                userId={testUser.userId}
-                onPress={(userId) => {
-                  OpenUserDetails(userId)
-                }}
-              />
-            </ScrollView>
-          </View>}
-          {layer && <View>
-            <UserDetails 
-              userId={userId}
-              navigation={navigation}
-              onPress={() => {
-                setLayer((value) => !value)
-              }}
-            />
-          </View>}
-        </View>
+    <View>
+      {!layer && <View>
+        <View style={search.header}>
+          <Text style={search.title}>Search results for {param}</Text>
+          <View style={search.separator} />
+      </View>
+      <ScrollView>
+        <SearchCard 
+          userId={testUser.userId}
+          onPress={(userId) => {
+            OpenUserDetails(userId)
+          }}
+        />
+      </ScrollView>
+      </View>}
+      {layer && <ScrollView>
+        <UserDetails 
+          userId={userId}
+          navigation={navigation}
+          onPress={() => {
+            setLayer((value) => !value)
+          }}
+        />
+      </ScrollView>}
+    </View>
   );
 }
 
