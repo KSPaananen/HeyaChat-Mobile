@@ -95,17 +95,21 @@ export const modals = StyleSheet.create({
     paddingBottom: 10
   },
   ol: { // Overlay
-    flex: 1,
-    position: 'absolute',
-    width: 0,
+    position: 'absolute', 
+    top: 0, 
+    right: 0, 
+    bottom: 0, 
+    left: 0, 
+    alignItems: 'flex-end'
   },
-  olExitIcon: {
-    flex: 1,
-    borderRadius: 100,
-    height: 55,
-    width: 55,
-    top: -18,
-    left: 322
+  exitBtnWrapper: {
+    bottom: 18, 
+    left: 18
+  },
+  olExitBtn: {
+    height: 50, 
+    width: 50, 
+    borderRadius: 100
   }
 })
 
@@ -158,6 +162,146 @@ export const modalCard = StyleSheet.create({
   }
 })
 
+export const home = StyleSheet.create({
+  container: {
+    flex: 1,
+ 
+  },
+  ol: {
+    position: 'absolute', 
+    top: 0, 
+    right: 0, 
+    bottom: 0, 
+    left: 0, 
+    alignItems: 'flex-end', 
+    justifyContent: 'flex-end',
+  },
+  
+})
+
+export const messager = StyleSheet.create({
+  container: {
+    flex: 1,
+    
+  },
+  body: {
+    marginBottom: 0
+  },
+  footer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  inputWrapper: {
+    flex: 1,
+    height: 55,
+    padding: 2.5,
+    marginVertical: 10, 
+    marginHorizontal: 5,
+    borderRadius: 100,
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+  },
+  input: {
+    height: 50,
+    overflow: 'hidden',
+    borderTopRightRadius: 100,
+    borderTopLeftRadius: 100,
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 100,
+  },
+  inputIcon: {
+
+  },
+  iconWrapper: {
+    height: 55,
+    width: 55,
+    marginRight: 5,
+    marginBottom: 10,
+    borderRadius: 100,
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+  },
+  icon: {
+    height: 50,
+    width: 50,
+    marginTop: 5,
+    marginLeft: 2.5,
+    marginBottom: 5,
+    borderRadius: 100,
+  },
+
+})
+
+export const messageCard = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  messageSent: {
+    alignItems: 'flex-end',
+    flexDirection: 'row', 
+    justifyContent: 'flex-end'
+  },
+  messageReceived: {
+    alignItems: 'flex-end',
+    flexDirection: 'row', 
+    justifyContent: 'flex-start'
+  },
+  icon: {
+    height: 25,
+    width: 25,
+    marginBottom: 10,
+    borderRadius: 100,
+    alignItems: 'flex-end'
+  },
+  messageFrame: {
+    flex: 1,
+    marginVertical: 10,
+    paddingTop: 5,
+    paddingRight: 10,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    backgroundColor: 'lightgray'
+  },
+  username: {
+    fontSize: 12,
+    fontStyle: 'italic',
+    fontWeight: '600',
+  }, 
+  dateTime: {
+    marginRight: 5,
+    marginBottom: 1,
+    fontSize: 11,
+    fontStyle: 'italic',
+
+  },
+  mediaContainer: {
+    overflow: 'hidden', 
+    borderWidth: 3, 
+    borderRadius: 10, 
+    borderColor: 'gray', 
+    backgroundColor: 'darkgray', 
+    marginTop: 10
+  },
+  mediaWrapper: {
+    flex: 1, 
+    height: 250, 
+    alignItems: 'center', 
+    justifyContent: 'center',
+  },
+  media: {
+    height: "100%"
+  },
+
+})
+
 export const profile = StyleSheet.create({
   container: {
     flex: 1,
@@ -166,7 +310,10 @@ export const profile = StyleSheet.create({
   // Head
   head: {
     flex: 1,
-    borderRadius: 15,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     backgroundColor: 'lightgray'
   },
   banner: {
@@ -247,7 +394,9 @@ export const profile = StyleSheet.create({
   },
   descriptionFade: {
     position: 'absolute',
-    borderRadius: 15,
+    // borderRadius: 15,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
     bottom: 0,
     left: 0,
     right: 0, 
@@ -255,6 +404,7 @@ export const profile = StyleSheet.create({
 
   // Body
   body: {
+    flex: 1,
     padding: 10,
   },
   section: {
@@ -263,15 +413,6 @@ export const profile = StyleSheet.create({
   },
 
   // Re-usables
-  separator: {
-    flex: 1,
-    marginTop: 10,
-
-    height: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
-  },
   primaryButton: {
     marginTop: 10,
     marginHorizontal: 5,
@@ -297,7 +438,10 @@ export const profile = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
-  }
+  },
+  returnButton: {
+
+  },
 
 })
 

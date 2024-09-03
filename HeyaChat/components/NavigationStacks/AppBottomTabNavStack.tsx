@@ -15,7 +15,12 @@ const Tab = createBottomTabNavigator<AppStackParams>()
 const AppBottomTabNavStack = () => {
 
     return (
-      <Tab.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+      <Tab.Navigator initialRouteName="Home" 
+      screenOptions={{ 
+        headerShown: false,
+        tabBarHideOnKeyboard: true // Temporary fix
+      }}
+      >
         <Tab.Screen name="Home" component={HomeNavStack} />
         <Tab.Screen name="Messenger" component={MessengerNavStack} options={{ 
           tabBarBadge: 1 

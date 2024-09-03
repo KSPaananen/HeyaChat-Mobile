@@ -7,14 +7,14 @@ import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/styles'
 
 import MessengerTopTabNavStack from './MessengerTopTabNavStack'
-import DirectMessagePage from '../Messenger/DirectMessagePage'
+import ChatPage from '../Messenger/Chat/ChatPage'
 import UserProfile from '../UserDetails/UserProfile'
 import Search from '../Messenger/Search/Search'
 
 export type MessengerStackParams = {
     MessengerTopTabNavStack: undefined
-    DirectMessagePage: {
-        userId: number
+    ChatPage: {
+        userIds?: Array<number> // Pass one for direct messages and multiple for group chats
     }
     UserProfile: {
         userId: number
@@ -56,7 +56,7 @@ const MessengerNavStack = () => {
                 }}/>
             </Stack.Group>
             <Stack.Group>
-                <Stack.Screen name="DirectMessagePage" component={DirectMessagePage} options={{
+                <Stack.Screen name="ChatPage" component={ChatPage} options={{
                     headerTitle: "Username DM's (needs userId implementation)",
                     headerRight: () => (
                         <Button title="Profile" onPress={() => navigation.navigate("UserProfile", { userId: 10 })}/>

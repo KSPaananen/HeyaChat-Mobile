@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, Image, ImageSourcePropType, TouchableOpacity, ImageBackground, Pressable, Button } from 'react-native'
+import { Text, View, Image, ImageSourcePropType, ImageBackground, Pressable, Button } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { profile } from '../../assets/styles/styles'
@@ -42,7 +42,7 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
     // Navigate first to bottom page and then to direct messages to maintain navigation stack
     navigation.navigate("Messenger")
     setTimeout(
-      () => navigation.navigate("Messenger", { screen: "DirectMessagePage", params: { userId: userId }}), 
+      () => navigation.navigate("Messenger", { screen: "ChatPage", params: { userId: userId }}), 
     50)
   }
 
@@ -51,7 +51,7 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
       <View style={profile.descriptionWrapper}>
         <View style={profile.head}>
 
-          <ImageBackground style={profile.banner} imageStyle={{ borderRadius: 15 }} source={banner} resizeMode="cover" />
+          <ImageBackground style={profile.banner} imageStyle={{ borderTopRightRadius: 15, borderTopLeftRadius: 15, borderBottomRightRadius: 0, borderBottomLeftRadius: 0 }} source={banner} resizeMode="cover" />
         
           <View style={{ position: 'absolute', top: 70, left: 0, right: 0, bottom: 0, alignItems: 'center' }}>
             <View style={profile.profileIconBackground} />
@@ -108,15 +108,16 @@ const UserDetails: React.FC<Props> = ({ userId, navigation, onPress }) => {
                 style={{ ...profile.descriptionFade, ...{ height: fadeHeight } }}
               />
             </Pressable>
-      </View>
+        </View>
       
         <View style={profile.body}>
           <Text>Body</Text>
         </View>
-    
-      <View style={{ justifyContent: 'flex-end'}}>
-        <Button title="Go back" onPress={() => onPress()} />
-      </View>
+
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center' }}>
+          <Button title="Go back" onPress={() => onPress()} />
+        </View>
+
     </View>
   );
 }

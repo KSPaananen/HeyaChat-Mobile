@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
-import UsersPage from '../Messenger/UsersPage'
+import UsersPage from '../Messenger/UserPage/UsersPage'
 
 export type MessengerTopTabStackParams = {
     MetUsers: undefined
