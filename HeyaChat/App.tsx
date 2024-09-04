@@ -1,4 +1,5 @@
 import './gesture-handler';
+import { useEffect } from 'react'
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
