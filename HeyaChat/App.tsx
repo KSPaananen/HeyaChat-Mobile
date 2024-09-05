@@ -11,6 +11,13 @@ LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ])
 
+//                             - Nav stack structure -
+// 
+//                             -> HomeNavStack
+// App -> AppBottomTabNavStack -> MessengerNavStack -> MessengerTopTabNavStack
+//                             -> ProfileNavStack -> SettingsNavStack
+//
+
 export type RootStackParams = {
   AppBottomTabs: undefined
   Modal: {
@@ -20,12 +27,6 @@ export type RootStackParams = {
 }
 
 const Stack = createStackNavigator<RootStackParams>()
-
-// Nav stack structure
-// 
-//                             -> HomeNavStack
-// App -> AppBottomTabNavStack -> MessengerNavStack -> MessengerTopTabNavStack
-//                             -> ProfileNavStack -> SettingsNavStack
 
 const App = () => {
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Text, View, Image, TouchableHighlight } from 'react-native'
-import { user } from '../../../models/user'
+import { user } from '../../../models/localDB/models'
 import { modalCard } from '../../../assets/styles/styles'
 
 interface Props {

@@ -1,4 +1,4 @@
-import { user } from '../models/user'
+import { user } from './localDB/models'
 
 // User object for placeholder values & testing
 

@@ -3,7 +3,7 @@ import { Text, View, Image, ImageSourcePropType, ImageBackground, Pressable, But
 import { StackActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { profile } from '../../assets/styles/styles'
-import { user } from '../../models/user'
+import { user } from '../../models/localDB/models'
 
 import { testUser } from '../../models/testUser'
 

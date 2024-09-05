@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, View, ScrollView } from 'react-native'
 import { modals } from '../../../assets/styles/styles'
-import { user } from '../../../models/user'
+import { users } from '../../../models/localDB/models'
 import { testUser } from '../../../models/testUser'
 
 import SummaryCard from './SummaryCard'
@@ -16,7 +16,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
 
-  const usersList: user[] = []
+  const usersList: users[] = []
   usersList.push(testUser)
   usersList.push(testUser)
 
@@ -44,7 +44,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
               key={index}
               user={user}
               onPress={(userId) => {
-                OpenUserDetails(user.userId)
+                OpenUserDetails(user.userID)
               }}
             />
           ))}

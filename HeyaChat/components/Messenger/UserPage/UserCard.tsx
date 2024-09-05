@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import { user } from '../../../models/user'
+import { user } from '../../../models/localDB/models'
 import { userCard } from '../../../assets/styles/styles'
 
 interface Props {
