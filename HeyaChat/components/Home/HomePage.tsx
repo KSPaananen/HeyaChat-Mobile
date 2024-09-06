@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Text, View, Image, TouchableOpacity, Button } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { home } from '../../assets/styles/styles'
+import { home } from '../../assets/styles/stylesheet'
 import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
 import { requestForGoogleNearbyConnectionsPerms, checkForGoogleNearbyConnectionsPerms } from '../../services/PermissionsService'
 import { localRepository } from '../../repositories/localRepository'
@@ -14,11 +14,90 @@ import FriendRequests from './Requests/FriendRequests'
 type Props = NativeStackScreenProps<HomeStackParams, "HomePage">
     
 const HomePage: React.FC<Props> = ({ navigation }) => {
+  const [user, setUser] = useState<users | null>()
 
+  const getLocalPlaceholderUser = () => {
+    var repo = new localRepository()
+    repo.getLocalUser().then((result) => {
+      setUser(result)
+    })
+    
+  }
+
+  const getPlaceholderUser = () => {
+    var repo = new localRepository()
+    repo.getUser(25).then((result) => {
+      setUser(result)
+    })
+    
+  }
+
+  const createPlaceholderUser = () => {
+    var user: users = {
+      userID: 25,
+      username: "username25",
+      email: "email.username25@email.com",
+      phone: "+1234567890",
+      localUser: true
+    }
+
+    var repo = new localRepository()
+    repo.insertUser(user)
+    
+  }
+
+  const editPlaceholderUser = () => {
+    var user: users = {
+      userID: 25,
+      username: "username25",
+      email: "email.username25@email.com",
+      phone: "+1234567890",
+      localUser: true
+    }
+
+    var repo = new localRepository()
+    repo.editUser(user)
+    
+  }
+
+  const deletePlaceholderUser = () => {
+
+    var repo = new localRepository()
+    repo.deleteUser(25)
+    
+  }
+
+  const dropTables = () => {
+    const test = new localDB()
+
+    test.dropTables()
+  }
+
+  const createTables = () => {
+    const test = new localDB()
+
+    test.setupDB()
+  }
 
   return (
     <View style={home.container}>
-       
+        <Text></Text>
+        <Text>{user?.username}</Text>
+        <Text>{user?.email}</Text>
+
+        <Text>Permission tester</Text>
+        <Button title="Request permissions" onPress={() => requestForGoogleNearbyConnectionsPerms()} />
+        <Text>SQLite tester</Text>
+        <Button title="Get local user" onPress={() => getLocalPlaceholderUser()} />
+        <Button title="Get user 25" onPress={() => getPlaceholderUser()} />
+        <Button title="Create user" onPress={() => createPlaceholderUser()} />
+        <Button title="Edit user" onPress={() => editPlaceholderUser()} />
+        <Button title="Delete user" onPress={() => deletePlaceholderUser()} />
+        <Text></Text>
+        <Button title="Create tables" onPress={() => createTables()} />
+        <Button title="Drop tables" onPress={() => dropTables()} />
+        <Text></Text>
+        <Button title="Back to login" onPress={() => navigation.navigate("Login", { screen: "MainPage"})} />
       
         <View style={home.ol}>
           {/* Friend requests */}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Pressable, Image, ImageSourcePropType, ImageURISource } from 'react-native'
-import { messageCard } from '../../../assets/styles/styles'
+import { messageCard } from '../../../assets/styles/stylesheet'
 
 
 interface Props {

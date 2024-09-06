@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Text, View, Button, ScrollView } from 'react-native'
-import { search } from '../../../assets/styles/styles'
+import { search } from '../../../assets/styles/stylesheet'
 import { testUser } from '../../../models/testUser'
 
 import SearchCard from './SearchCard'

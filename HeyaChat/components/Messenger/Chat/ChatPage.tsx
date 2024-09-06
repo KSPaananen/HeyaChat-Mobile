@@ -3,7 +3,7 @@ import { Text, View, ScrollView,Pressable, TouchableOpacity, Image } from 'react
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../../NavigationStacks/MessengerNavStack'
 import { TextInput } from "react-native-paper"
-import { messager } from '../../../assets/styles/styles'
+import { messager } from '../../../assets/styles/stylesheet'
 
 import MessageCard from './MessageCard'
 

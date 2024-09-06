@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { TextInput } from "react-native-paper"
-import { header } from '../../assets/styles/styles'
+import { header } from '../../assets/styles/stylesheet'
 
 import MessengerTopTabNavStack from './MessengerTopTabNavStack'
 import ChatPage from '../Messenger/Chat/ChatPage'
@@ -39,6 +39,9 @@ const MessengerNavStack = () => {
             <Stack.Group>
                 <Stack.Screen name="MessengerTopTabNavStack" component={MessengerTopTabNavStack} options={{
                     headerTitle: "Messenger",
+                    headerLeft: () => (<View>
+                        
+                    </View>),
                     headerRight: () => (
                         <View style={header.textInputRight}>
                             <TextInput style={header.textInput}

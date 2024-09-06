@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity, TouchableWithoutFeedback, Image } from 'r
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../App'
 import { StackActions, CommonActions } from '@react-navigation/native'
-import { modals } from '../../assets/styles/styles'
+import { modals } from '../../assets/styles/stylesheet'
 
 type Props = NativeStackScreenProps<RootStackParams, "Modal">
 

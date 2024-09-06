@@ -156,7 +156,7 @@ export const modalCard = StyleSheet.create({
   },
   icon: {
     height: 50,
-    width: 50,
+    width: 50, 
     marginRight: 7.5,
     borderRadius: 100,
   }
@@ -469,7 +469,6 @@ export const settings = StyleSheet.create({
   separator: {
     flex: 1,
     height: 1,
-    marginTop: 17,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',

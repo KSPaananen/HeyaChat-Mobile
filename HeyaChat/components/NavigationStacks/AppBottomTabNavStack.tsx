@@ -18,7 +18,6 @@ const AppBottomTabNavStack = () => {
       <Tab.Navigator initialRouteName="Home" 
       screenOptions={{ 
         headerShown: false,
-        tabBarHideOnKeyboard: true // Temporary fix
       }}
       >
         <Tab.Screen name="Home" component={HomeNavStack} />

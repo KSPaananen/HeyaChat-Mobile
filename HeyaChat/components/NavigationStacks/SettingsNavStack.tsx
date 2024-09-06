@@ -3,7 +3,7 @@ import { NavigationContainer, DrawerActions } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/core'
 import { Text, Pressable, Image } from 'react-native'
-import { header } from '../../assets/styles/styles'
+import { header } from '../../assets/styles/stylesheet'
 
 import ProfileSettingsPage from '../Profile/Settings/ProfileSettingsPage'
 import AccountSettingsPage from '../Profile/Settings/AccountSettingsPage'

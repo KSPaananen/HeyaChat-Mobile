@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { SettingsStackParams } from '../../NavigationStacks/SettingsNavStack'
 import { SelectList } from 'react-native-dropdown-select-list'
 import { TextInput } from "react-native-paper"
-import { settings } from '../../../assets/styles/styles'
+import { settings } from '../../../assets/styles/stylesheet'
 
 import { testUser } from '../../../models/testUser'
 

@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Text, Pressable, Image, Button } from 'react-native'
-import { header } from '../../assets/styles/styles'
+import { View, Text, Pressable, Image, Button } from 'react-native'
+import { header } from '../../assets/styles/stylesheet'
 
 import ProfilePage from '../Profile/ProfilePage'
 import LeaderboardsPage from '../Profile/Leaderboards/LeaderboardsPage'
@@ -24,6 +24,9 @@ export default function HomeNavStack() {
             <Stack.Group>
                 <Stack.Screen name="ProfilePage" component={ProfilePage} options={{
                     headerTitle: "My profile",
+                    headerLeft: () => (<View>
+                        
+                        </View>),
                     headerRight: () => (
                         <Pressable onPress={() => navigation.navigate("SettingsNavStack")}>
                             <Image style={header.iconRight} source={require('../../assets/icons/icon.png')} />

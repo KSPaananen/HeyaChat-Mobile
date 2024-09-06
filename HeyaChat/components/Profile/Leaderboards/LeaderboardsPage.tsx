@@ -1,7 +1,7 @@
 import { Text, View, Button } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { ProfileStackParams } from '../../NavigationStacks/ProfileNavStack'
-import { styles } from '../../../assets/styles/styles'
+import { styles } from '../../../assets/styles/stylesheet'
 
 import LiteUserDetails from '../../UserDetails/LiteUserDetails'
 
