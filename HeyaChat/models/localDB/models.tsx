@@ -27,3 +27,8 @@ export type profiles = {
     bannerUrl: string
     userID: number
 }
+
+export type device = {
+    deviceID: number
+    deviceName: string
+}

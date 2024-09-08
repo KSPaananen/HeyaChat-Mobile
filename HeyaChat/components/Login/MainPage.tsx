@@ -5,6 +5,7 @@ import { LoginStackParams } from '../NavigationStacks/LoginNavStack'
 
 import Login from './Screens/Login'
 import Register from './Screens/Register'
+import Verify from './Screens/Verify'
 
 type Props = NativeStackScreenProps<LoginStackParams, "MainPage">
 
@@ -12,11 +13,9 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
     const [loginPage, setLoginPage] = useState<boolean>(true)
     const [registerPage, setRegisterPage] = useState<boolean>(false)
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false)
+    const [verifyPage, setVerifyPage] = useState<boolean>(false)
 
-    const onSubmit = () => {
-
-    }
-
+   
     return (
         <View style={login.container}>
             <View style={login.wrapper}>
@@ -28,11 +27,15 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {registerPage && <Register
-                    onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Register
+                    onPress1={() => {setRegisterPage(false); setVerifyPage(true)}} // Register
                     onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Sign in
                 />}
 
                 {recoveryPage}
+
+                {verifyPage && <Verify 
+
+                />}
 
             </View>
         </View>
@@ -80,7 +83,8 @@ export const login = StyleSheet.create({
     ///////////////////////////
 
     inputWrapper: {
-        marginVertical: 10, 
+        marginTop: 5, 
+        marginBottom: 10, 
         marginHorizontal: 5, 
         borderRadius: 100, 
         overflow: 'hidden'
@@ -90,7 +94,7 @@ export const login = StyleSheet.create({
     },
     primaryBtnWrapper: {
         flexDirection: 'row',
-        marginTop: 30,
+        marginTop: 20,
         marginHorizontal: 5, 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -102,6 +106,14 @@ export const login = StyleSheet.create({
       alignItems: 'center', 
       justifyContent: 'center',
       backgroundColor: 'gray'
+    },
+    primaryBtnDisabled: {
+      flex: 1, 
+      height: 50, 
+      borderRadius: 100, 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      backgroundColor: 'lightgray'
     },
     primaryBtnText: {
         fontSize: 15,

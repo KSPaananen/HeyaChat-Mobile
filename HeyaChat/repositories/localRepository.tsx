@@ -174,22 +174,24 @@ export class localRepository {
     
     // -- devices table -- //
 
-    getDevice = async () => {
+    getDevice = async (): Promise<Models.device | null> => {
         const db = await SQLite.openDatabaseAsync('localDB');
 
         const result = await db.getFirstAsync(`
             SELECT * FROM device
-        `)
+        `).then((result) => {
+            return result
+        })
 
-        return result
+        return null
     }
 
-    editDevice = async (deviceID: number, deviceName: string) => {
+    editDevice = async (object: Models.device) => {
         const db = await SQLite.openDatabaseAsync('localDB')
 
         // There should only be one row so just replace its value
         await db.execAsync(`
-            UPDATE device SET deviceName = '${deviceName}' WHERE deviceID = ${deviceID}
+            UPDATE device SET deviceName = '${object.deviceName}' WHERE deviceID = ${object.deviceID}
         `)
     }
 

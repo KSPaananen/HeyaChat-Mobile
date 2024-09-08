@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import * as Localization from 'expo-localization';
 
 import LoginNavStack from './components/NavigationStacks/LoginNavStack'
 import Modal from './components/CommonComponents/Modal'
@@ -30,6 +31,11 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>()
 
 const App = () => {
+
+  useEffect(() => {
+    
+
+  }, [])
 
   return (
     <NavigationContainer>
