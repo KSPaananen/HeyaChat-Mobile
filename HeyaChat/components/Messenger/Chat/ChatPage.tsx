@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Text, View, ScrollView,Pressable, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, View, ScrollView,Pressable, TouchableOpacity, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../../NavigationStacks/MessengerNavStack'
 import { TextInput } from "react-native-paper"
-import { messager } from '../../../assets/styles/stylesheet'
 
 import MessageCard from './MessageCard'
 
@@ -81,3 +80,62 @@ const ChatPage: React.FC<Props> = ({ route, navigation }) => {
 }
 
 export default ChatPage
+
+export const messager = StyleSheet.create({
+  container: {
+    flex: 1,
+    
+  },
+  body: {
+    marginBottom: 0
+  },
+  footer: {
+    position: 'absolute',
+    flexDirection: 'row',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  inputWrapper: {
+    flex: 1,
+    height: 55,
+    padding: 2.5,
+    marginVertical: 10, 
+    marginHorizontal: 5,
+    borderRadius: 100,
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+  },
+  input: {
+    height: 50,
+    overflow: 'hidden',
+    borderTopRightRadius: 100,
+    borderTopLeftRadius: 100,
+    borderBottomLeftRadius: 100,
+    borderBottomRightRadius: 100,
+  },
+  inputIcon: {
+
+  },
+  iconWrapper: {
+    height: 55,
+    width: 55,
+    marginRight: 5,
+    marginBottom: 10,
+    borderRadius: 100,
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+  },
+  icon: {
+    height: 50,
+    width: 50,
+    marginTop: 5,
+    marginLeft: 2.5,
+    marginBottom: 5,
+    borderRadius: 100,
+  },
+
+})

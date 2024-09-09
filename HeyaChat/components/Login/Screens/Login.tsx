@@ -86,14 +86,14 @@ const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            <View style={{ ...login.checkboxBtnWrapper, ...{ alignItems: 'flex-end' } }}>
+            <View style={{ ...login.checkboxBtnWrapper, ...{ justifyContent: 'flex-end', marginRight: 10 } }}>
                 <Pressable style={login.checkboxBtn} onPress={() => setKeepLoggedIn(!keepLoggedIn)}>
                     <Checkbox 
                         onPress={() => setKeepLoggedIn(!keepLoggedIn)}
                         status={ keepLoggedIn ? "checked" : "unchecked"}
                     />
-                    <Text style={login.checkboxText}>Stay signed in</Text>
                 </Pressable>
+                <Text style={login.checkboxText}>Stay signed in</Text>
             </View>
             <View style={{ ...login.primaryBtnWrapper, ...{ marginTop: 40} }}>
                 <Pressable style={login.primaryBtn} onPress={() => onSubmit()} >

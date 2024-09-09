@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native'
-import { modals } from '../../../assets/styles/stylesheet'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { users } from '../../../models/localDB/models'
 import { testUser } from '../../../models/testUser'
 
@@ -38,7 +37,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   return (
     <View>
       {!layer && <ScrollView>
-        <Text style={modals.title}>{titles[0]}</Text>
+        <Text style={summary.title}>{titles[0]}</Text>
           {usersList.map((user, index) => (
             <SummaryCard 
               key={index}
@@ -61,3 +60,13 @@ const Summary: React.FC<Props> = ({ navigation }) => {
 }
 
 export default Summary
+
+export const summary = StyleSheet.create({
+  title: {
+    alignItems: 'flex-start',
+    fontSize: 25,
+    fontWeight: 'bold',
+    padding: 5,
+    paddingBottom: 10
+  },
+})

@@ -1,26 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
 import DateTimePicker from 'react-native-ui-datepicker';
 import * as Localization from 'expo-localization';
 import { login } from '../MainPage'
 
-import ErrorBox from '../../CommonComponents/ErrorBox'
-
 interface Props {
-  onPress1: () => void // Navigate to code verification screen
-  onPress2: () => void // Navigate back to login screen
+  onPress1: () => void // Change state to code verification screen
+  onPress2: () => void // Change state back to login screen
+  onPress3: () => void // Navigate to terms page
+  onPress4: () => void // Navigate to EULA page
 }
 
-const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
+//
+// Not proud of the code structure here, redo later
+//
+
+const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) => {
     // Fields
     const [usernameField, setUsernameField] = useState<string>("")
     const [emailField, setEmailField] = useState<string>("")
-    const [dateOfBirthField, setDateOfBirthField] = useState<Date>()
+    const [dateOfBirthField, setDateOfBirthField] = useState<Date>(new Date())
     const [passwordField, setPasswordField] = useState<string>("")
+
+    // Field restrictions
+    const usernameMaxLength: number = 32
+    const usernameMinLength: number = 3
+    const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    const minimumAge : number = 13
+    const passwordMinLength: number = 8
 
     // Account creation booleans
     const [usernameValid, setUsernameValid] = useState<boolean>(false)
+    const [emailValid, setEmailValid] = useState<boolean>(false)
+    const [userAgeValid, setUserAgeValid] = useState<boolean>(false)
     const [passwordValid, setPasswordValid] = useState<boolean>(false)
     const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false)
     const [agreeTerms, setAgreeTerms] = useState<boolean>(false)
@@ -33,21 +46,17 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
     const [displayUsernameLongError, setDisplayUsernameLongError] = useState<boolean>(false)
     const [displayUsernameShortError, setDisplayUsernameShortError] = useState<boolean>(false)
     const [invalidCharacters, setInvalidCharacters] = useState<string>("")
-    const [dateOfBirth, setDateOfBirth] = useState<string>("")
-    const [displayEmailError, setDisplayEmailError] = useState<boolean>(false)
+    const [dateOfBirth, setDateOfBirth] = useState<string>("Date of birth")
+    const [displayDateOfBirthAgeError, setDisplayDateOfBirthAgeError] = useState<boolean>(false)
+    const [displayEmailInvalidError, setDisplayEmailInvalidError] = useState<boolean>(false)
+    const [displayEmailTakenError, setDisplayEmailTakenError] = useState<boolean>(false)
     const [displayPasswordMatchError, setDisplayPasswordMatchError] = useState<boolean>(false)
     const [displayPasswordLengthError, setDisplayPasswordLengthError] = useState<boolean>(false)
     
-
-    const usernameMaxLength: number = 32
-    const usernameMinLength: number = 3
-    const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    const passwordMinLength: number = 8
-
     const userLocalization = Localization.getLocales()
 
     // Ensure username fits criteria and display errors accordingly
-    const checkUsername = (value: string) => {
+    const handleUsername = (value: string) => {
         setUsernameField(value)
 
         const validChars: string[] = [
@@ -70,23 +79,25 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
 
         let invalidChars: string = getInvalidChars(value)
 
-        if (invalidChars === "" && value.length <= usernameMaxLength) {
-            // Set GUI values
-            setInvalidCharacters("")
+        if (invalidChars === "" && value.length <= usernameMaxLength) { // No invalid characters and fits the length requirement
+            // Clear displayed errors on the GUI
             setDisplayUsernameCharacterError(false)
             setDisplayUsernameLongError(false)
             setDisplayUsernameShortError(false)
 
+            // Clear invalid characters
+            setInvalidCharacters("")
+
             // Set username as valid for onSubmit method
             setUsernameValid(true)
-        } else if (value.length > usernameMaxLength) {
-            // Set GUI values
+        } else if (value.length > usernameMaxLength) { // Username too long
+            // Display errors on the GUI
             setDisplayUsernameLongError(true)
 
             // Set username as invalid
             setUsernameValid(false)
-        } else {
-            // Set GUI values
+        } else if (invalidChars !== "") { // Invalif characters found
+            // Display errors on the GUI
             setDisplayUsernameCharacterError(true)
             setInvalidCharacters(invalidChars)
 
@@ -95,7 +106,26 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
         }
     }
 
-    // Check if passwords match
+    // Calculate if user is over the required minimum age
+    const verifyAge = (value: Date) => {
+        // Reset user age valid to avoid age tricking
+        setUserAgeValid(false)
+
+        const dateToday = new Date()
+
+        const ageCheckPassed = dateToday.getFullYear() - value.getFullYear() > minimumAge || 
+        (dateToday.getFullYear() - value.getFullYear() == minimumAge && dateToday.getMonth() > value.getMonth()) ||
+        (dateToday.getFullYear() - value.getFullYear() == minimumAge && dateToday.getMonth() >= value.getMonth() && dateToday.getDate() >= value.getDate())
+
+        // If user is old enough, set userAgeValid to true
+        if (ageCheckPassed) {
+            setUserAgeValid(true)
+        } else { // Display error on GUI
+            setDisplayDateOfBirthAgeError(true)
+        }
+    }
+
+    // Check if both password fields match
     const matchPasswords = (value: string) => {
         if (passwordField.length <= value.length && passwordField !== value) {
             setDisplayPasswordMatchError(true)
@@ -105,11 +135,13 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
             setPasswordsMatch(false)
         } else if (passwordField.length == value.length && passwordField === value) {
             setDisplayPasswordMatchError(false)
+
             setPasswordsMatch(true)
+            setPasswordValid(true)
         }
     }
 
-    // Trim and assign picked date to the selector as string and pass date value to dateOfBirthField
+    // Trim and assign picked date to the selector button as string and pass date value to dateOfBirthField
     const handleDate = (dt: Date) => {
         // Hide date picker
         setShowDatePicker(false)
@@ -125,41 +157,48 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
         setDateOfBirth(trimmedDate)
     }
 
-    // Post registeration to backend
     const onSubmit = () => {
-        // Reset all errors on submit
+        // Reset all displayable errors on submit
         setDisplayUsernameTakenError(false)
         setDisplayUsernameShortError(false)
+        setDisplayEmailInvalidError(false)
+        setDisplayDateOfBirthAgeError(false)
         setDisplayPasswordLengthError(false)
-        setDisplayEmailError(false)
 
-        // Check all fields are valid
-
+        // Check if username meets minimum length requirements
         if (usernameField.length < usernameMinLength && usernameField.length >= 1) {
             setDisplayUsernameShortError(true)
         }
 
+        // Check if user is old enough to use the app
+        verifyAge(dateOfBirthField)
+        
+        // Check if password meets minimum length requirements
         if (passwordField.length < passwordMinLength && passwordField.length >= 1) {
             setDisplayPasswordLengthError(true)
         }
 
+        // Check if email is valid with regex
         if (!emailRegex.test(emailField) && emailField.length >= 1) {
-            setDisplayEmailError(true)
+            setDisplayEmailInvalidError(true)
+            setEmailValid(false)
+        } else {
+            setEmailValid(true)
         }
 
         // Verify everything is on order and post to backend
-        if (usernameValid && emailField !== "" && passwordValid && passwordsMatch && agreeTerms && agreeEULA) {
+        if (usernameValid && emailValid && userAgeValid && passwordValid && passwordsMatch && agreeTerms && agreeEULA) {
             // Post registeration details to backend
             const response: number = 200
             const errorType: string = "username"
 
             // If response is 200, navigate to code verification screen
             if (response === 200) {
-                onPress1()
+                // onPress1()
             } else if (response === 304 && errorType === "username") { // If error is username taken, display error
                 setDisplayUsernameTakenError(true)
             } else if (response === 304 && errorType === "email") { // If error is email in use, display error
-                
+                setDisplayEmailTakenError(true)
             }
         } 
     }
@@ -185,14 +224,15 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
                     keyboardType="default"
                     dense
                     value={usernameField}
-                    onChangeText={(value) => checkUsername(value)}
+                    onChangeText={(value) => handleUsername(value)}
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Username" 
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            {displayEmailError && <Text style={{ color: 'red', marginLeft: 10}}>Insert a valid email</Text>}
+            {displayEmailTakenError && <Text style={{ color: 'red', marginLeft: 10}}>Username is already in use</Text>}
+            {displayEmailInvalidError && <Text style={{ color: 'red', marginLeft: 10}}>Insert a valid email</Text>}
             <View style={login.inputWrapper}>
                 <TextInput 
                     style={login.input}
@@ -208,11 +248,11 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
+            {displayDateOfBirthAgeError && <Text style={{ color: 'red', marginLeft: 10}}>You must be atleast 13 to use this service</Text>}
             <View style={login.inputWrapper}>
                 <Pressable style={{ backgroundColor: 'red' , height: 50, alignItems: 'flex-start', justifyContent: 'center' }} onPress={() => setShowDatePicker(!showDatePicker)}>
                     <View style={{ flexDirection: 'row', alignItems: 'center',  }}>
                         <Image style={{ height: 30, width: 30, marginLeft: 12, marginRight: 12, borderRadius: 100 }} source={require('../../../assets/icons/icon.png')} />
-                        {!dateOfBirthField && <Text style={{ fontSize: 16, margin: 0 }}>Date of birth</Text>}
                         {dateOfBirthField && <Text style={{ fontSize: 16, margin: 0, letterSpacing: 0.3 }}>{dateOfBirth}</Text>}
                     </View>
                 </Pressable>
@@ -268,22 +308,28 @@ const Register: React.FC<Props> = ({ onPress1, onPress2 }) => {
                 />
             </View>
             
-            <View style={{ ...login.checkboxBtnWrapper, ...{ alignItems: 'flex-start' } }}>
+            <View style={login.checkboxBtnWrapper}>
                 <Pressable style={login.checkboxBtn} onPress={() => setAgreeTerms(!agreeTerms)}>
                     <Checkbox 
                         onPress={() => setAgreeTerms(!agreeTerms)}
                         status={ agreeTerms ? "checked" : "unchecked"}
                     />
-                    <Text style={login.checkboxText}>I have read and agree to the terms</Text>
+                </Pressable>
+                <Text style={login.checkboxText}>I'm over the age of 13 and agree to the</Text>
+                <Pressable style={login.checkboxTextBtn} onPress={() => onPress3()}>
+                    <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>terms</Text>
                 </Pressable>
             </View>
-            <View style={{ ...login.checkboxBtnWrapper, ...{ alignItems: 'flex-start' } }}>
+            <View style={login.checkboxBtnWrapper}>
                 <Pressable style={login.checkboxBtn} onPress={() => setAgreeEULA(!agreeEULA)}>
                     <Checkbox 
                         onPress={() => setAgreeEULA(!agreeEULA)}
                         status={ agreeEULA ? "checked" : "unchecked"}
                     />
-                    <Text style={login.checkboxText}>I have read and agree to the EULA</Text>
+                </Pressable>
+                <Text style={login.checkboxText}>I have read and agree to the</Text>
+                <Pressable style={login.checkboxTextBtn} onPress={() => onPress4()}>
+                <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
                 </Pressable>
             </View>
             <View style={login.primaryBtnWrapper}>

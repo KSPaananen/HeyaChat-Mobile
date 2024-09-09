@@ -29,6 +29,8 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
                 {registerPage && <Register
                     onPress1={() => {setRegisterPage(false); setVerifyPage(true)}} // Register
                     onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Sign in
+                    onPress3={() => navigation.navigate("FullscreenModal", { param: "Terms" })} // Terms
+                    onPress4={() => navigation.navigate("FullscreenModal", { param: "EULA" })} // EULA
                 />}
 
                 {recoveryPage}
@@ -130,17 +132,22 @@ export const login = StyleSheet.create({
         fontSize: 12,
     },
     checkboxBtnWrapper: {
-        marginHorizontal: 10
+      flexDirection: 'row', 
+      alignItems: 'center', 
+      justifyContent: 'flex-start',
     },
     checkboxBtn: {
-        flexDirection: 'row',  
-        justifyContent: 'center',
-        alignItems: 'center'
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    checkboxTextBtn: {
+      flexDirection: 'row',
+      paddingVertical: 5, 
+      paddingHorizontal: 4, 
     },
     checkboxText: {
-        fontSize: 14, 
-        justifyContent: 'center', 
-        alignItems: 'center'
+      fontSize: 13,
+      marginBottom: 1,
     },
 
 

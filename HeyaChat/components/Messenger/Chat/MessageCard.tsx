@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View, Pressable, Image, ImageSourcePropType, ImageURISource } from 'react-native'
-import { messageCard } from '../../../assets/styles/stylesheet'
+import { StyleSheet, Text, View, Pressable, Image, ImageSourcePropType, ImageURISource } from 'react-native'
 
 
 interface Props {
@@ -95,3 +94,66 @@ const MessageCard: React.FC<Props> = ({ messageId, messageType, chatType, messag
 
 export default MessageCard
 
+export const messageCard = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    messageSent: {
+      alignItems: 'flex-end',
+      flexDirection: 'row', 
+      justifyContent: 'flex-end'
+    },
+    messageReceived: {
+      alignItems: 'flex-end',
+      flexDirection: 'row', 
+      justifyContent: 'flex-start'
+    },
+    icon: {
+      height: 25,
+      width: 25,
+      marginBottom: 10,
+      borderRadius: 100,
+      alignItems: 'flex-end'
+    },
+    messageFrame: {
+      flex: 1,
+      marginVertical: 10,
+      paddingTop: 5,
+      paddingRight: 10,
+      paddingBottom: 5,
+      paddingLeft: 10,
+      borderRadius: 10,
+      justifyContent: 'center',
+      backgroundColor: 'lightgray'
+    },
+    username: {
+      fontSize: 12,
+      fontStyle: 'italic',
+      fontWeight: '600',
+    }, 
+    dateTime: {
+      marginRight: 5,
+      marginBottom: 1,
+      fontSize: 11,
+      fontStyle: 'italic',
+  
+    },
+    mediaContainer: {
+      overflow: 'hidden', 
+      borderWidth: 3, 
+      borderRadius: 10, 
+      borderColor: 'gray', 
+      backgroundColor: 'darkgray', 
+      marginTop: 10
+    },
+    mediaWrapper: {
+      flex: 1, 
+      height: 250, 
+      alignItems: 'center', 
+      justifyContent: 'center',
+    },
+    media: {
+      height: "100%"
+    },
+  
+  })

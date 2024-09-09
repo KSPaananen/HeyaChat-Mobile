@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Text, View, Button, ScrollView } from 'react-native'
-import { search } from '../../../assets/styles/stylesheet'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { testUser } from '../../../models/testUser'
 
 import SearchCard from './SearchCard'
@@ -50,3 +49,21 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
 }
 
 export default Search
+
+export const search = StyleSheet.create({
+  header: {
+    marginTop: 10,
+    marginRight: 5,
+    marginBottom: 10,
+    marginLeft: 5
+  },
+  title: {
+    fontSize: 20
+  },
+  separator: {
+    flex: 1,
+    padding: 0.5,
+    marginTop: 10,
+    backgroundColor: 'black'
+  }
+})

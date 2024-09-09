@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Text, View, Image, TouchableOpacity, Button } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { home } from '../../assets/styles/stylesheet'
 import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
 import { requestForGoogleNearbyConnectionsPerms, checkForGoogleNearbyConnectionsPerms } from '../../services/PermissionsService'
 import { localRepository } from '../../repositories/localRepository'
@@ -114,3 +113,20 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
 }
 
 export default HomePage
+
+export const home = StyleSheet.create({
+  container: {
+    flex: 1,
+ 
+  },
+  ol: {
+    position: 'absolute', 
+    top: 0, 
+    right: 0, 
+    bottom: 0, 
+    left: 0, 
+    alignItems: 'flex-end', 
+    justifyContent: 'flex-end',
+  },
+  
+})
