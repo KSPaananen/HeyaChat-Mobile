@@ -38,7 +38,7 @@ const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
   return (
     <View>
         <View style={{ ...login.head, ...{ height: "40%"} }}>
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={login.titleWrapper}>
                 <Text style={login.title}>Heya!Chat</Text>
                 <Image style={login.icon} source={require('../../../assets/icons/icon.png')} />
             </View>

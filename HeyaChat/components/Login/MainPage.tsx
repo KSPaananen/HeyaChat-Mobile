@@ -6,6 +6,10 @@ import { LoginStackParams } from '../NavigationStacks/LoginNavStack'
 import Login from './Screens/Login'
 import Register from './Screens/Register'
 import Verify from './Screens/Verify'
+import Recovery from './Screens/Recovery'
+
+import Terms from '../CommonComponents/LegalTexts/Terms'
+import EULA from '../CommonComponents/LegalTexts/EULA'
 
 type Props = NativeStackScreenProps<LoginStackParams, "MainPage">
 
@@ -14,29 +18,37 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
     const [registerPage, setRegisterPage] = useState<boolean>(false)
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false)
     const [verifyPage, setVerifyPage] = useState<boolean>(false)
+  
+    const [verifyPageType, setVerifyPageType] = useState<string>("")
 
-   
     return (
         <View style={login.container}>
             <View style={login.wrapper}>
 
                 {loginPage && <Login 
-                    onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Log in
-                    onPress2={() => {setLoginPage(false); setRecoveryPage(true)}} // Recover
-                    onPress3={() => {setLoginPage(false); setRegisterPage(true)}} // Register
+                    onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Navigate to home screen after succesful login
+                    onPress2={() => {setVerifyPageType("recover"); setLoginPage(false); setRecoveryPage(true)}} // Navigate to recovery 
+                    onPress3={() => {setVerifyPageType("register"); setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
                 />}
 
                 {registerPage && <Register
-                    onPress1={() => {setRegisterPage(false); setVerifyPage(true)}} // Register
-                    onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Sign in
-                    onPress3={() => navigation.navigate("FullscreenModal", { param: "Terms" })} // Terms
-                    onPress4={() => navigation.navigate("FullscreenModal", { param: "EULA" })} // EULA
+                    onPress1={() => {setRegisterPage(false); setVerifyPage(true)}} // Navigate to verification screen after succesful post
+                    onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
+                    onPress3={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })} // Bring up Terms of service
+                    onPress4={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })} // Bring up EULA
                 />}
 
-                {recoveryPage}
+                {recoveryPage && <Recovery 
+                  onPress1={() => {setVerifyPageType("recover"); setRecoveryPage(false); setVerifyPage(true)}} // After inserting email, navigate to verification screen
+                  onPress2={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
+                />}
 
                 {verifyPage && <Verify 
-
+                  type={verifyPageType} // Which type of verification page to show
+                  onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Navigate to home screen after succesful verification during account creation
+                  onPress2={() => {}} // Navigate to new password screen during recovery
+                  onPress3={() => {setVerifyPage(false); setRegisterPage(true)}} // Return back to register screen
+                  onPress4={() => {setVerifyPage(false); setRecoveryPage(true)}} // Return back to recovery screen
                 />}
 
             </View>
@@ -65,6 +77,7 @@ export const login = StyleSheet.create({
     },
     body: {
       marginHorizontal: 5,
+      justifyContent: 'center', 
     },
     footer: {
       marginHorizontal: 5,
@@ -75,18 +88,15 @@ export const login = StyleSheet.create({
     separator: {
         flex: 1,
         height: 1,
-        marginVertical: 10,
+        marginVertical: 20,
         marginHorizontal: 10,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
       },
-
-    ///////////////////////////
-
     inputWrapper: {
-        marginTop: 5, 
-        marginBottom: 10, 
+        marginTop: 10, 
+        marginBottom: 5, 
         marginHorizontal: 5, 
         borderRadius: 100, 
         overflow: 'hidden'
@@ -97,7 +107,7 @@ export const login = StyleSheet.create({
     primaryBtnWrapper: {
         flexDirection: 'row',
         marginTop: 20,
-        marginHorizontal: 5, 
+        marginHorizontal: 30, 
         alignItems: 'center', 
         justifyContent: 'center',
     },
@@ -149,16 +159,22 @@ export const login = StyleSheet.create({
       fontSize: 13,
       marginBottom: 1,
     },
-
-
-    ///////////////////////////
-
-    
-   
-    
+    titleWrapper: {
+      flex: 1, 
+      justifyContent: 'center', 
+      alignItems: 'center'
+    },
     title: {
       fontSize: 25,
-      marginTop: 15,
+      marginTop: 25,
+    },
+    description: {
+      fontSize: 13,
+      marginLeft: 10
+    },
+    errorText: {
+      color: 'red', 
+      marginLeft: 10
     },
     icon: {
       height: 50,
@@ -166,8 +182,4 @@ export const login = StyleSheet.create({
       marginTop: 15,
     },
 
-// Buttons/pressables
-    
-    
-    
   })

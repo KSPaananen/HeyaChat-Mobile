@@ -158,6 +158,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
     }
 
     const onSubmit = () => {
+        onPress1()
         // Reset all displayable errors on submit
         setDisplayUsernameTakenError(false)
         setDisplayUsernameShortError(false)
@@ -212,10 +213,10 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
         </View>
 
         <View style={{ ...login.body, ...{ height: "75%"}}}>
-        {displayUsernameTakenError && <Text style={{ color: 'red', marginLeft: 10}}>Username is already in use</Text>}
-        {displayUsernameLongError && <Text style={{ color: 'red', marginLeft: 10}}>Username too long!</Text>}
-        {displayUsernameShortError && <Text style={{ color: 'red', marginLeft: 10}}>Username too short!</Text>}
-        {displayUsernameCharacterError && <Text style={{ color: 'red', marginLeft: 10}}>Disallowed characters found: {invalidCharacters}</Text>}
+        {displayUsernameTakenError && <Text style={login.errorText}>Username is already in use</Text>}
+        {displayUsernameLongError && <Text style={login.errorText}>Username too long!</Text>}
+        {displayUsernameShortError && <Text style={login.errorText}>Username too short!</Text>}
+        {displayUsernameCharacterError && <Text style={login.errorText}>Disallowed characters found: {invalidCharacters}</Text>}
             <View style={login.inputWrapper}>
                 <TextInput 
                     style={login.input}
@@ -231,8 +232,8 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            {displayEmailTakenError && <Text style={{ color: 'red', marginLeft: 10}}>Username is already in use</Text>}
-            {displayEmailInvalidError && <Text style={{ color: 'red', marginLeft: 10}}>Insert a valid email</Text>}
+            {displayEmailTakenError && <Text style={login.errorText}>Username is already in use</Text>}
+            {displayEmailInvalidError && <Text style={login.errorText}>Insert a valid email</Text>}
             <View style={login.inputWrapper}>
                 <TextInput 
                     style={login.input}
@@ -248,7 +249,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            {displayDateOfBirthAgeError && <Text style={{ color: 'red', marginLeft: 10}}>You must be atleast 13 to use this service</Text>}
+            {displayDateOfBirthAgeError && <Text style={login.errorText}>You must be atleast 13 to use this service</Text>}
             <View style={login.inputWrapper}>
                 <Pressable style={{ backgroundColor: 'red' , height: 50, alignItems: 'flex-start', justifyContent: 'center' }} onPress={() => setShowDatePicker(!showDatePicker)}>
                     <View style={{ flexDirection: 'row', alignItems: 'center',  }}>
@@ -274,7 +275,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                 <View style={login.separator} />
             </View>
 
-            {displayPasswordLengthError && <Text style={{ color: 'red', marginLeft: 10}}>Password has to be atleast 8 characters long</Text>}
+            {displayPasswordLengthError && <Text style={login.errorText}>Password has to be atleast 8 characters long</Text>}
             <View style={login.inputWrapper}>
                 <TextInput 
                     style={login.input}
@@ -291,7 +292,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                     left={<TextInput.Icon icon="eye" style={{ }} />}
                 />
             </View>
-            {displayPasswordMatchError && <Text style={{ color: 'red', marginLeft: 10}}>Passwords do not match!</Text>}
+            {displayPasswordMatchError && <Text style={login.errorText}>Passwords do not match!</Text>}
             <View style={login.inputWrapper}>
                 <TextInput 
                     style={login.input}
@@ -308,7 +309,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                 />
             </View>
             
-            <View style={login.checkboxBtnWrapper}>
+            <View style={{ ...login.checkboxBtnWrapper, ...{ marginTop: 10 } }}>
                 <Pressable style={login.checkboxBtn} onPress={() => setAgreeTerms(!agreeTerms)}>
                     <Checkbox 
                         onPress={() => setAgreeTerms(!agreeTerms)}

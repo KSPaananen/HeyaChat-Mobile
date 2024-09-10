@@ -10,6 +10,7 @@ import FullscreenModal from './components/CommonComponents/FullscreenModal'
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
+  "Require cycle:" // This warning goes off from importing styles from parent component
 ])
 
 //                             - Nav stack structure -
@@ -28,7 +29,7 @@ export type RootStackParams = {
   }
   FullscreenModal: {
     param?: any
-    Component?: React.ComponentType<any>
+    Component: React.ComponentType<any>
   }
 }
 

@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../App'
 
 type Props = NativeStackScreenProps<RootStackParams, "FullscreenModal">
 
 const FullscreenModal: React.FC<Props> = ({ route, navigation }) => {
-    const { param } = route.params
-
-    const title = "aa"
+    const { param, Component } = route.params
 
     useEffect(() => {
         // Set title from parameter
@@ -18,7 +16,8 @@ const FullscreenModal: React.FC<Props> = ({ route, navigation }) => {
 
     return (
         <View style={fsModal.container}>
-            <Text> Full screen modal</Text>
+            <Component 
+            />
         </View>
     )
 }
@@ -28,5 +27,6 @@ export default FullscreenModal
 export const fsModal = StyleSheet.create({
     container: {
         flex: 1,
+        margin: 10,
     }
 })

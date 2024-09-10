@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View, Image, ImageSourcePropType, ImageBackground, Pressable, Button } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { profile } from '../../assets/styles/stylesheet'
+import { profile } from '../../assets/styles/profileSheet'
 import { user } from '../../models/localDB/models'
 
 import { testUser } from '../../models/testUser'

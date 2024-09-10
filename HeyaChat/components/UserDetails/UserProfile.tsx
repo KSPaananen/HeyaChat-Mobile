@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Image, ImageSourcePropType, ImageBackground, Pr
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../NavigationStacks/MessengerNavStack'
 import { LinearGradient } from 'expo-linear-gradient'
-import { profile } from '../../assets/styles/stylesheet'
+import { profile } from '../../assets/styles/profileSheet'
 import { user } from '../../models/localDB/models'
 
 import { testUser } from '../../models/testUser'
