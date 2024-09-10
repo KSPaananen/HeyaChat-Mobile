@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../../App'
+import { RootStackParams } from '../../../App'
 import { CommonActions } from '@react-navigation/native'
 
 type Props = NativeStackScreenProps<RootStackParams, "Modal">
@@ -27,7 +27,7 @@ const Modal: React.FC<Props> = ({ route, navigation }) => {
 
             <View style={modal.ol}>
               <TouchableOpacity style={modal.exitBtnWrapper} hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.dispatch(CommonActions.goBack())} >
-                <Image style={modal.olExitBtn} source={require('../../assets/icons/icon.png')} />
+                <Image style={modal.olExitBtn} source={require('../../../assets/icons/icon.png')} />
               </TouchableOpacity>
             </View>
 

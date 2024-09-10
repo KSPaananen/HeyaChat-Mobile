@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../../App'
+import { RootStackParams } from '../../../App'
 
 type Props = NativeStackScreenProps<RootStackParams, "FullscreenModal">
 

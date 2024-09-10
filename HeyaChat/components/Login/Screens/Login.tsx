@@ -6,12 +6,13 @@ import { login } from '../MainPage'
 import ErrorBox from '../../CommonComponents/ErrorBox'
 
 interface Props {
-  onPress1: () => void // Navigate to home screen
-  onPress2: () => void // Navigate to recovery page
-  onPress3: () => void // Navigate to registeration screen
+    navigation: any
+    onPress1: () => void // Navigate to recovery page
+    onPress2: () => void // Navigate to registeration screen
+    onPress3: () => void // Navigate to verification screen
 }
 
-const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
+const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) => {
     const [loginField, setLoginField] = useState<string>("")
     const [passwordField, setPasswordField] = useState<string>("")
     const [keepLoggedIn, setKeepLoggedIn] = useState<boolean>(false)
@@ -21,15 +22,19 @@ const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
 
     const onSubmit = () => {
-        // Post login details to backend
-        const response: number = 200
-        
+        // Reset all displayable errors on GUI
+        setDisplayLoginError(false)
 
+        // Post login details to backend
+        let response: number = 200
+        
         // If response is 200, navigate to home screen & save certificate
         if (response === 200) {
-            setDisplayLoginError(false)
-            onPress1()
-        } else {
+            navigation.navigate("AppBottomTabs", { screen: "Home"})
+        } else if (response === 201) {
+            onPress3()
+        }
+        else {
             setDisplayLoginError(true)
         }
     }
@@ -102,7 +107,7 @@ const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
             </View>
             <View style={login.secondaryBtnWrapper}>
                 {/* Reset errorbox when navigating to other screens */}
-                <Pressable style={login.secondaryBtn} onPress={() => {onPress2(); setDisplayLoginError(false)}}>
+                <Pressable style={login.secondaryBtn} onPress={() => {onPress1(); setDisplayLoginError(false)}}>
                     <Text style={login.secondaryBtnText}>Forgot your password?</Text>
                 </Pressable>
             </View>
@@ -112,7 +117,7 @@ const Login: React.FC<Props> = ({ onPress1, onPress2, onPress3 }) => {
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={login.secondaryBtnWrapper}>
                     {/* Reset errorbox when navigating to other screens */}
-                    <Pressable style={login.secondaryBtn} onPress={() => {onPress3(); setDisplayLoginError(false)}}> 
+                    <Pressable style={login.secondaryBtn} onPress={() => {onPress2(); setDisplayLoginError(false)}}> 
                         <Text style={login.secondaryBtnText}>Don't have an account? <Text style={{ color: 'blue' }}>Sign up!</Text></Text>
                     </Pressable>
                 </View>

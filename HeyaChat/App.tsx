@@ -5,8 +5,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import LoginNavStack from './components/NavigationStacks/LoginNavStack'
-import Modal from './components/CommonComponents/Modal'
-import FullscreenModal from './components/CommonComponents/FullscreenModal'
+import Modal from './components/CommonComponents/Modals/Modal'
+import FullscreenModal from './components/CommonComponents/Modals/FullscreenModal'
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",

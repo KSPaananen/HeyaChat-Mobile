@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
-import DateTimePicker from 'react-native-ui-datepicker';
-import * as Localization from 'expo-localization';
+import DateTimePicker from 'react-native-ui-datepicker'
+import * as Localization from 'expo-localization'
 import { login } from '../MainPage'
 
+import Terms from '../../CommonComponents/LegalTexts/Terms'
+import EULA from '../../CommonComponents/LegalTexts/EULA'
+
 interface Props {
-  onPress1: () => void // Change state to code verification screen
-  onPress2: () => void // Change state back to login screen
-  onPress3: () => void // Navigate to terms page
-  onPress4: () => void // Navigate to EULA page
+    navigation: any
+    onPress1: () => void // Change state to code verification screen
+    onPress2: () => void // Change state back to login screen
 }
 
-//
-// Not proud of the code structure here, redo later
-//
+// This whole component needs some major cleaning
 
-const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) => {
+const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
     // Fields
     const [usernameField, setUsernameField] = useState<string>("")
     const [emailField, setEmailField] = useState<string>("")
@@ -107,7 +107,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
     }
 
     // Calculate if user is over the required minimum age
-    const verifyAge = (value: Date) => {
+    const verifyAge = (value: Date): boolean => {
         // Reset user age valid to avoid age tricking
         setUserAgeValid(false)
 
@@ -119,10 +119,10 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
 
         // If user is old enough, set userAgeValid to true
         if (ageCheckPassed) {
-            setUserAgeValid(true)
-        } else { // Display error on GUI
-            setDisplayDateOfBirthAgeError(true)
-        }
+            return true
+        } 
+
+        return false
     }
 
     // Check if both password fields match
@@ -143,7 +143,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
 
     // Trim and assign picked date to the selector button as string and pass date value to dateOfBirthField
     const handleDate = (dt: Date) => {
-        // Hide date picker
+        // Hide date picker after selection
         setShowDatePicker(false)
 
         // Pass dt to dateofBirthField
@@ -151,6 +151,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
             setDateOfBirthField(new Date(dt))
         }
         
+        // Trim dt to displayable string
         const date: string = dt.toLocaleString(userLocalization[0].languageTag)
 
         const trimmedDate: string = date.substring(0, date.indexOf(","))
@@ -158,7 +159,6 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
     }
 
     const onSubmit = () => {
-        onPress1()
         // Reset all displayable errors on submit
         setDisplayUsernameTakenError(false)
         setDisplayUsernameShortError(false)
@@ -169,6 +169,15 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
         // Check if username meets minimum length requirements
         if (usernameField.length < usernameMinLength && usernameField.length >= 1) {
             setDisplayUsernameShortError(true)
+        }
+
+        // Check if user is old enough to use the service
+        let ageCheckPassed: boolean = verifyAge(dateOfBirthField)
+
+        if (ageCheckPassed) {
+            setUserAgeValid(true)
+        } else if (!ageCheckPassed && dateOfBirthField.getDate() != new Date().getDate()) { // Display error on GUI
+            setDisplayDateOfBirthAgeError(true)
         }
 
         // Check if user is old enough to use the app
@@ -195,7 +204,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
 
             // If response is 200, navigate to code verification screen
             if (response === 200) {
-                // onPress1()
+                onPress1()
             } else if (response === 304 && errorType === "username") { // If error is username taken, display error
                 setDisplayUsernameTakenError(true)
             } else if (response === 304 && errorType === "email") { // If error is email in use, display error
@@ -254,7 +263,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                 <Pressable style={{ backgroundColor: 'red' , height: 50, alignItems: 'flex-start', justifyContent: 'center' }} onPress={() => setShowDatePicker(!showDatePicker)}>
                     <View style={{ flexDirection: 'row', alignItems: 'center',  }}>
                         <Image style={{ height: 30, width: 30, marginLeft: 12, marginRight: 12, borderRadius: 100 }} source={require('../../../assets/icons/icon.png')} />
-                        {dateOfBirthField && <Text style={{ fontSize: 16, margin: 0, letterSpacing: 0.3 }}>{dateOfBirth}</Text>}
+                        <Text style={{ fontSize: 16, margin: 0, letterSpacing: 0.3 }}>{dateOfBirth}</Text>
                     </View>
                 </Pressable>
             </View>
@@ -316,8 +325,8 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                         status={ agreeTerms ? "checked" : "unchecked"}
                     />
                 </Pressable>
-                <Text style={login.checkboxText}>I'm over the age of 13 and agree to the</Text>
-                <Pressable style={login.checkboxTextBtn} onPress={() => onPress3()}>
+                <Text style={login.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
+                <Pressable style={login.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
                     <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>terms</Text>
                 </Pressable>
             </View>
@@ -329,8 +338,8 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
                     />
                 </Pressable>
                 <Text style={login.checkboxText}>I have read and agree to the</Text>
-                <Pressable style={login.checkboxTextBtn} onPress={() => onPress4()}>
-                <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
+                <Pressable style={login.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })}>
+                    <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
                 </Pressable>
             </View>
             <View style={login.primaryBtnWrapper}>
@@ -345,7 +354,7 @@ const Register: React.FC<Props> = ({ onPress1, onPress2, onPress3, onPress4 }) =
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={login.secondaryBtnWrapper}>
                     <Pressable style={login.secondaryBtn} onPress={() => onPress2()}>
-                        <Text style={login.secondaryBtnText}>Have an account? <Text style={{ color: 'blue' }}>Sign in</Text></Text>
+                        <Text style={login.secondaryBtnText}>Have an account? <Text style={{ color: 'blue' }}>Log in!</Text></Text>
                     </Pressable>
                 </View>
             </View>

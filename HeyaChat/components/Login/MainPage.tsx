@@ -7,48 +7,86 @@ import Login from './Screens/Login'
 import Register from './Screens/Register'
 import Verify from './Screens/Verify'
 import Recovery from './Screens/Recovery'
-
-import Terms from '../CommonComponents/LegalTexts/Terms'
-import EULA from '../CommonComponents/LegalTexts/EULA'
+import ChangePassword from './Screens/ChangePassword'
 
 type Props = NativeStackScreenProps<LoginStackParams, "MainPage">
 
 const MainPage: React.FC<Props> = ({ navigation }) => {
+    // Screen booleans
     const [loginPage, setLoginPage] = useState<boolean>(true)
     const [registerPage, setRegisterPage] = useState<boolean>(false)
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false)
     const [verifyPage, setVerifyPage] = useState<boolean>(false)
-  
-    const [verifyPageType, setVerifyPageType] = useState<string>("")
+    const [changePasswordPage, setChangePasswordPage] = useState<boolean>(false)
+
+    // Email re-request cooldown state persistence stuff
+    const [requestEmailCoolDown, setRequestEmailCoolDown] = useState<boolean>(false)
+    const [countDown, setCountDown] = useState<number>(30)
+    const setCoolDown = (value: boolean) => {
+      // Set cooldown to true
+      setRequestEmailCoolDown(true)
+
+      // Animate a countdown for GUI
+      let count: number = 30 
+
+      let intervalId = setInterval(() => {
+          count--
+          setCountDown(count)
+
+          if(count === 0) {
+              clearInterval(intervalId)
+              setRequestEmailCoolDown(false)
+          }
+      }, 1000)
+      setCountDown(30) // Set countdown back to 30 or next countdown displays 0 at the beginning
+    }
+
+    // constants which are to be passed for Verify.tsx component
+    const [email, setEmail] = useState<string>("") // String which is displayed on Verify.tsx
+    const [lastPage, setLastPage] = useState<string>("") // register | recover (Dictates component content)
 
     return (
         <View style={login.container}>
             <View style={login.wrapper}>
 
                 {loginPage && <Login 
-                    onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Navigate to home screen after succesful login
-                    onPress2={() => {setVerifyPageType("recover"); setLoginPage(false); setRecoveryPage(true)}} // Navigate to recovery 
-                    onPress3={() => {setVerifyPageType("register"); setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
+                  navigation={navigation}
+                  onPress1={() => {setLoginPage(false); setRecoveryPage(true)}} // Navigate to account recovery 
+                  onPress2={() => {setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
+                  onPress3={() => {setLastPage("register"); setLoginPage(false); setVerifyPage(true)}} // Navigate to verify page if users email isn't confirmed
                 />}
 
                 {registerPage && <Register
-                    onPress1={() => {setRegisterPage(false); setVerifyPage(true)}} // Navigate to verification screen after succesful post
-                    onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
-                    onPress3={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })} // Bring up Terms of service
-                    onPress4={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })} // Bring up EULA
+                  navigation={navigation}
+                  onPress1={() => {setLastPage("register"); setRegisterPage(false); setVerifyPage(true)}} // Navigate to verification screen after succesful post
+                  onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
                 />}
 
                 {recoveryPage && <Recovery 
-                  onPress1={() => {setVerifyPageType("recover"); setRecoveryPage(false); setVerifyPage(true)}} // After inserting email, navigate to verification screen
+                  setEmail={setEmail}
+                  onPress1={() => {setLastPage("recover"); setRecoveryPage(false); setVerifyPage(true)}} // After inserting email, navigate to verification screen
                   onPress2={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
+                  requestEmailCoolDown={requestEmailCoolDown}
+                  countDown={countDown}
+                  setCoolDown={setCoolDown}
                 />}
 
                 {verifyPage && <Verify 
-                  type={verifyPageType} // Which type of verification page to show
-                  onPress1={() => navigation.navigate("AppBottomTabs", { screen: "Home"})} // Navigate to home screen after succesful verification during account creation
-                  onPress2={() => {}} // Navigate to new password screen during recovery
-                  onPress3={() => {setVerifyPage(false); setRegisterPage(true)}} // Return back to register screen
-                  onPress4={() => {setVerifyPage(false); setRecoveryPage(true)}} // Return back to recovery screen
+                  navigation={navigation}
+                  email={email}
+                  lastPage={lastPage} // Which type of verification page to show
+                  setVerifyPage={setVerifyPage}
+                  setRegisterPage={setRegisterPage}
+                  setRecoveryPage={setRecoveryPage}
+                  setChangePasswordPage={setChangePasswordPage}
+                  requestEmailCoolDown={requestEmailCoolDown}
+                  countDown={countDown}
+                  setCoolDown={setCoolDown}
+                />}
+
+                {changePasswordPage && <ChangePassword 
+                  onPress1={() => {setChangePasswordPage(false); setLoginPage(true)}} // Navigate to login page to re-login after changing password
+                  onPress2={() => {setChangePasswordPage(false); setVerifyPage(true)}} // Return to verify page
                 />}
 
             </View>
@@ -106,7 +144,7 @@ export const login = StyleSheet.create({
     },
     primaryBtnWrapper: {
         flexDirection: 'row',
-        marginTop: 20,
+        marginTop: 30,
         marginHorizontal: 30, 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -128,18 +166,23 @@ export const login = StyleSheet.create({
       backgroundColor: 'lightgray'
     },
     primaryBtnText: {
-        fontSize: 15,
+      fontSize: 15,
     },
     secondaryBtnWrapper: {
         marginTop: 10,
         marginBottom: 5,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     secondaryBtn: {
-        padding: 10
+        padding: 10,
+        alignItems: 'center',
     },
     secondaryBtnText: {
         fontSize: 12,
+    },
+    secondaryBtnDisabledText : {
+      fontSize: 12,
+      color: 'gray'
     },
     checkboxBtnWrapper: {
       flexDirection: 'row', 
