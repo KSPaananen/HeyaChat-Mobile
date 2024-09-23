@@ -24,7 +24,7 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
     const [passwordField, setPasswordField] = useState<string>("")
 
     // Field restrictions
-    const usernameMaxLength: number = 32
+    const usernameMaxLength: number = 20
     const usernameMinLength: number = 3
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     const minimumAge : number = 13

@@ -92,13 +92,6 @@ const Recovery: React.FC<Props> = ({ setEmail, onPress1, onPress2, requestEmailC
                         </Pressable>
                     </View>
 
-                    <View style={login.secondaryBtnWrapper}>
-                        <Pressable style={login.secondaryBtn} onPress={() => requestEmail()} disabled={requestEmailCoolDown}>
-                            <Text style={!requestEmailCoolDown ? login.secondaryBtnText : login.secondaryBtnDisabledText}>Didn't receive your email? <Text style={{ ...login.secondaryBtnText, ...{ color: 'blue' } }}>Resend </Text>code</Text>
-                            {requestEmailCoolDown && <Text style={login.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
-                        </Pressable>
-                    </View>
-
                 </View>
             </View>
 

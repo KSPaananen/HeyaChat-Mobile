@@ -53,7 +53,6 @@ const App = () => {
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true, presentation: "modal"  }}>
           <Stack.Screen name="FullscreenModal" component={FullscreenModal} 
-          
           />
         </Stack.Group>
       </Stack.Navigator>
