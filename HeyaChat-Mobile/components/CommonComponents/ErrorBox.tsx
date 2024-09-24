@@ -21,7 +21,7 @@ const ErrorBox: React.FC<Props> = ({ message, borderRadius, onPress }) => {
             </Pressable>
         </View>
     </View>
-  );
+  )
 }
 
 export default ErrorBox

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
-import { login } from '../MainPage'
+import { auth } from '../AuthorizationPage'
 
 import ErrorBox from '../../CommonComponents/ErrorBox'
 
@@ -42,23 +42,23 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
 
   return (
     <View>
-        <View style={{ ...login.head, ...{ height: "40%"} }}>
-            <View style={login.titleWrapper}>
-                <Text style={login.title}>Heya!Chat</Text>
-                <Image style={login.icon} source={require('../../../assets/icons/icon.png')} />
+        <View style={{ ...auth.head, ...{ height: "40%"} }}>
+            <View style={auth.titleWrapper}>
+                <Text style={auth.title}>Heya!Chat</Text>
+                <Image style={auth.icon} source={require('../../../assets/icons/icon.png')} />
             </View>
         </View>
 
-        <View style={{ ...login.body, ...{ height: "45%"} }}>
+        <View style={{ ...auth.body, ...{ height: "45%"} }}>
 
             {displayLoginError && <ErrorBox 
                 message="No users match password"
                 borderRadius={5}
                 onPress={() => setDisplayLoginError(false)}
             />}
-            <View style={login.inputWrapper}>
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     dense
@@ -70,9 +70,9 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            <View style={login.inputWrapper}>
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     dense
@@ -91,34 +91,34 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            <View style={{ ...login.checkboxBtnWrapper, ...{ justifyContent: 'flex-end', marginRight: 10 } }}>
-                <Pressable style={login.checkboxBtn} onPress={() => setKeepLoggedIn(!keepLoggedIn)}>
+            <View style={{ ...auth.checkboxBtnWrapper, ...{ justifyContent: 'flex-end', marginRight: 10 } }}>
+                <Pressable style={auth.checkboxBtn} onPress={() => setKeepLoggedIn(!keepLoggedIn)}>
                     <Checkbox 
                         onPress={() => setKeepLoggedIn(!keepLoggedIn)}
                         status={ keepLoggedIn ? "checked" : "unchecked"}
                     />
                 </Pressable>
-                <Text style={login.checkboxText}>Stay signed in</Text>
+                <Text style={auth.checkboxText}>Stay signed in</Text>
             </View>
-            <View style={{ ...login.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                <Pressable style={login.primaryBtn} onPress={() => onSubmit()} >
-                    <Text style={login.primaryBtnText}>Login</Text>
+            <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
+                <Pressable style={auth.primaryBtn} onPress={() => onSubmit()} >
+                    <Text style={auth.primaryBtnText}>Login</Text>
                 </Pressable>
             </View>
-            <View style={login.secondaryBtnWrapper}>
+            <View style={auth.secondaryBtnWrapper}>
                 {/* Reset errorbox when navigating to other screens */}
-                <Pressable style={login.secondaryBtn} onPress={() => {onPress1(); setDisplayLoginError(false)}}>
-                    <Text style={login.secondaryBtnText}>Forgot your password?</Text>
+                <Pressable style={auth.secondaryBtn} onPress={() => {onPress1(); setDisplayLoginError(false)}}>
+                    <Text style={auth.secondaryBtnText}>Forgot your password?</Text>
                 </Pressable>
             </View>
         </View>
 
-        <View style={{ ...login.footer, ...{ height: "15%" } }}>
+        <View style={{ ...auth.footer, ...{ height: "15%" } }}>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                <View style={login.secondaryBtnWrapper}>
+                <View style={auth.secondaryBtnWrapper}>
                     {/* Reset errorbox when navigating to other screens */}
-                    <Pressable style={login.secondaryBtn} onPress={() => {onPress2(); setDisplayLoginError(false)}}> 
-                        <Text style={login.secondaryBtnText}>Don't have an account? <Text style={{ color: 'blue' }}>Sign up!</Text></Text>
+                    <Pressable style={auth.secondaryBtn} onPress={() => {onPress2(); setDisplayLoginError(false)}}> 
+                        <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'blue' }}>Sign up!</Text></Text>
                     </Pressable>
                 </View>
             </View>

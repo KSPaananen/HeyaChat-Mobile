@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
-import { login } from '../MainPage'
+import { auth } from '../AuthorizationPage'
 
 interface Props {
     navigation: any
@@ -47,26 +47,26 @@ const Verify: React.FC<Props> = ({ navigation, email, lastPage, setVerifyPage, s
     return (
         <View>
 
-            <View style={{ ...login.head, ...{ height: "20%"} }}>
+            <View style={{ ...auth.head, ...{ height: "20%"} }}>
                 {lastPage === "register" && <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={login.title}>Email verification</Text>
+                    <Text style={auth.title}>Email verification</Text>
                 </View>}
                 {lastPage === "recover" && <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={login.title}>Verification</Text>
+                    <Text style={auth.title}>Verification</Text>
                 </View>}
             </View>
 
-            <View style={{ ...login.body, ...{ height: "70%" } }}>
+            <View style={{ ...auth.body, ...{ height: "70%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
-                    <Text style={login.description}>Please enter the verification code we have sent to</Text>
-                    <Text style={login.description}>your email address {email}</Text>
+                    <Text style={auth.description}>Please enter the verification code we have sent to</Text>
+                    <Text style={auth.description}>your email address {email}</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     
-                    {codeError && <Text style={login.errorText}>Code didn't belong to any existing accounts</Text>}
-                    <View style={login.inputWrapper}>
+                    {codeError && <Text style={auth.errorText}>Code didn't belong to any existing accounts</Text>}
+                    <View style={auth.inputWrapper}>
                         <TextInput 
-                            style={login.input}
+                            style={auth.input}
                             contentStyle={{ paddingLeft: 15 }}
                             underlineStyle={{ height: 0 }}
                             dense
@@ -80,33 +80,33 @@ const Verify: React.FC<Props> = ({ navigation, email, lastPage, setVerifyPage, s
                         />
                     </View>
 
-                    <View style={{ ...login.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                        {lastPage === "register" && <Pressable style={codeField != "" ? login.primaryBtn : login.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == ""}>
-                            <Text style={login.primaryBtnText}>Verify email</Text>
+                    <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
+                        {lastPage === "register" && <Pressable style={codeField != "" ? auth.primaryBtn : auth.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == ""}>
+                            <Text style={auth.primaryBtnText}>Verify email</Text>
                         </Pressable>}
-                        {lastPage === "recover" && <Pressable style={codeField != "" ? login.primaryBtn : login.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == ""}>
-                            <Text style={login.primaryBtnText}>Verify code</Text>
+                        {lastPage === "recover" && <Pressable style={codeField != "" ? auth.primaryBtn : auth.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == ""}>
+                            <Text style={auth.primaryBtnText}>Verify code</Text>
                         </Pressable>}
                     </View>
-                    <View style={login.secondaryBtnWrapper}>
-                        <Pressable style={login.secondaryBtn} onPress={() => requestEmail()} disabled={requestEmailCoolDown}>
-                            <Text style={!requestEmailCoolDown ? login.secondaryBtnText : login.secondaryBtnDisabledText}>Didn't receive your email? <Text style={{ ...login.secondaryBtnText, ...{ color: 'blue' } }}>Resend </Text>code</Text>
-                            {requestEmailCoolDown && <Text style={login.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
+                    <View style={auth.secondaryBtnWrapper}>
+                        <Pressable style={auth.secondaryBtn} onPress={() => requestEmail()} disabled={requestEmailCoolDown}>
+                            <Text style={!requestEmailCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestEmailCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'blue' }} : auth.secondaryBtnText}>Request </Text>a new one</Text>
+                            {requestEmailCoolDown && <Text style={auth.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
                         </Pressable>
                     </View>
                 </View>
             </View>
 
-            <View style={{ ...login.footer, ...{ height: "10%" } }}>
+            <View style={{ ...auth.footer, ...{ height: "10%" } }}>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <View style={login.secondaryBtnWrapper}>
+                    <View style={auth.secondaryBtnWrapper}>
                         {/* Navigate back to register screen */}
-                        {lastPage === "register" && <Pressable style={login.secondaryBtn} onPress={() => {setVerifyPage(false); setRegisterPage(true)}}>
-                            <Text style={login.secondaryBtnText}>Return</Text>
+                        {lastPage === "register" && <Pressable style={auth.secondaryBtn} onPress={() => {setVerifyPage(false); setRegisterPage(true)}}>
+                            <Text style={auth.secondaryBtnText}>Return</Text>
                         </Pressable>}
                         {/* Navigate back to recovery screen */}
-                        {lastPage === "recover" && <Pressable style={login.secondaryBtn} onPress={() => {setVerifyPage(false); setRecoveryPage(true)}}>
-                            <Text style={login.secondaryBtnText}>Return</Text>
+                        {lastPage === "recover" && <Pressable style={auth.secondaryBtn} onPress={() => {setVerifyPage(false); setRecoveryPage(true)}}>
+                            <Text style={auth.secondaryBtnText}>Return</Text>
                         </Pressable>}
                     </View>
                 </View>

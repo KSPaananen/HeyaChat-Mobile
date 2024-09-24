@@ -31,7 +31,9 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-ui-datepicker": "^2.0.3",
     "react-native-vector-icons": "^10.1.0",
-    "expo-localization": "~15.0.3"
+    "expo-localization": "~15.0.3",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "expo-splash-screen": "~0.27.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

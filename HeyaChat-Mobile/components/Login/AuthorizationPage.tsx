@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { LoginStackParams } from '../NavigationStacks/LoginNavStack'
+import * as SplashScreen from 'expo-splash-screen';
 
 import Login from './Screens/Login'
 import Register from './Screens/Register'
@@ -9,9 +10,9 @@ import Verify from './Screens/Verify'
 import Recovery from './Screens/Recovery'
 import ChangePassword from './Screens/ChangePassword'
 
-type Props = NativeStackScreenProps<LoginStackParams, "MainPage">
+type Props = NativeStackScreenProps<LoginStackParams, "AuthorizationPage">
 
-const MainPage: React.FC<Props> = ({ navigation }) => {
+const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
     // Screen booleans
     const [loginPage, setLoginPage] = useState<boolean>(true)
     const [registerPage, setRegisterPage] = useState<boolean>(false)
@@ -19,7 +20,7 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
     const [verifyPage, setVerifyPage] = useState<boolean>(false)
     const [changePasswordPage, setChangePasswordPage] = useState<boolean>(false)
 
-    // Email re-request cooldown state persistence stuff
+    // Code re-request cooldown state persistence stuff
     const [requestEmailCoolDown, setRequestEmailCoolDown] = useState<boolean>(false)
     const [countDown, setCountDown] = useState<number>(30)
     const setCoolDown = (value: boolean) => {
@@ -45,9 +46,14 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
     const [email, setEmail] = useState<string>("") // String which is displayed on Verify.tsx
     const [lastPage, setLastPage] = useState<string>("") // register | recover (Dictates component content)
 
+    const OnLayout = async () => {
+      // Hide splashscreen on screen show
+      await SplashScreen.hideAsync();
+    }
+
     return (
-        <View style={login.container}>
-            <View style={login.wrapper}>
+        <View style={auth.container} onLayout={OnLayout}>
+            <View style={auth.wrapper}>
 
                 {loginPage && <Login 
                   navigation={navigation}
@@ -94,9 +100,9 @@ const MainPage: React.FC<Props> = ({ navigation }) => {
     )
 }
 
-export default MainPage
+export default AuthorizationPage
 
-export const login = StyleSheet.create({
+export const auth = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#ffff'

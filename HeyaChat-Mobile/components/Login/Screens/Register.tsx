@@ -3,7 +3,7 @@ import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
 import DateTimePicker from 'react-native-ui-datepicker'
 import * as Localization from 'expo-localization'
-import { login } from '../MainPage'
+import { auth } from '../AuthorizationPage'
 
 import Terms from '../../CommonComponents/LegalTexts/Terms'
 import EULA from '../../CommonComponents/LegalTexts/EULA'
@@ -215,20 +215,20 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
 
   return (
     <View>
-        <View style={{ ...login.head, ...{ height: "15%"}}}>
+        <View style={{ ...auth.head, ...{ height: "15%"}}}>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={login.title}>Create an account</Text>
+                <Text style={auth.title}>Create an account</Text>
             </View>
         </View>
 
-        <View style={{ ...login.body, ...{ height: "75%"}}}>
-        {displayUsernameTakenError && <Text style={login.errorText}>Username is already in use</Text>}
-        {displayUsernameLongError && <Text style={login.errorText}>Username too long!</Text>}
-        {displayUsernameShortError && <Text style={login.errorText}>Username too short!</Text>}
-        {displayUsernameCharacterError && <Text style={login.errorText}>Disallowed characters found: {invalidCharacters}</Text>}
-            <View style={login.inputWrapper}>
+        <View style={{ ...auth.body, ...{ height: "75%"}}}>
+        {displayUsernameTakenError && <Text style={auth.errorText}>Username is already in use</Text>}
+        {displayUsernameLongError && <Text style={auth.errorText}>Username too long!</Text>}
+        {displayUsernameShortError && <Text style={auth.errorText}>Username too short!</Text>}
+        {displayUsernameCharacterError && <Text style={auth.errorText}>Disallowed characters found: {invalidCharacters}</Text>}
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     keyboardType="default"
@@ -241,11 +241,11 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            {displayEmailTakenError && <Text style={login.errorText}>Username is already in use</Text>}
-            {displayEmailInvalidError && <Text style={login.errorText}>Insert a valid email</Text>}
-            <View style={login.inputWrapper}>
+            {displayEmailTakenError && <Text style={auth.errorText}>Username is already in use</Text>}
+            {displayEmailInvalidError && <Text style={auth.errorText}>Insert a valid email</Text>}
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     keyboardType="email-address"
@@ -258,8 +258,8 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
                     left={<TextInput.Icon icon="eye" style={{ }} />} 
                 />
             </View>
-            {displayDateOfBirthAgeError && <Text style={login.errorText}>You must be atleast 13 to use this service</Text>}
-            <View style={login.inputWrapper}>
+            {displayDateOfBirthAgeError && <Text style={auth.errorText}>You must be atleast 13 to use this service</Text>}
+            <View style={auth.inputWrapper}>
                 <Pressable style={{ backgroundColor: 'red' , height: 50, alignItems: 'flex-start', justifyContent: 'center' }} onPress={() => setShowDatePicker(!showDatePicker)}>
                     <View style={{ flexDirection: 'row', alignItems: 'center',  }}>
                         <Image style={{ height: 30, width: 30, marginLeft: 12, marginRight: 12, borderRadius: 100 }} source={require('../../../assets/icons/icon.png')} />
@@ -280,14 +280,14 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
                 />
             </View>}
 
-            <View style={login.separatorWrapper} >
-                <View style={login.separator} />
+            <View style={auth.separatorWrapper} >
+                <View style={auth.separator} />
             </View>
 
-            {displayPasswordLengthError && <Text style={login.errorText}>Password has to be atleast 8 characters long</Text>}
-            <View style={login.inputWrapper}>
+            {displayPasswordLengthError && <Text style={auth.errorText}>Password has to be atleast 8 characters long</Text>}
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     // keyboardType="visible-password" // KeyboardType is currently bugged
@@ -301,10 +301,10 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
                     left={<TextInput.Icon icon="eye" style={{ }} />}
                 />
             </View>
-            {displayPasswordMatchError && <Text style={login.errorText}>Passwords do not match!</Text>}
-            <View style={login.inputWrapper}>
+            {displayPasswordMatchError && <Text style={auth.errorText}>Passwords do not match!</Text>}
+            <View style={auth.inputWrapper}>
                 <TextInput 
-                    style={login.input}
+                    style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
                     // keyboardType="visible-password" // KeyboardType is currently bugged
@@ -318,43 +318,43 @@ const Register: React.FC<Props> = ({ navigation, onPress1, onPress2 }) => {
                 />
             </View>
             
-            <View style={{ ...login.checkboxBtnWrapper, ...{ marginTop: 10 } }}>
-                <Pressable style={login.checkboxBtn} onPress={() => setAgreeTerms(!agreeTerms)}>
+            <View style={{ ...auth.checkboxBtnWrapper, ...{ marginTop: 10 } }}>
+                <Pressable style={auth.checkboxBtn} onPress={() => setAgreeTerms(!agreeTerms)}>
                     <Checkbox 
                         onPress={() => setAgreeTerms(!agreeTerms)}
                         status={ agreeTerms ? "checked" : "unchecked"}
                     />
                 </Pressable>
-                <Text style={login.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
-                <Pressable style={login.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
-                    <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>terms</Text>
+                <Text style={auth.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
+                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+                    <Text style={{ ...auth.checkboxText, ...{ color: 'blue' } }}>terms</Text>
                 </Pressable>
             </View>
-            <View style={login.checkboxBtnWrapper}>
-                <Pressable style={login.checkboxBtn} onPress={() => setAgreeEULA(!agreeEULA)}>
+            <View style={auth.checkboxBtnWrapper}>
+                <Pressable style={auth.checkboxBtn} onPress={() => setAgreeEULA(!agreeEULA)}>
                     <Checkbox 
                         onPress={() => setAgreeEULA(!agreeEULA)}
                         status={ agreeEULA ? "checked" : "unchecked"}
                     />
                 </Pressable>
-                <Text style={login.checkboxText}>I have read and agree to the</Text>
-                <Pressable style={login.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })}>
-                    <Text style={{ ...login.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
+                <Text style={auth.checkboxText}>I have read and agree to the</Text>
+                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })}>
+                    <Text style={{ ...auth.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
                 </Pressable>
             </View>
-            <View style={login.primaryBtnWrapper}>
-                <Pressable style={!agreeEULA || !agreeTerms ? login.primaryBtnDisabled : login.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA && !agreeTerms}>
-                    <Text style={login.primaryBtnText}>Register</Text>
+            <View style={auth.primaryBtnWrapper}>
+                <Pressable style={!agreeEULA || !agreeTerms ? auth.primaryBtnDisabled : auth.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA && !agreeTerms}>
+                    <Text style={auth.primaryBtnText}>Register</Text>
                 </Pressable>
             </View>
         </View>
 
         {/* Hide footer when date picker is open to prevent overlap */}
-        {!showDatePicker && <View style={{ ...login.footer, ...{ height: "10%"}}}>
+        {!showDatePicker && <View style={{ ...auth.footer, ...{ height: "10%"}}}>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                <View style={login.secondaryBtnWrapper}>
-                    <Pressable style={login.secondaryBtn} onPress={() => onPress2()}>
-                        <Text style={login.secondaryBtnText}>Have an account? <Text style={{ color: 'blue' }}>Log in!</Text></Text>
+                <View style={auth.secondaryBtnWrapper}>
+                    <Pressable style={auth.secondaryBtn} onPress={() => onPress2()}>
+                        <Text style={auth.secondaryBtnText}>Have an account? <Text style={{ color: 'blue' }}>Log in!</Text></Text>
                     </Pressable>
                 </View>
             </View>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
-import { login } from '../MainPage'
+import { auth } from '../AuthorizationPage'
 
 import ErrorBox from '../../CommonComponents/ErrorBox'
 
@@ -62,22 +62,22 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
   return (
     <View>
 
-        <View style={{ ...login.head, ...{ height: "20%"} }}>
+        <View style={{ ...auth.head, ...{ height: "20%"} }}>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={login.title}>Enter a new password</Text>
+                <Text style={auth.title}>Enter a new password</Text>
             </View>
         </View>
 
-        <View style={{ ...login.body, ...{ height: "70%" } }}>
+        <View style={{ ...auth.body, ...{ height: "70%" } }}>
             <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
-                <Text style={login.description}></Text>
-                <Text style={login.description}></Text>
+                <Text style={auth.description}></Text>
+                <Text style={auth.description}></Text>
             </View>
             <View style={{ flex: 0.65 }}>
-                {displayPasswordLengthError && <Text style={login.errorText}>Password has to be atleast 8 characters long</Text>}
-                <View style={login.inputWrapper}>
+                {displayPasswordLengthError && <Text style={auth.errorText}>Password has to be atleast 8 characters long</Text>}
+                <View style={auth.inputWrapper}>
                     <TextInput 
-                        style={login.input}
+                        style={auth.input}
                         contentStyle={{ paddingLeft: 15 }}
                         underlineStyle={{ height: 0 }}
                         dense
@@ -90,10 +90,10 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
                         left={<TextInput.Icon icon="eye" style={{ }} />} 
                     />
                 </View>
-                {displayPasswordMatchError && <Text style={login.errorText}>Passwords do not match!</Text>}
-                <View style={login.inputWrapper}>
+                {displayPasswordMatchError && <Text style={auth.errorText}>Passwords do not match!</Text>}
+                <View style={auth.inputWrapper}>
                     <TextInput 
-                        style={login.input}
+                        style={auth.input}
                         contentStyle={{ paddingLeft: 15 }}
                         underlineStyle={{ height: 0 }}
                         dense
@@ -113,20 +113,20 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
                     />
                 </View>
 
-                <View style={{ ...login.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                    <Pressable style={passwordField != "" || repeatPasswordField != "" ? login.primaryBtn : login.primaryBtnDisabled} disabled={passwordField == "" || repeatPasswordField == ""} onPress={() => onSubmit()} >
-                        <Text style={login.primaryBtnText}>Submit</Text>
+                <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
+                    <Pressable style={passwordField != "" || repeatPasswordField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={passwordField == "" || repeatPasswordField == ""} onPress={() => onSubmit()} >
+                        <Text style={auth.primaryBtnText}>Submit</Text>
                     </Pressable>
                 </View>
 
             </View>
         </View>
 
-        <View style={{ ...login.footer, ...{ height: "10%" } }}>
+        <View style={{ ...auth.footer, ...{ height: "10%" } }}>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                <View style={login.secondaryBtnWrapper}>
-                    <Pressable style={login.secondaryBtn} onPress={() => onPress2()}>
-                        <Text style={login.secondaryBtnText}>Return</Text>
+                <View style={auth.secondaryBtnWrapper}>
+                    <Pressable style={auth.secondaryBtn} onPress={() => onPress2()}>
+                        <Text style={auth.secondaryBtnText}>Return</Text>
                     </Pressable>
                 </View>
             </View>

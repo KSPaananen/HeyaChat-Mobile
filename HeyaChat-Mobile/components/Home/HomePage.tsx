@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import * as SplashScreen from 'expo-splash-screen';
 import { HomeStackParams } from '../NavigationStacks/HomeNavStack'
 import { requestForGoogleNearbyConnectionsPerms, checkForGoogleNearbyConnectionsPerms } from '../../services/PermissionsService'
 import { localRepository } from '../../repositories/localRepository'
@@ -78,8 +79,13 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
     test.setupDB()
   }
 
+  const onLayout = async () => {
+    // Hide splashscreen
+    await SplashScreen.hideAsync();
+  }
+
   return (
-    <View style={home.container}>
+    <View style={home.container} onLayout={onLayout}>
         <Text></Text>
         <Text>{user?.username}</Text>
         <Text>{user?.email}</Text>
@@ -96,7 +102,7 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
         <Button title="Create tables" onPress={() => createTables()} />
         <Button title="Drop tables" onPress={() => dropTables()} />
         <Text></Text>
-        <Button title="Back to login" onPress={() => navigation.navigate("Login", { screen: "MainPage"})} />
+        <Button title="Back to login" onPress={() => navigation.navigate("Login", { screen: "AuthorizationPage"})} />
       
         <View style={home.ol}>
           {/* Friend requests */}

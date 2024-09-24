@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
-import { login } from '../MainPage'
+import { auth } from '../AuthorizationPage'
 
 interface Props {
     setEmail: any
@@ -56,23 +56,23 @@ const Recovery: React.FC<Props> = ({ setEmail, onPress1, onPress2, requestEmailC
     return (
         <View>
 
-            <View style={{ ...login.head, ...{ height: "20%"} }}>
+            <View style={{ ...auth.head, ...{ height: "20%"} }}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={login.title}>Recover your account</Text>
+                    <Text style={auth.title}>Recover your account</Text>
                 </View>
             </View>
 
-            <View style={{ ...login.body, ...{ height: "70%" } }}>
+            <View style={{ ...auth.body, ...{ height: "70%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
-                    <Text style={login.description}>Enter the email address associated</Text>
-                    <Text style={login.description}>with your account</Text>
+                    <Text style={auth.description}>Enter the email address associated</Text>
+                    <Text style={auth.description}>with your account</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
-                    {emailNotFoundError && <Text style={login.errorText}>Email does not belong to an account</Text>}
-                    {emailInvalidError && <Text style={login.errorText}>Please provide a valid email address</Text>}
-                    <View style={login.inputWrapper}>
+                    {emailNotFoundError && <Text style={auth.errorText}>Email does not belong to an account</Text>}
+                    {emailInvalidError && <Text style={auth.errorText}>Please provide a valid email address</Text>}
+                    <View style={auth.inputWrapper}>
                         <TextInput 
-                            style={login.input}
+                            style={auth.input}
                             contentStyle={{ paddingLeft: 15 }}
                             underlineStyle={{ height: 0 }}
                             dense
@@ -86,20 +86,20 @@ const Recovery: React.FC<Props> = ({ setEmail, onPress1, onPress2, requestEmailC
                         />
                     </View>
 
-                    <View style={{ ...login.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                        <Pressable style={emailField != "" ? login.primaryBtn : login.primaryBtnDisabled} disabled={emailField == ""} onPress={() => onSubmit()} >
-                            <Text style={login.primaryBtnText}>Recover</Text>
+                    <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
+                        <Pressable style={emailField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={emailField == ""} onPress={() => onSubmit()} >
+                            <Text style={auth.primaryBtnText}>Recover</Text>
                         </Pressable>
                     </View>
 
                 </View>
             </View>
 
-            <View style={{ ...login.footer, ...{ height: "10%" } }}>
+            <View style={{ ...auth.footer, ...{ height: "10%" } }}>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <View style={login.secondaryBtnWrapper}>
-                        <Pressable style={login.secondaryBtn} onPress={() => onPress2()}>
-                            <Text style={login.secondaryBtnText}>Return</Text>
+                    <View style={auth.secondaryBtnWrapper}>
+                        <Pressable style={auth.secondaryBtn} onPress={() => onPress2()}>
+                            <Text style={auth.secondaryBtnText}>Return</Text>
                         </Pressable>
                     </View>
                 </View>

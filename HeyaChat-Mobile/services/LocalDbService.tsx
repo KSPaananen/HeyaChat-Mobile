@@ -7,40 +7,12 @@ export class localDB {
 
         db.execAsync(`
             PRAGMA journal_mode = WAL;
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS example_table (
                 userID INTEGER NOT NULL, 
                 username TEXT, 
                 email TEXT, 
                 phone TEXT,
                 localUser INTEGER DEFAULT 0
-            );
-            CREATE TABLE IF NOT EXISTS interactions (
-                lastMetDT TEXT DEFAULT '1970-1-1 00:00:00', 
-                lastMessage TEXT, 
-                lastMessageDT TEXT DEFAULT '1970-1-1 00:00:00', 
-                userID INTEGER NOT NULL,
-	            CONSTRAINT UsersFK FOREIGN KEY(userID) REFERENCES users(userID)
-            );
-            CREATE TABLE IF NOT EXISTS profiles (
-                profileID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                displayname TEXT,
-                title TEXT,
-                description TEXT,
-                iconUrl BLOB,
-                bannerUrl BLOB,
-                userID INTEGER NOT NULL,
-                CONSTRAINT UsersFK FOREIGN KEY(userID) REFERENCES users(userID)
-            );
-            CREATE TABLE IF NOT EXISTS certificates (
-                certificateID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                certificate TEXT NOT NULL,
-                dateGranted TEXT NOT NULL DEFAULT '1970-1-1 00:00:00',
-                userID INTEGER NOT NULL,
-                CONSTRAINT UsersFK FOREIGN KEY(userID) REFERENCES users(userID)
-            );
-            CREATE TABLE IF NOT EXISTS device (
-                deviceID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                deviceName TEXT
             );
         `)
 
@@ -51,11 +23,7 @@ export class localDB {
         const db = await SQLite.openDatabaseAsync('localDB')
 
         await db.execAsync(`
-            DROP TABLE IF EXISTS users;
-            DROP TABLE IF EXISTS interactions;
-            DROP TABLE IF EXISTS profiles;
-            DROP TABLE IF EXISTS certificates;
-            DROP TABLE IF EXISTS device;
+            DROP TABLE IF EXISTS example_table;
         `)
         
         db.closeAsync()
