@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import * as Models from '../models/localDB/models'
+import * as Models from '../models/sqlite/models'
 
 export class localRepository {
     // db.closeAsync()

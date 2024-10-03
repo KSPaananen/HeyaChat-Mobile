@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/core'
 import { LinearGradient } from 'expo-linear-gradient'
 import { ProfileStackParams } from '../NavigationStacks/ProfileNavStack'
 import { profile } from '../../assets/styles/profileSheet'
-import { user } from '../../models/localDB/models'
+import { user } from '../../models/sqlite/models'
 
 import { testUser } from '../../models/testUser'
 

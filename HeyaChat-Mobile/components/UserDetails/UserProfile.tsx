@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../NavigationStacks/MessengerNavStack'
 import { LinearGradient } from 'expo-linear-gradient'
 import { profile } from '../../assets/styles/profileSheet'
-import { user } from '../../models/localDB/models'
+import { user } from '../../models/sqlite/models'
 
 import { testUser } from '../../models/testUser'
 

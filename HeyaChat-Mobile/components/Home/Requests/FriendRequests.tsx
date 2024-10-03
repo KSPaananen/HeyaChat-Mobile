@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Text, View, ScrollView } from 'react-native'
-import { user } from '../../../models/localDB/models'
 
 type Props = {
   navigation: any

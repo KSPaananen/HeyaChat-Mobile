@@ -1,44 +1,78 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
+import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
 import ErrorBox from '../../CommonComponents/ErrorBox'
 
 interface Props {
     navigation: any
-    onPress1: () => void // Navigate to recovery page
-    onPress2: () => void // Navigate to registeration screen
-    onPress3: () => void // Navigate to verification screen
+    navigateToRecovery: () => void // Navigate to recovery page
+    navigateToRegistering: () => void // Navigate to registeration screen
+    navigateToMfaVerifying: () => void // Navigate to mfa verifying screen
+    navigateToEmailVerifying: () => void // Navigate to email verifying screen
 }
 
-const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) => {
+const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegistering, navigateToMfaVerifying, navigateToEmailVerifying }) => {
+    // Fields/buttons
     const [loginField, setLoginField] = useState<string>("")
     const [passwordField, setPasswordField] = useState<string>("")
-    const [keepLoggedIn, setKeepLoggedIn] = useState<boolean>(false)
+    const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false)
 
-    // GUI
-    const [displayLoginError, setDisplayLoginError] = useState<boolean>(false)
+    // GUI displayables
+    const [displayError, setDisplayError] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string>("")
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // Reset all displayable errors on GUI
-        setDisplayLoginError(false)
+        setDisplayError(false)
 
         // Post login details to backend
-        let response: number = 200
+        let api = new AuthorizationAPI()
+        // Add biometrics login later to api.Login()
+        let response = await api.Login(loginField, passwordField, null)
         
-        // If response is 200, navigate to home screen & save certificate
-        if (response === 200) {
-            navigation.navigate("AppBottomTabs", { screen: "Home"})
-        } else if (response === 201) {
-            onPress3()
+        if (response === null) {
+            setErrorMessage("Something went wrong :(")
+            setDisplayError(true)
+            return
         }
-        else {
-            setDisplayLoginError(true)
+
+        // Read code from body
+        let jsonBody = await response.json()
+        let code = jsonBody.code
+
+        if (response.status === 200) {
+            // Act based on code read from body
+            if (code === 451) {        // Succesfully logged in
+                navigation.navigate("AppBottomTabs", { screen: "Home"})
+            } else if (code === 452) { // Succesfully logged in. Email is not verified
+                navigateToEmailVerifying()
+            }
+        } else if (response.status === 202) {
+            if (code === 450) {        // User logged in from new device with mfa enabled
+                navigateToMfaVerifying()
+            }
+        } else if (response.status === 401) {
+            if (code === 410) {
+                setErrorMessage("Couldn't find user matching login details")
+                setDisplayError(true)
+            } else if (code === 411) {
+                setErrorMessage("Incorrect password")
+                setDisplayError(true)
+            }
+        } else if (response.status === 403) {
+            if (code == 412) {
+                // Display user suspended modal
+
+            } else if (code === 413) {
+                // Display user permanently suspended modal
+
+            }
         }
     }
-  
 
   return (
     <View>
@@ -51,10 +85,10 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
 
         <View style={{ ...auth.body, ...{ height: "45%"} }}>
 
-            {displayLoginError && <ErrorBox 
-                message="No users match password"
+            {displayError && <ErrorBox 
+                message={errorMessage}
                 borderRadius={5}
-                onPress={() => setDisplayLoginError(false)}
+                onPress={() => setDisplayError(false)}
             />}
             <View style={auth.inputWrapper}>
                 <TextInput 
@@ -92,10 +126,10 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
                 />
             </View>
             <View style={{ ...auth.checkboxBtnWrapper, ...{ justifyContent: 'flex-end', marginRight: 10 } }}>
-                <Pressable style={auth.checkboxBtn} onPress={() => setKeepLoggedIn(!keepLoggedIn)}>
+                <Pressable style={auth.checkboxBtn} onPress={() => setStayLoggedIn(!stayLoggedIn)}>
                     <Checkbox 
-                        onPress={() => setKeepLoggedIn(!keepLoggedIn)}
-                        status={ keepLoggedIn ? "checked" : "unchecked"}
+                        onPress={() => setStayLoggedIn(!stayLoggedIn)}
+                        status={ stayLoggedIn ? "checked" : "unchecked"}
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>Stay signed in</Text>
@@ -107,7 +141,7 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
             </View>
             <View style={auth.secondaryBtnWrapper}>
                 {/* Reset errorbox when navigating to other screens */}
-                <Pressable style={auth.secondaryBtn} onPress={() => {onPress1(); setDisplayLoginError(false)}}>
+                <Pressable style={auth.secondaryBtn} onPress={() => {navigateToRecovery(); setDisplayError(false)}}>
                     <Text style={auth.secondaryBtnText}>Forgot your password?</Text>
                 </Pressable>
             </View>
@@ -117,7 +151,7 @@ const Login: React.FC<Props> = ({ navigation, onPress1, onPress2, onPress3 }) =>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={auth.secondaryBtnWrapper}>
                     {/* Reset errorbox when navigating to other screens */}
-                    <Pressable style={auth.secondaryBtn} onPress={() => {onPress2(); setDisplayLoginError(false)}}> 
+                    <Pressable style={auth.secondaryBtn} onPress={() => {navigateToRegistering(); setDisplayError(false)}}> 
                         <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'blue' }}>Sign up!</Text></Text>
                     </Pressable>
                 </View>

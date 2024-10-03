@@ -6,9 +6,11 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import Login from './Screens/Login'
 import Register from './Screens/Register'
-import Verify from './Screens/Verify'
 import Recovery from './Screens/Recovery'
 import ChangePassword from './Screens/ChangePassword'
+import VerifyMFA from './Screens/VerifyMFA'
+import VerifyEmail from './Screens/VerifyEmail'
+import VerifyCode from './Screens/VerifyCode'
 
 type Props = NativeStackScreenProps<LoginStackParams, "AuthorizationPage">
 
@@ -17,15 +19,20 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
     const [loginPage, setLoginPage] = useState<boolean>(true)
     const [registerPage, setRegisterPage] = useState<boolean>(false)
     const [recoveryPage, setRecoveryPage] = useState<boolean>(false)
-    const [verifyPage, setVerifyPage] = useState<boolean>(false)
     const [changePasswordPage, setChangePasswordPage] = useState<boolean>(false)
+    const [verifyMFAPage, setVerifyMFAPage] = useState<boolean>(false)
+    const [verifyEmailPage, setVerifyEmailPage] = useState<boolean>(false)
+    const [verifyCodePage, setVerifyCodePage] = useState<boolean>(false)
+
+    // Constants which influence navigation behaviour (mostly returning)
+    const [lastPage, setLastPage] = useState<string>("")
 
     // Code re-request cooldown state persistence stuff
-    const [requestEmailCoolDown, setRequestEmailCoolDown] = useState<boolean>(false)
+    const [requestCodeCoolDown, setRequestCodeCoolDown] = useState<boolean>(false)
     const [countDown, setCountDown] = useState<number>(30)
+
     const setCoolDown = (value: boolean) => {
-      // Set cooldown to true
-      setRequestEmailCoolDown(true)
+      setRequestCodeCoolDown(true)
 
       // Animate a countdown for GUI
       let count: number = 30 
@@ -36,15 +43,11 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
           if(count === 0) {
               clearInterval(intervalId)
-              setRequestEmailCoolDown(false)
+              setRequestCodeCoolDown(false)
           }
       }, 1000)
       setCountDown(30) // Set countdown back to 30 or next countdown displays 0 at the beginning
     }
-
-    // constants which are to be passed for Verify.tsx component
-    const [email, setEmail] = useState<string>("") // String which is displayed on Verify.tsx
-    const [lastPage, setLastPage] = useState<string>("") // register | recover (Dictates component content)
 
     const OnLayout = async () => {
       // Hide splashscreen on screen show
@@ -57,42 +60,50 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
                 {loginPage && <Login 
                   navigation={navigation}
-                  onPress1={() => {setLoginPage(false); setRecoveryPage(true)}} // Navigate to account recovery 
-                  onPress2={() => {setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
-                  onPress3={() => {setLastPage("register"); setLoginPage(false); setVerifyPage(true)}} // Navigate to verify page if users email isn't confirmed
+                  navigateToRecovery={() => {setLoginPage(false); setRecoveryPage(true)}} // Navigate to account recovery 
+                  navigateToRegistering={() => {setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
+                  navigateToMfaVerifying={() => {setLoginPage(false); setVerifyMFAPage(true)}} // Navigate to mfa verifying screen
+                  navigateToEmailVerifying={() => {setLoginPage(false); setVerifyEmailPage(true)}} // Navigate to email verifying screen
                 />}
 
                 {registerPage && <Register
                   navigation={navigation}
-                  onPress1={() => {setLastPage("register"); setRegisterPage(false); setVerifyPage(true)}} // Navigate to verification screen after succesful post
-                  onPress2={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
+                  navigateToEmailVerifying={() => {setRegisterPage(false); setVerifyEmailPage(true)}} // Navigate to email confirmation screen
+                  navigateToLogin={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
                 />}
 
                 {recoveryPage && <Recovery 
-                  setEmail={setEmail}
-                  onPress1={() => {setLastPage("recover"); setRecoveryPage(false); setVerifyPage(true)}} // After inserting email, navigate to verification screen
-                  onPress2={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
-                  requestEmailCoolDown={requestEmailCoolDown}
-                  countDown={countDown}
-                  setCoolDown={setCoolDown}
-                />}
-
-                {verifyPage && <Verify 
-                  navigation={navigation}
-                  email={email}
-                  lastPage={lastPage} // Which type of verification page to show
-                  setVerifyPage={setVerifyPage}
-                  setRegisterPage={setRegisterPage}
-                  setRecoveryPage={setRecoveryPage}
-                  setChangePasswordPage={setChangePasswordPage}
-                  requestEmailCoolDown={requestEmailCoolDown}
-                  countDown={countDown}
-                  setCoolDown={setCoolDown}
+                  navigateToCodeVerifying={() => {setRecoveryPage(false); setVerifyCodePage(true)}} // Navigate to code verifying screen
+                  navigateToLogin={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
                 />}
 
                 {changePasswordPage && <ChangePassword 
-                  onPress1={() => {setChangePasswordPage(false); setLoginPage(true)}} // Navigate to login page to re-login after changing password
-                  onPress2={() => {setChangePasswordPage(false); setVerifyPage(true)}} // Return to verify page
+                  navigateToLogin={() => {setChangePasswordPage(false); setLoginPage(true)}} // Return to login
+                />}
+
+                {verifyMFAPage && <VerifyMFA
+                  navigation={navigation}
+                  navigateToLogin={() => {setVerifyMFAPage(false); setLoginPage(true)}}
+                  requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
+                  countDown={countDown} // Cooldown remaining length
+                  setCoolDown={setCoolDown} //Method for starting cooldown and disabling further requests for a set time
+                />}
+
+                {verifyEmailPage && <VerifyEmail
+                  navigation={navigation}
+                  navigateToLogin={() => {setVerifyEmailPage(false); setLoginPage(true)}}
+                  requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
+                  countDown={countDown} // Cooldown remaining length
+                  setCoolDown={setCoolDown} //Method for starting cooldown and disabling further requests for a set time
+                />}
+
+                {verifyCodePage && <VerifyCode
+                  navigation={navigation}
+                  navigateToPasswordChange={() => {setVerifyCodePage(false); setChangePasswordPage(true)}}
+                  navigateToLogin={() => {setVerifyCodePage(false); setLoginPage(true)}}
+                  requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
+                  countDown={countDown} // Cooldown remaining length
+                  setCoolDown={setCoolDown} //Method for starting cooldown and disabling further requests for a set time
                 />}
 
             </View>
@@ -215,7 +226,7 @@ export const auth = StyleSheet.create({
     },
     title: {
       fontSize: 25,
-      marginTop: 25,
+      marginTop: 0,
     },
     description: {
       fontSize: 13,

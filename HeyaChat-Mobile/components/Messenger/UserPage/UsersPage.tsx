@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { MessengerTopTabStackParams } from '../../NavigationStacks/MessengerTopTabNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { user } from '../../../models/localDB/models'
+import { user } from '../../../models/sqlite/models'
 import { testUser } from '../../../models/testUser'
 
 import UserCard from './UserCard'

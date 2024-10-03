@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import { user } from '../../../models/localDB/models'
+import { user } from '../../../models/sqlite/models'
 
 interface Props {
   user: user

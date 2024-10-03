@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { users } from '../../../models/localDB/models'
 import { testUser } from '../../../models/testUser'
 
 import SummaryCard from './SummaryCard'

@@ -1,65 +1,75 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
+import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
 import ErrorBox from '../../CommonComponents/ErrorBox'
 
 interface Props {
-    onPress1: () => void // Navígate to login screen
-    onPress2: () => void // Return
+    navigateToLogin: () => void // Return
 }
 
-const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
+const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
     // Fields
     const [passwordField, setPasswordField] = useState<string>("")
     const [repeatPasswordField, setRepeatPasswordField] = useState<string>("")
 
     // Conditions
-    const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false)
     const passwordMinLength: number = 8
 
     // GUI
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
-    const [displayPasswordMatchError, setDisplayPasswordMatchError] = useState<boolean>(false)
-    const [displayPasswordLengthError, setDisplayPasswordLengthError] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string>("")
+    const [displayError, setDisplayError] = useState<boolean>(false)
 
     // Check if both password fields match
     const matchPasswords = (value: string) => {
         if (passwordField.length <= value.length && passwordField !== value) {
-            setDisplayPasswordMatchError(true)
-            setPasswordsMatch(false)
+            setErrorMessage("Passwords do not match")
+            setDisplayError(true)
         } else if (passwordField.length > value.length) {
-            setDisplayPasswordMatchError(false)
-            setPasswordsMatch(false)
+            setErrorMessage("Passwords do not match")
+            setDisplayError(false)
         } else if (passwordField.length == value.length && passwordField === value) {
-            setDisplayPasswordMatchError(false)
-            setPasswordsMatch(true)
+            setDisplayError(false)
         }
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // Reset all displayable errors on GUI
-        setDisplayPasswordLengthError(false)
+        setDisplayError(false)
 
-        // Post login details to backend
-        if (passwordsMatch && passwordField.length >= passwordMinLength) {
-            let response: number = 200
-        
-            // If response is 200, navigate to home screen & save certificate
-            if (response === 200) {
-                onPress1()
+        if (passwordField === repeatPasswordField && passwordField.length >= passwordMinLength) {
+            let api = new AuthorizationAPI()
+            let response = await api.ChangePassword(passwordField, repeatPasswordField)
+
+            if (response === null) {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+                return
             }
-            else {
-            
+
+            let jsonBody = await response.json()
+            let code = jsonBody.code
+
+            if (response.status === 201) {
+                if (code === 950) {
+                    navigateToLogin()
+                }
+            } else if (response.status === 304) {
+                if (code === 910) {
+                    setErrorMessage("Passwords do not match")
+                    setDisplayError(true)
+                }
+            } else {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
             }
-        } else if (passwordField.length < passwordMinLength) {
-            setDisplayPasswordLengthError(true)
         }
     }
-  
 
-  return (
+    return (
     <View>
 
         <View style={{ ...auth.head, ...{ height: "20%"} }}>
@@ -74,7 +84,7 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
                 <Text style={auth.description}></Text>
             </View>
             <View style={{ flex: 0.65 }}>
-                {displayPasswordLengthError && <Text style={auth.errorText}>Password has to be atleast 8 characters long</Text>}
+                {displayError && <Text style={auth.errorText}>{errorMessage}</Text>}
                 <View style={auth.inputWrapper}>
                     <TextInput 
                         style={auth.input}
@@ -90,7 +100,6 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
                         left={<TextInput.Icon icon="eye" style={{ }} />} 
                     />
                 </View>
-                {displayPasswordMatchError && <Text style={auth.errorText}>Passwords do not match!</Text>}
                 <View style={auth.inputWrapper}>
                     <TextInput 
                         style={auth.input}
@@ -125,8 +134,8 @@ const ChangePassword: React.FC<Props> = ({ onPress1, onPress2 }) => {
         <View style={{ ...auth.footer, ...{ height: "10%" } }}>
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={auth.secondaryBtnWrapper}>
-                    <Pressable style={auth.secondaryBtn} onPress={() => onPress2()}>
-                        <Text style={auth.secondaryBtnText}>Return</Text>
+                    <Pressable style={auth.secondaryBtn} onPress={() => navigateToLogin()}>
+                        <Text style={auth.secondaryBtnText}>Back to login</Text>
                     </Pressable>
                 </View>
             </View>

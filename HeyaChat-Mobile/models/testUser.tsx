@@ -1,4 +1,4 @@
-import { user } from './localDB/models'
+import { user } from './sqlite/models'
 
 // User object for placeholder values & testing
 
