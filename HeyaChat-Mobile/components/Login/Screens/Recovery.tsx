@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
+import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
+
+import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
     navigateToCodeVerifying: () => void // Navigate to verification screen
@@ -24,51 +27,60 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
         // Reset displayable errors
         setDisplayError(false)
 
-        // Post to backend
-        let api = new AuthorizationAPI()
-        let response = await api.Recover(loginField)
+        let response: any
 
-        if (response === null) {
-            setErrorMessage("Something went wrong :(")
-            setDisplayError(true)
+        // Post to backend
+        try {
+            let api = new AuthorizationAPI()
+            response = await api.Recover(loginField)
+        } catch {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
             return
         }
-
+        
         // Read body
         let jsonBody = await response.json()
-        let code = jsonBody.code
 
         if (response.status === 200) {
-            if (code === 850) {
+            if (jsonBody.code === 850) {
                 navigateToCodeVerifying()
             }
         } else if (response.status === 404) {
-            if (code === 810) {
-                setErrorMessage("User matching login couldn't be found")
-                setDisplayError(true)
+            if (jsonBody.code === 810) {
+                setTimeout(() => {
+                    setErrorMessage("User matching login couldn't be found")
+                    setDisplayError(true)
+                }, 500)
             }
         } else {
-            // Display error using errorbox
-            
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
         }
     }
 
     return (
         <View>
 
-            <View style={{ ...auth.head, ...{ height: "20%"} }}>
+            <View style={{ ...auth.head, ...{ height: "23%"} }}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={auth.title}>Recover your account</Text>
                 </View>
             </View>
 
-            <View style={{ ...auth.body, ...{ height: "70%" } }}>
-                <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
+            <View style={{ ...auth.body, ...{ height: "67%" } }}>
+                <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
                     <Text style={auth.description}>Enter the email address or username associated</Text>
                     <Text style={auth.description}>with your account</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
-                    {displayError && <Text style={auth.errorText}>{errorMessage}</Text>}
+                    <View style={auth.notificationWrapper}>
+                        {displayError && <ErrorNotification message={errorMessage} />}
+                    </View>
                     <View style={auth.inputWrapper}>
                         <TextInput 
                             style={auth.input}
@@ -81,11 +93,11 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
                             mode="flat"
                             activeOutlineColor="#0330fc"
                             placeholder="Email or username" 
-                            left={<TextInput.Icon icon="eye" style={{ }} />} 
+                            left={<TextInput.Icon icon={() => <Octicons name="mail" size={23} color="rgb(63, 118, 198)" />} />} 
                         />
                     </View>
 
-                    <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
+                    <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
                         <Pressable style={loginField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={loginField == ""} onPress={() => onSubmit()} >
                             <Text style={auth.primaryBtnText}>Recover</Text>
                         </Pressable>

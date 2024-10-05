@@ -149,6 +149,8 @@ export class AuthorizationAPI {
 
             // Remove token from storage
             await storageService.Delete("jsonwebtoken")
+            // Set staysignedin to false
+            await storageService.StoreValue("staysignedin", "false")
 
             return res
         } catch (e) {

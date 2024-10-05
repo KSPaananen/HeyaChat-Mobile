@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { useState, useEffect } from 'react'
+import { StyleSheet, View, Animated } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { LoginStackParams } from '../NavigationStacks/LoginNavStack'
-import * as SplashScreen from 'expo-splash-screen';
+import { LinearGradient } from 'expo-linear-gradient'
+import * as SplashScreen from 'expo-splash-screen'
 
 import Login from './Screens/Login'
 import Register from './Screens/Register'
@@ -24,12 +25,32 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
     const [verifyEmailPage, setVerifyEmailPage] = useState<boolean>(false)
     const [verifyCodePage, setVerifyCodePage] = useState<boolean>(false)
 
-    // Constants which influence navigation behaviour (mostly returning)
-    const [lastPage, setLastPage] = useState<string>("")
-
     // Code re-request cooldown state persistence stuff
     const [requestCodeCoolDown, setRequestCodeCoolDown] = useState<boolean>(false)
     const [countDown, setCountDown] = useState<number>(30)
+
+    // Animation
+    const [position, setPosition] = useState<number>(0.5)
+    const [direction, setDirection] = useState<number>(1) // 1 increases, -1 decreases
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setPosition((pos) => {
+          const newValue = pos + direction * 0.005
+  
+          if (newValue >= 0.7) {
+            setDirection(-1)
+            return 0.7
+          } else if (newValue <= 0.3) {
+            setDirection(1)
+            return 0.3
+          }
+          return newValue
+        })
+      }, 100)
+  
+      return () => clearInterval(interval)
+    }, [direction])
 
     const setCoolDown = (value: boolean) => {
       setRequestCodeCoolDown(true)
@@ -51,11 +72,19 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
     const OnLayout = async () => {
       // Hide splashscreen on screen show
-      await SplashScreen.hideAsync();
+      await SplashScreen.hideAsync()
     }
 
     return (
         <View style={auth.container} onLayout={OnLayout}>
+          <LinearGradient
+            // colors={['rgb(78, 50, 170)', 'rgb(67, 113, 180)', 'rgb(55, 175, 189)']}
+            colors={['rgb(72, 35, 195)', 'rgb(63, 118, 198)', 'rgb(55, 200, 200)']}
+            style={auth.background}
+            locations={[0, position, 1]}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 0 }}
+            />
             <View style={auth.wrapper}>
 
                 {loginPage && <Login 
@@ -118,12 +147,19 @@ export const auth = StyleSheet.create({
       flex: 1,
       backgroundColor: '#ffff'
     },
+    background: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      height: "100%",
+    },
     wrapper: {
       flex: 1,
       marginVertical: 55,
       marginHorizontal: 30,
       borderRadius: 45,
-      borderWidth: 1,
+      borderWidth: 0,
       borderColor: 'gray',
       overflow: 'hidden'
     },
@@ -143,25 +179,25 @@ export const auth = StyleSheet.create({
     separator: {
         flex: 1,
         height: 1,
-        marginVertical: 20,
-        marginHorizontal: 10,
+        marginTop: 27,
+        marginBottom: 6,
+        marginHorizontal: 15,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
       },
     inputWrapper: {
-        marginTop: 10, 
-        marginBottom: 5, 
         marginHorizontal: 5, 
         borderRadius: 100, 
         overflow: 'hidden'
     },
     input: {
         height: 50,
+        backgroundColor: 'rgb(255, 255, 255)'
     },
     primaryBtnWrapper: {
         flexDirection: 'row',
-        marginTop: 30,
+        marginTop: 40,
         marginHorizontal: 30, 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -172,7 +208,7 @@ export const auth = StyleSheet.create({
       borderRadius: 100, 
       alignItems: 'center', 
       justifyContent: 'center',
-      backgroundColor: 'gray'
+      backgroundColor: 'rgb(255, 255, 255)'
     },
     primaryBtnDisabled: {
       flex: 1, 
@@ -180,10 +216,11 @@ export const auth = StyleSheet.create({
       borderRadius: 100, 
       alignItems: 'center', 
       justifyContent: 'center',
-      backgroundColor: 'lightgray'
+      backgroundColor: 'rgba(52, 52, 52, 0.4)'
     },
     primaryBtnText: {
-      fontSize: 15,
+      fontSize: 16,
+      color: 'black'
     },
     secondaryBtnWrapper: {
         marginTop: 10,
@@ -195,7 +232,8 @@ export const auth = StyleSheet.create({
         alignItems: 'center',
     },
     secondaryBtnText: {
-        fontSize: 12,
+        fontSize: 13,
+        color: 'black'
     },
     secondaryBtnDisabledText : {
       fontSize: 12,
@@ -208,7 +246,7 @@ export const auth = StyleSheet.create({
     },
     checkboxBtn: {
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     checkboxTextBtn: {
       flexDirection: 'row',
@@ -232,14 +270,16 @@ export const auth = StyleSheet.create({
       fontSize: 13,
       marginLeft: 10
     },
-    errorText: {
-      color: 'red', 
-      marginLeft: 10
-    },
     icon: {
-      height: 50,
-      width: 200,
+      height: 75,
+      width: 75,
       marginTop: 15,
     },
-
+    notificationWrapper: {
+      justifyContent: 'center',
+      marginTop: 2,
+      marginBottom: 6,
+      height: 20,
+      
+    }
   })

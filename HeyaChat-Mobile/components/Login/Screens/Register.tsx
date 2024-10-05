@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from 'react-native-paper'
+import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorBox from '../../CommonComponents/ErrorBox'
 import Terms from '../../CommonComponents/LegalTexts/Terms'
 import EULA from '../../CommonComponents/LegalTexts/EULA'
+import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
     navigation: any
@@ -100,8 +101,11 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
 
         // Check if username meets minimum length requirements
         if (usernameField.length < usernameMinLength && usernameField.length >= 1) {
-            setUsernameError(`Username should be atleast ${usernameMinLength} characters long`)
-            setDisplayUsernameError(true)
+            setTimeout(() => {
+                // Notification component works a bit better with some delay
+                setUsernameError(`Username should be atleast ${usernameMinLength} characters long`)
+                setDisplayUsernameError(true)
+            }, 500)
             return
         } else if (usernameField.length === 0) { // Return if field is empty
             return
@@ -109,8 +113,11 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
 
         // Check if password meets minimum length requirements
         if (passwordField.length < passwordMinLength && passwordField.length >= 1) {
-            setPasswordError(`Password should be atleast ${passwordMinLength} characters long`)
-            setDisplayPasswordError(true)
+            setTimeout(() => {
+                // Notification component works a bit better with some delay
+                setPasswordError(`Password should be atleast ${passwordMinLength} characters long`)
+                setDisplayPasswordError(true)
+            }, 500)
             return
         } else if (passwordField.length === 0) { // Return is field is empty
             return
@@ -118,8 +125,11 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
 
         // Check if email is valid with regex
         if (!emailRegex.test(emailField) && emailField.length >= 1) {
-            setEmailError("Valid email address required")
-            setDisplayEmailError(true)
+            setTimeout(() => {
+                // Notification component works a bit better with some delay
+                setEmailError("Valid email address required")
+                setDisplayEmailError(true)
+            }, 500)
             return
         } else if (emailField.length === 0) { // Return is field is empty
             return
@@ -127,46 +137,66 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
 
         // Send post request to API if everything is ok
         if (usernameField.length <= usernameMaxLength && passwordField === passwordRepeatField && passwordField.length >= passwordMinLength && agreeTerms && agreeEULA) {
+            let response: any
+
             // Post to API
-            let api = new AuthorizationAPI()
-            let response = await api.Register(usernameField, passwordField, emailField)
-            
-            if (response === null) {
-                // Display something else went wrong error with errorbox
-                setGeneralError(`Something went wrong :(`)
-                setDisplayGeneralError(true)
+            try {
+                let api = new AuthorizationAPI()
+                response = await api.Register(usernameField, passwordField, emailField)
+            } catch {
+                setTimeout(() => {
+                    // Notification component works a bit better with some delay
+                    setGeneralError(`Something went wrong :(`)
+                    setDisplayGeneralError(true)
+                }, 500)
                 return
             }
 
+            // Read response body
             let jsonBody = await response.json()
-            let code = jsonBody.code
 
             if (response.status === 201) {
                 navigateToEmailVerifying()
             } else if (response.status === 302) {
                 // Display error message based on code in response body
-                if (code === 310) {
-                    setUsernameError(`Username already in use`)
-                    setDisplayUsernameError(true)
-                } else if (code === 311) {
-                    setEmailError(`Email address already in use`)
-                    setDisplayEmailError(true)
-                } else if (code === 312) {
-                    setUsernameError(`Username and email address already in use`)
-                    setDisplayUsernameError(true)
+                if (jsonBody.code === 310) {
+                    setTimeout(() => {
+                        // Notification component works a bit better with some delay
+                        setUsernameError(`Username already in use`)
+                        setDisplayUsernameError(true)
+                    }, 500)
+                } else if (jsonBody.code === 311) {
+                    setTimeout(() => {
+                        // Notification component works a bit better with some delay
+                        setEmailError(`Email address already in use`)
+                        setDisplayEmailError(true)
+                    }, 500)
+                } else if (jsonBody.code === 312) {
+                    setTimeout(() => {
+                        // Notification component works a bit better with some delay
+                        setUsernameError(`Username and email address already in use`)
+                        setDisplayUsernameError(true)
+                    }, 500)
                 }
             } else if (response.status === 406) {
                 // Display error message based on code in response body
-                if (code === 313) {
-                    setGeneralError(`Code: ${313}\nSomething went wrong :(`)
-                    setDisplayGeneralError(true)
+                if (jsonBody.code === 313) {
+                    setTimeout(() => {
+                        // Notification component works a bit better with some delay
+                        setGeneralError(`Code: ${313}\nSomething went wrong :(`)
+                        setDisplayGeneralError(true)
+                    }, 500)
                 }
             } else  {
-                // Display something else went wrong error with errorbox
-                setGeneralError(`Something went wrong :(`)
-                setDisplayGeneralError(true)
+                setTimeout(() => {
+                    // Notification component works a bit better with some delay
+                    setGeneralError(`Something went wrong :(`)
+                    setDisplayGeneralError(true)
+                }, 500)
             }
         }
+
+        return
     }
 
   return (
@@ -178,12 +208,12 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
         </View>
 
         <View style={{ ...auth.body, ...{ height: "75%" }}}>
-            {displayGeneralError && <ErrorBox
-                message={generalError}
-                borderRadius={5}
-                onPress={() => setDisplayGeneralError(false)}
-            />}
-        {displayUsernameError && <Text style={auth.errorText}>{usernameError}</Text>}
+            
+            <View style={auth.notificationWrapper}>
+                {displayGeneralError && <ErrorNotification message={generalError} />}
+                {displayUsernameError && <ErrorNotification message={usernameError} />}
+            </View>
+            
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -196,10 +226,14 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Username" 
-                    left={<TextInput.Icon icon="eye" style={{ }} />} 
+                    left={<TextInput.Icon icon={() => <Octicons name="person" size={23} color="rgb(63, 118, 198)" />} />} 
                 />
             </View>
-            {displayEmailError && <Text style={auth.errorText}>{emailError}</Text>}
+
+            <View style={auth.notificationWrapper}>
+                {displayEmailError && <ErrorNotification message={emailError} />}
+            </View>
+            
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -212,7 +246,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Email" 
-                    left={<TextInput.Icon icon="eye" style={{ }} />} 
+                    left={<TextInput.Icon icon={() => <Octicons name="mail" size={23} color="rgb(63, 118, 198)" />} />} 
                 />
             </View>
 
@@ -220,7 +254,10 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 <View style={auth.separator} />
             </View>
 
-            {displayPasswordError && <Text style={auth.errorText}>{passwordError}</Text>}
+            <View style={auth.notificationWrapper}>
+                {displayPasswordError && <ErrorNotification message={passwordError} />}
+            </View>
+            
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -234,9 +271,14 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Password" 
-                    left={<TextInput.Icon icon="eye" style={{ }} />}
+                    left={<TextInput.Icon icon={() => <Octicons name="key" size={23} color="rgb(63, 118, 198)" />} />} 
                 />
             </View>
+
+            <View style={auth.notificationWrapper}>
+                
+            </View>
+
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -248,8 +290,8 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     onChangeText={(value) => {matchPasswords(value); setPasswordRepeatField(value)}}
                     mode="flat"
                     activeOutlineColor="#0330fc"
-                    placeholder="Re-enter password" 
-                    left={<TextInput.Icon icon="eye" style={{ }} />} 
+                    placeholder="Confirm password" 
+                    left={<TextInput.Icon icon={() => <Octicons name="lock" size={23} color="rgb(63, 118, 198)" />} />} 
                 />
             </View>
             
@@ -258,6 +300,8 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     <Checkbox 
                         onPress={() => setAgreeTerms(!agreeTerms)}
                         status={ agreeTerms ? "checked" : "unchecked"}
+                        color={'rgba(50, 200, 205, 1)'}
+                        uncheckedColor={'rgba(50, 200, 205, 1)'}
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
@@ -270,6 +314,8 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                     <Checkbox 
                         onPress={() => setAgreeEULA(!agreeEULA)}
                         status={ agreeEULA ? "checked" : "unchecked"}
+                        color={'rgba(50, 200, 205, 1)'}
+                        uncheckedColor={'rgba(50, 200, 205, 1)'}
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>I have read and agree to the</Text>
@@ -278,7 +324,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 </Pressable>
             </View>
             <View style={auth.primaryBtnWrapper}>
-                <Pressable style={!agreeEULA || !agreeTerms ? auth.primaryBtnDisabled : auth.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA && !agreeTerms}>
+                <Pressable style={!usernameField || !emailField || !passwordField  || !passwordRepeatField || !agreeEULA || !agreeTerms ? auth.primaryBtnDisabled : auth.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA && !agreeTerms}>
                     <Text style={auth.primaryBtnText}>Register</Text>
                 </Pressable>
             </View>
@@ -288,7 +334,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={auth.secondaryBtnWrapper}>
                     <Pressable style={auth.secondaryBtn} onPress={() => navigateToLogin()}>
-                        <Text style={auth.secondaryBtnText}>Have an account? <Text style={{ color: 'blue' }}>Log in!</Text></Text>
+                        <Text style={auth.secondaryBtnText}>Have an account? <Text style={{ color: 'rgba(50, 200, 205, 1)' }}>Log in!</Text></Text>
                     </Pressable>
                 </View>
             </View>

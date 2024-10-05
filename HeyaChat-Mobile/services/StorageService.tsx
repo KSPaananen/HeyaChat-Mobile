@@ -9,6 +9,7 @@ import { ClassType } from 'react';
 // jsonwebtoken: string
 // continent: string
 // userdevice: object
+// staysignedin: string, either true or false
 
 export class StorageService {
     constructor() {

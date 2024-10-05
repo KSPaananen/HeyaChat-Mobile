@@ -4,8 +4,6 @@ import { TextInput, Checkbox } from 'react-native-paper'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorBox from '../../CommonComponents/ErrorBox'
-
 interface Props {
     navigation: any
     navigateToLogin: () => void
@@ -51,25 +49,21 @@ const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCode
     return (
         <View>
 
-            <View style={{ ...auth.head, ...{ height: "20%"} }}>
+            <View style={{ ...auth.head, ...{ height: "23%"} }}>
                 <View style={auth.titleWrapper}>
                     <Text style={auth.title}>Email verification</Text>
                     <Text style={auth.title}>required</Text>
                 </View>
             </View>
 
-            <View style={{ ...auth.body, ...{ height: "70%" } }}>
+            <View style={{ ...auth.body, ...{ height: "67%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
                     <Text style={auth.description}>Please enter the verification code we have sent to</Text>
                     <Text style={auth.description}>your email address</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     
-                    {displayError && <ErrorBox
-                        message={errorMessage}
-                        borderRadius={5}
-                        onPress={() => setDisplayError(false)}
-                    />}
+                    {displayError && <Text style={auth.errorText}>{errorMessage}</Text>}
                     <View style={auth.inputWrapper}>
                         <TextInput 
                             style={auth.input}

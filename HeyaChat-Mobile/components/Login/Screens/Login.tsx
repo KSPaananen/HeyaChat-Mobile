@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
+import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
+import { StorageService } from '../../../services/StorageService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorBox from '../../CommonComponents/ErrorBox'
+import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
     navigation: any
@@ -18,9 +20,10 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
     // Fields/buttons
     const [loginField, setLoginField] = useState<string>("")
     const [passwordField, setPasswordField] = useState<string>("")
-    const [stayLoggedIn, setStayLoggedIn] = useState<boolean>(false)
+    const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
 
-    // GUI displayables
+    // GUI 
+    const [primButtonPressed, setPrimButtonPressed] = useState<boolean>(false)
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
@@ -29,45 +32,63 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
         // Reset all displayable errors on GUI
         setDisplayError(false)
 
+        let response: any
+
         // Post login details to backend
-        let api = new AuthorizationAPI()
         // Add biometrics login later to api.Login()
-        let response = await api.Login(loginField, passwordField, null)
-        
-        if (response === null) {
-            setErrorMessage("Something went wrong :(")
-            setDisplayError(true)
+        try {
+            let api = new AuthorizationAPI()
+            response = await api.Login(loginField, passwordField, null)
+        } catch {
+            setTimeout(() => {
+                // Add delay so the notification component renders properly
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
             return
         }
 
         // Read code from body
         let jsonBody = await response.json()
-        let code = jsonBody.code
 
-        if (response.status === 200) {
+        let storageService = new StorageService()
+
+        if (response.status === 200) { // Succesfully logged in
+            // Set the state of "staySignedIn" to storage
+            await storageService.StoreValue("staysignedin", String(staySignedIn))
+
             // Act based on code read from body
-            if (code === 451) {        // Succesfully logged in
+            if (jsonBody.code === 451) {        // Succesfully logged in
                 navigation.navigate("AppBottomTabs", { screen: "Home"})
-            } else if (code === 452) { // Succesfully logged in. Email is not verified
+            } else if (jsonBody.code === 452) { // Succesfully logged in. Email is not verified
                 navigateToEmailVerifying()
             }
-        } else if (response.status === 202) {
-            if (code === 450) {        // User logged in from new device with mfa enabled
+        } else if (response.status === 202) { // Succesfully logged, but additional confirmation required
+            // Set the state of "staySignedIn" to storage
+            await storageService.StoreValue("staysignedin", String(staySignedIn))
+
+            if (jsonBody.code === 450) {
                 navigateToMfaVerifying()
             }
-        } else if (response.status === 401) {
-            if (code === 410) {
-                setErrorMessage("Couldn't find user matching login details")
-                setDisplayError(true)
-            } else if (code === 411) {
-                setErrorMessage("Incorrect password")
-                setDisplayError(true)
+        } else if (response.status === 401) { // Login was unsuccesful
+            if (jsonBody.code === 410) {
+                setTimeout(() => {
+                    // Add delay so the notification component renders properly
+                    setErrorMessage("Couldn't find user matching login details")
+                    setDisplayError(true)
+                }, 500)
+            } else if (jsonBody.code === 411) {
+                setTimeout(() => {
+                    // Add delay so the notification component renders properly
+                    setErrorMessage("Incorrect password")
+                    setDisplayError(true)
+                }, 500)
             }
         } else if (response.status === 403) {
-            if (code == 412) {
+            if (jsonBody.code == 412) {
                 // Display user suspended modal
 
-            } else if (code === 413) {
+            } else if (jsonBody.code === 413) {
                 // Display user permanently suspended modal
 
             }
@@ -76,20 +97,19 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
 
   return (
     <View>
-        <View style={{ ...auth.head, ...{ height: "40%"} }}>
+        <View style={{ ...auth.head, ...{ height: "43%"} }}>
             <View style={auth.titleWrapper}>
                 <Text style={auth.title}>Heya!Chat</Text>
                 <Image style={auth.icon} source={require('../../../assets/icons/icon.png')} />
             </View>
         </View>
 
-        <View style={{ ...auth.body, ...{ height: "45%"} }}>
+        <View style={{ ...auth.body, ...{ height: "42%"} }}>
 
-            {displayError && <ErrorBox 
-                message={errorMessage}
-                borderRadius={5}
-                onPress={() => setDisplayError(false)}
-            />}
+            <View style={auth.notificationWrapper}>
+                {displayError && <ErrorNotification message={errorMessage} />}
+            </View>
+            
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -101,9 +121,14 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Username or email" 
-                    left={<TextInput.Icon icon="eye" style={{ }} />} 
+                    left={<TextInput.Icon icon={() => <Octicons name="person" size={23} color="rgb(63, 118, 198)" />} />} 
                 />
             </View>
+
+            <View style={auth.notificationWrapper}>
+                
+            </View>
+
             <View style={auth.inputWrapper}>
                 <TextInput 
                     style={auth.input}
@@ -122,20 +147,23 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
                             onPress={() => setBlurPassword(!blurPassword)}
                         />
                     }
-                    left={<TextInput.Icon icon="eye" style={{ }} />} 
+                    left={<TextInput.Icon icon={() => <Octicons name="lock" size={25} color="rgb(63, 118, 198)" />} />} 
+                    
                 />
             </View>
             <View style={{ ...auth.checkboxBtnWrapper, ...{ justifyContent: 'flex-end', marginRight: 10 } }}>
-                <Pressable style={auth.checkboxBtn} onPress={() => setStayLoggedIn(!stayLoggedIn)}>
+                <Pressable style={auth.checkboxBtn} onPress={() => setStaySignedIn(!staySignedIn)}>
                     <Checkbox 
-                        onPress={() => setStayLoggedIn(!stayLoggedIn)}
-                        status={ stayLoggedIn ? "checked" : "unchecked"}
+                        onPress={() => setStaySignedIn(!staySignedIn)}
+                        status={ staySignedIn ? "checked" : "unchecked"}
+                        color={'rgba(50, 200, 205, 1)'}
+                        uncheckedColor={'rgba(50, 200, 205, 1)'}
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>Stay signed in</Text>
             </View>
-            <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                <Pressable style={auth.primaryBtn} onPress={() => onSubmit()} >
+            <View style={auth.primaryBtnWrapper}>
+                <Pressable style={loginField != "" && passwordField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} onPress={() => onSubmit()} >
                     <Text style={auth.primaryBtnText}>Login</Text>
                 </Pressable>
             </View>
@@ -152,7 +180,7 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
                 <View style={auth.secondaryBtnWrapper}>
                     {/* Reset errorbox when navigating to other screens */}
                     <Pressable style={auth.secondaryBtn} onPress={() => {navigateToRegistering(); setDisplayError(false)}}> 
-                        <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'blue' }}>Sign up!</Text></Text>
+                        <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'rgba(50, 200, 205, 1)' }}>Sign up!</Text></Text>
                     </Pressable>
                 </View>
             </View>

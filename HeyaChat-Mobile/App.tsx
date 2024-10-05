@@ -3,6 +3,7 @@
 // React native: https://reactnative.dev/docs/environment-setup
 // React navigation: https://reactnavigation.org/docs/getting-started
 // React native paper: https://callstack.github.io/react-native-paper/
+// React-native-vector-icons https://github.com/oblador/react-native-vector-icons
 // react-native-uuid https://github.com/eugenehp/react-native-uuid/blob/HEAD/docs/modules.md
 // ip-api https://ip-api.com/docs/
 
@@ -69,14 +70,20 @@ const App = () => {
     // Check if stored token is valid. Set boolean to tokenValid to dictate whether app navigates to Login or Home
     const HandleLoginState = async () => {
       let storedToken = await storageService.ReadValue("jsonwebtoken")
+      let staySignedIn = await storageService.ReadValue("staysignedin")
 
       if (storedToken !== null) {
         // Ping backend to see if token is still valid
-        await apiService.PingBackend().then((res) => {
-          if (res !== null && res.status === 200) {
-            setTokenValid(true)
-          }
-        })
+        let res = await apiService.PingBackend()
+
+        if (res !== null && res.status === 200 && staySignedIn === "true") {
+          setTokenValid(true)
+        } else {
+          // Set staysignedin back to false if pinging backend failed
+          await storageService.StoreValue("staysignedin", "false")
+          // Also delete invalid token from storage
+          await storageService.Delete("staysignedin")
+        }
       }
     }
 
