@@ -2,10 +2,12 @@ import { StorageService } from './StorageService'
 
 // --- API classes --- //
 export class AuthorizationAPI {
+    Timeout: number
     StorageService: StorageService
 
     constructor() {
         this.StorageService = new StorageService()
+        this.Timeout = 6000
     }
 
     Register = async (username: string, password: string, email: string): Promise<Response | null> => {
@@ -39,7 +41,9 @@ export class AuthorizationAPI {
             // 302: Username or email already in use or blocked
             // 406: Regex check failed
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Store received token to storage from authorization header
             if (res.status === 201) {
@@ -90,7 +94,9 @@ export class AuthorizationAPI {
             // 401: Login unsuccesful
             // 403: User suspended
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Store received token to storage from authorization header
             // Store token with 403, because permanently suspended users get a token in order to delete their accounts
@@ -145,7 +151,9 @@ export class AuthorizationAPI {
             // 200: User logged out
             // 404: Token doesn't belong to user
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Remove token from storage
             await storageService.Delete("jsonwebtoken")
@@ -194,7 +202,9 @@ export class AuthorizationAPI {
 
             // 200: Ping succesful
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Store authorization header if response was 200
             if (res.status === 200) {
@@ -248,7 +258,9 @@ export class AuthorizationAPI {
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             return res
         } catch (e) {
@@ -285,7 +297,9 @@ export class AuthorizationAPI {
             // 200: Code was valid
             // 404: Incorrect code
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Backend will respond with temporary token which is required for changing user details
             if (res.status === 200) {
@@ -331,7 +345,9 @@ export class AuthorizationAPI {
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Save token to storage from authorization header
             if (res.status === 200) {
@@ -349,7 +365,7 @@ export class AuthorizationAPI {
         }
     }
 
-    Recover = async (login: string): Promise<Response | null> => {
+    Recover = async (email: string): Promise<Response | null> => {
         try {
             // Read device information from storage
             let device = await this.StorageService.ReadObject("userdevice")
@@ -369,7 +385,7 @@ export class AuthorizationAPI {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    Login: login,
+                    Email: email,
                     UserDevice: parsedDevice
                 })
             })
@@ -377,7 +393,9 @@ export class AuthorizationAPI {
             // 200: Login matched a user. Code sent
             // 404: User matching login couldnt be found
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             return res
         } catch (e) {
@@ -423,7 +441,9 @@ export class AuthorizationAPI {
             // 201: Password changes
             // 304: Passwords didn't match
             // 500: Internal server error
-            const res = await fetch(req)
+            const res = await fetch(req, {
+                signal: AbortSignal.timeout(this.Timeout)
+            })
 
             // Don't store token here. Make user login again
 

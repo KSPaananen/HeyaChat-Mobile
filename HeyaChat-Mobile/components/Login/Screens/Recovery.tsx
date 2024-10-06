@@ -8,13 +8,15 @@ import { auth } from '../AuthorizationPage'
 import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
+    setContact: any
+    setContactType: any
     navigateToCodeVerifying: () => void // Navigate to verification screen
     navigateToLogin: () => void // Return to login screen
 }
 
-const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin }) => {
+const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeVerifying, navigateToLogin }) => {
     // Fields
-    const [loginField, setLoginField] = useState<string>("")
+    const [emailField, setEmailField] = useState<string>("")
 
     // GUI 
     const [displayError, setDisplayError] = useState<boolean>(false)
@@ -32,7 +34,7 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
         // Post to backend
         try {
             let api = new AuthorizationAPI()
-            response = await api.Recover(loginField)
+            response = await api.Recover(emailField)
         } catch {
             setTimeout(() => {
                 setErrorMessage("Something went wrong :(")
@@ -41,19 +43,37 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
             return
         }
         
-        // Read body
+        // Response body structure
+        // Contact: ""
+        // Details: {
+        //    Code: 0
+        //    Details: ""
+        // }
         let jsonBody = await response.json()
+        let contact = jsonBody.Contact
+        let code = jsonBody.AuthDetails.code
 
         if (response.status === 200) {
-            if (jsonBody.code === 850) {
-                navigateToCodeVerifying()
+            // Set contact type according to code. Can be either email or phone
+            switch (code) {
+                case 1070:
+                    setContactType("email")
+                    break;
+                case 1071:
+                    setContactType("phone")
+                    break;
             }
+            // Set contact string from response body and navigate to code verifying
+            setContact(contact)
+            navigateToCodeVerifying()
         } else if (response.status === 404) {
-            if (jsonBody.code === 810) {
-                setTimeout(() => {
-                    setErrorMessage("User matching login couldn't be found")
-                    setDisplayError(true)
-                }, 500)
+            switch (code) {
+                case 1030:
+                    setTimeout(() => {
+                        setErrorMessage("User matching login couldn't be found")
+                        setDisplayError(true)
+                    }, 500)
+                    break;
             }
         } else {
             setTimeout(() => {
@@ -74,8 +94,8 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
 
             <View style={{ ...auth.body, ...{ height: "67%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
-                    <Text style={auth.description}>Enter the email address or username associated</Text>
-                    <Text style={auth.description}>with your account</Text>
+                    <Text style={auth.description}>Enter the email address associated with your account.</Text>
+                    <Text style={auth.description}>You'll receive a code shortly after.</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     <View style={auth.notificationWrapper}>
@@ -88,17 +108,17 @@ const Recovery: React.FC<Props> = ({ navigateToCodeVerifying, navigateToLogin })
                             underlineStyle={{ height: 0 }}
                             dense
                             keyboardType="email-address"
-                            value={loginField}
-                            onChangeText={(value) => setLoginField(value)}
+                            value={emailField}
+                            onChangeText={(value) => setEmailField(value)}
                             mode="flat"
                             activeOutlineColor="#0330fc"
-                            placeholder="Email or username" 
+                            placeholder="Email" 
                             left={<TextInput.Icon icon={() => <Octicons name="mail" size={23} color="rgb(63, 118, 198)" />} />} 
                         />
                     </View>
 
                     <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
-                        <Pressable style={loginField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={loginField == ""} onPress={() => onSubmit()} >
+                        <Pressable style={emailField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={emailField == ""} onPress={() => onSubmit()} >
                             <Text style={auth.primaryBtnText}>Recover</Text>
                         </Pressable>
                     </View>

@@ -29,6 +29,10 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
     const [requestCodeCoolDown, setRequestCodeCoolDown] = useState<boolean>(false)
     const [countDown, setCountDown] = useState<number>(30)
 
+    // Passable variables
+    const [contact, setContact] = useState<string>("")
+    const [contactType, setContactType] = useState<string>("")
+
     // Animation
     const [position, setPosition] = useState<number>(0.5)
     const [direction, setDirection] = useState<number>(1) // 1 increases, -1 decreases
@@ -88,6 +92,8 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
             <View style={auth.wrapper}>
 
                 {loginPage && <Login 
+                  setContact={setContact}
+                  setContactType={setContactType}
                   navigation={navigation}
                   navigateToRecovery={() => {setLoginPage(false); setRecoveryPage(true)}} // Navigate to account recovery 
                   navigateToRegistering={() => {setLoginPage(false); setRegisterPage(true)}} // Navigate to registering
@@ -96,12 +102,15 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {registerPage && <Register
+                  setContact={setContact}
                   navigation={navigation}
                   navigateToEmailVerifying={() => {setRegisterPage(false); setVerifyEmailPage(true)}} // Navigate to email confirmation screen
                   navigateToLogin={() => {setRegisterPage(false); setLoginPage(true)}} // Return back to login screen
                 />}
 
                 {recoveryPage && <Recovery 
+                  setContact={setContact}
+                  setContactType={setContactType}
                   navigateToCodeVerifying={() => {setRecoveryPage(false); setVerifyCodePage(true)}} // Navigate to code verifying screen
                   navigateToLogin={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
                 />}
@@ -111,6 +120,8 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {verifyMFAPage && <VerifyMFA
+                  contact={contact}
+                  contactType={contactType}
                   navigation={navigation}
                   navigateToLogin={() => {setVerifyMFAPage(false); setLoginPage(true)}}
                   requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
@@ -119,6 +130,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {verifyEmailPage && <VerifyEmail
+                  contact={contact}
                   navigation={navigation}
                   navigateToLogin={() => {setVerifyEmailPage(false); setLoginPage(true)}}
                   requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
@@ -127,6 +139,8 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {verifyCodePage && <VerifyCode
+                  contact={contact}
+                  contactType={contactType}
                   navigation={navigation}
                   navigateToPasswordChange={() => {setVerifyCodePage(false); setChangePasswordPage(true)}}
                   navigateToLogin={() => {setVerifyCodePage(false); setLoginPage(true)}}
@@ -193,7 +207,7 @@ export const auth = StyleSheet.create({
     },
     input: {
         height: 50,
-        backgroundColor: 'rgb(255, 255, 255)'
+        backgroundColor: 'rgb(250, 250, 250)'
     },
     primaryBtnWrapper: {
         flexDirection: 'row',
@@ -208,7 +222,7 @@ export const auth = StyleSheet.create({
       borderRadius: 100, 
       alignItems: 'center', 
       justifyContent: 'center',
-      backgroundColor: 'rgb(255, 255, 255)'
+      backgroundColor: 'rgba(250, 250, 250, 1)'
     },
     primaryBtnDisabled: {
       flex: 1, 
@@ -216,7 +230,7 @@ export const auth = StyleSheet.create({
       borderRadius: 100, 
       alignItems: 'center', 
       justifyContent: 'center',
-      backgroundColor: 'rgba(52, 52, 52, 0.4)'
+      backgroundColor: 'rgba(250, 250, 250, 0.5)'
     },
     primaryBtnText: {
       fontSize: 16,
@@ -233,13 +247,14 @@ export const auth = StyleSheet.create({
     },
     secondaryBtnText: {
         fontSize: 13,
-        color: 'black'
+        color: 'rgba(245, 245, 245, 0.9)'
     },
     secondaryBtnDisabledText : {
       fontSize: 12,
       color: 'gray'
     },
     checkboxBtnWrapper: {
+      paddingTop: 2,
       flexDirection: 'row', 
       alignItems: 'center', 
       justifyContent: 'flex-start',
@@ -256,6 +271,7 @@ export const auth = StyleSheet.create({
     checkboxText: {
       fontSize: 13,
       marginBottom: 1,
+      color: 'rgba(245, 245, 245, 0.9)'
     },
     titleWrapper: {
       flex: 1, 
@@ -264,11 +280,12 @@ export const auth = StyleSheet.create({
     },
     title: {
       fontSize: 25,
-      marginTop: 0,
+      color: 'rgba(245, 245, 245, 0.9)'
     },
     description: {
       fontSize: 13,
-      marginLeft: 10
+      marginLeft: 10,
+      color: 'rgba(245, 245, 245, 1)'
     },
     icon: {
       height: 75,

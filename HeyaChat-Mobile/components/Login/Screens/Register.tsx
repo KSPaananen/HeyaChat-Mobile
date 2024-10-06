@@ -10,12 +10,13 @@ import EULA from '../../CommonComponents/LegalTexts/EULA'
 import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
+    setContact: any
     navigation: any
     navigateToEmailVerifying: () => void // Navigate to email verifying screen after succesful register
     navigateToLogin: () => void // Navigate back to login screen
 }
 
-const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navigateToLogin }) => {
+const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVerifying, navigateToLogin }) => {
     // Fields
     const [usernameField, setUsernameField] = useState<string>("")
     const [emailField, setEmailField] = useState<string>("")
@@ -26,7 +27,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
     const usernameMaxLength: number = 20
     const usernameMinLength: number = 3
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    const minimumAge: number = 13
+    const minimumAge: number = 16
     const passwordMinLength: number = 8
 
     // Button enabling booleans
@@ -81,10 +82,10 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
 
     // Check if both password fields match
     const matchPasswords = (value: string) => {
-        if (passwordField.length <= value.length && passwordField !== value) { // Passwords dont match
+        if (passwordField !== "" && passwordField.length <= value.length && passwordField !== value) { // Passwords dont match
             setPasswordError("Passwords don't match")
             setDisplayPasswordError(true)
-        } else if (passwordField.length > value.length) { // Hide error as repeat password is shorter
+        } else if (passwordField !== "" && passwordField.length > value.length) { // Hide error as repeat password is shorter
             setPasswordError("")
             setDisplayPasswordError(false)
         } else if (passwordField.length == value.length && passwordField === value) {
@@ -152,40 +153,52 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 return
             }
 
-            // Read response body
+            // Response body structure
+            // Code: 0,
+            // Details: ""
             let jsonBody = await response.json()
+            let code = jsonBody.code
 
             if (response.status === 201) {
-                navigateToEmailVerifying()
+                switch (code) {
+                    case 1570:
+                        setContact(emailField)
+                        navigateToEmailVerifying()
+                        break
+                }
             } else if (response.status === 302) {
-                // Display error message based on code in response body
-                if (jsonBody.code === 310) {
-                    setTimeout(() => {
-                        // Notification component works a bit better with some delay
-                        setUsernameError(`Username already in use`)
-                        setDisplayUsernameError(true)
-                    }, 500)
-                } else if (jsonBody.code === 311) {
-                    setTimeout(() => {
-                        // Notification component works a bit better with some delay
-                        setEmailError(`Email address already in use`)
-                        setDisplayEmailError(true)
-                    }, 500)
-                } else if (jsonBody.code === 312) {
-                    setTimeout(() => {
-                        // Notification component works a bit better with some delay
-                        setUsernameError(`Username and email address already in use`)
-                        setDisplayUsernameError(true)
-                    }, 500)
+                switch (code) {
+                    case 1530:
+                        setTimeout(() => {
+                            setUsernameError(`Username and email address already in use`)
+                            setDisplayUsernameError(true)
+                        }, 500)
+                        break
+                    case 1531:
+                        setTimeout(() => {
+                            setUsernameError(`Username already in use`)
+                            setDisplayUsernameError(true)
+                        }, 500)
+                        break
+                    case 1532:
+                        setTimeout(() => {
+                            setEmailError(`Email address already in use`)
+                            setDisplayEmailError(true)
+                        }, 500)
+                        break
+                    case 1533:
+                        setTimeout(() => {
+                            setEmailError(`Email address permanently suspended`)
+                            setDisplayEmailError(true)
+                        }, 500)
                 }
             } else if (response.status === 406) {
-                // Display error message based on code in response body
-                if (jsonBody.code === 313) {
-                    setTimeout(() => {
-                        // Notification component works a bit better with some delay
-                        setGeneralError(`Code: ${313}\nSomething went wrong :(`)
-                        setDisplayGeneralError(true)
-                    }, 500)
+                switch (code) {
+                    case 1534: // Didn't pass regex, but display as "Something went wrong"
+                        setTimeout(() => {
+                            setGeneralError(`Something went wrong :(`)
+                            setDisplayGeneralError(true)
+                        }, 500)
                 }
             } else  {
                 setTimeout(() => {
@@ -195,8 +208,6 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 }, 500)
             }
         }
-
-        return
     }
 
   return (
@@ -306,7 +317,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 </Pressable>
                 <Text style={auth.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
                 <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
-                    <Text style={{ ...auth.checkboxText, ...{ color: 'blue' } }}>terms</Text>
+                    <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>terms</Text>
                 </Pressable>
             </View>
             <View style={auth.checkboxBtnWrapper}>
@@ -320,7 +331,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
                 </Pressable>
                 <Text style={auth.checkboxText}>I have read and agree to the</Text>
                 <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })}>
-                    <Text style={{ ...auth.checkboxText, ...{ color: 'blue' } }}>EULA</Text>
+                    <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>EULA</Text>
                 </Pressable>
             </View>
             <View style={auth.primaryBtnWrapper}>
@@ -334,7 +345,7 @@ const Register: React.FC<Props> = ({ navigation, navigateToEmailVerifying, navig
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={auth.secondaryBtnWrapper}>
                     <Pressable style={auth.secondaryBtn} onPress={() => navigateToLogin()}>
-                        <Text style={auth.secondaryBtnText}>Have an account? <Text style={{ color: 'rgba(50, 200, 205, 1)' }}>Log in!</Text></Text>
+                        <Text style={auth.secondaryBtnText}>Have an account? <Text style={{ color: 'rgba(50, 225, 225, 1)' }}>Log in!</Text></Text>
                     </Pressable>
                 </View>
             </View>

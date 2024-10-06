@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
+import { CommonActions } from '@react-navigation/native'
 import { TextInput, Checkbox } from 'react-native-paper'
+import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
+import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+
 interface Props {
+    contact: string
     navigation: any
     navigateToLogin: () => void
     requestCodeCoolDown: boolean // Boolean for displaying cooldown
@@ -12,7 +17,7 @@ interface Props {
     setCoolDown: Function // Method call for starting countdown and disabling further requests for a set time
 }
 
-const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
+const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
     const [codeField, setCodeField] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
@@ -26,23 +31,51 @@ const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCode
         // Reset all displayable errors on submit
         setDisplayError(false)
 
-        let api = new AuthorizationAPI()
-        let response = await api.VerifyEmail(codeField)
+        let response: any
 
-        if (response == null) {
-            setErrorMessage("Something went wrong :(")
-            setDisplayError(true)
+        try {
+            let api = new AuthorizationAPI()
+            response = await api.VerifyEmail(codeField)
+        } catch {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
             return
         }
 
+        // Response body structure
+        // Code: 0,
+        // Details: ""
+        let jsonBody = await response.json()
+        let code = jsonBody.code
+
         if (response.status === 200) {
-            navigation.navigate("AppBottomTabs", { screen: "Home"})
+            switch (code) {
+                case 1370:
+                    // Reset stack so user cant return to this screen with return button
+                    navigation.dispatch(
+                        CommonActions.reset({
+                          index: 0,
+                          routes: [{ name: 'AppBottomTabs', params: { screen: 'Home' } }],
+                        })
+                      )
+                    break
+            }
         } else if (response.status === 404) {
-            setErrorMessage("Incorrect code. Please try again")
-            setDisplayError(true)
+            switch (code) {
+                case 1330:
+                    setTimeout(() => {
+                        setErrorMessage("Incorrect code. Please try again")
+                        setDisplayError(true)
+                    }, 500)
+                    break
+            }
         } else {
-            setErrorMessage("Something went wrong :(")
-            setDisplayError(true)
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
         }
     }
 
@@ -57,13 +90,16 @@ const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCode
             </View>
 
             <View style={{ ...auth.body, ...{ height: "67%" } }}>
-                <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
+                <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
                     <Text style={auth.description}>Please enter the verification code we have sent to</Text>
-                    <Text style={auth.description}>your email address</Text>
+                    <Text style={auth.description}>your email address {contact}</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     
-                    {displayError && <Text style={auth.errorText}>{errorMessage}</Text>}
+                    <View style={auth.notificationWrapper}>
+                        {displayError && <ErrorNotification message={errorMessage} />}
+                    </View>
+
                     <View style={auth.inputWrapper}>
                         <TextInput 
                             style={auth.input}
@@ -76,7 +112,7 @@ const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCode
                             mode="flat"
                             activeOutlineColor="#0330fc"
                             placeholder="Code" 
-                            left={<TextInput.Icon icon="eye" style={{ }} />} 
+                            left={<TextInput.Icon icon={() => <Octicons name="hash" size={23} color="rgb(63, 118, 198)" />} />} 
                         />
                     </View>
 
@@ -87,7 +123,7 @@ const VerifyEmail: React.FC<Props> = ({ navigation, navigateToLogin, requestCode
                     </View>
                     <View style={auth.secondaryBtnWrapper}>
                         <Pressable style={auth.secondaryBtn} onPress={() => requestCode()} disabled={requestCodeCoolDown}>
-                            <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'blue' }} : auth.secondaryBtnText}>Request </Text>a new one</Text>
+                            <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'rgba(50, 225, 225, 1)' }} : { color: 'gray'}}>Request </Text>a new one</Text>
                             {requestCodeCoolDown && <Text style={auth.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
                         </Pressable>
                     </View>

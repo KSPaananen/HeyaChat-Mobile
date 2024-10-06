@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
+import { CommonActions } from '@react-navigation/native'
 import { TextInput, Checkbox } from "react-native-paper"
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
@@ -9,6 +10,8 @@ import { auth } from '../AuthorizationPage'
 import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
+    setContact: any
+    setContactType: any
     navigation: any
     navigateToRecovery: () => void // Navigate to recovery page
     navigateToRegistering: () => void // Navigate to registeration screen
@@ -16,14 +19,13 @@ interface Props {
     navigateToEmailVerifying: () => void // Navigate to email verifying screen
 }
 
-const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegistering, navigateToMfaVerifying, navigateToEmailVerifying }) => {
+const Login: React.FC<Props> = ({ setContact, setContactType, navigation, navigateToRecovery, navigateToRegistering, navigateToMfaVerifying, navigateToEmailVerifying }) => {
     // Fields/buttons
     const [loginField, setLoginField] = useState<string>("")
     const [passwordField, setPasswordField] = useState<string>("")
     const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
 
     // GUI 
-    const [primButtonPressed, setPrimButtonPressed] = useState<boolean>(false)
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
@@ -31,6 +33,11 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
     const onSubmit = async () => {
         // Reset all displayable errors on GUI
         setDisplayError(false)
+
+        setContact("wwwww.wwww@www.ww")
+                    setContactType("email")
+                    navigateToEmailVerifying()
+                    return
 
         let response: any
 
@@ -48,49 +55,78 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
             return
         }
 
-        // Read code from body
+        // Response body structure
+        // Contact: ""
+        // Details: {
+        //    Code: 0,
+        //    Details: ""
+        // }
         let jsonBody = await response.json()
+        let contact = jsonBody.contact
+        let code = jsonBody.details.code
 
         let storageService = new StorageService()
 
-        if (response.status === 200) { // Succesfully logged in
+        // setContact and setContactType are for displaying users blurred details in other screens if they're required
+
+        if (response.status === 200) {
             // Set the state of "staySignedIn" to storage
             await storageService.StoreValue("staysignedin", String(staySignedIn))
-
-            // Act based on code read from body
-            if (jsonBody.code === 451) {        // Succesfully logged in
-                navigation.navigate("AppBottomTabs", { screen: "Home"})
-            } else if (jsonBody.code === 452) { // Succesfully logged in. Email is not verified
-                navigateToEmailVerifying()
+            switch (code) {
+                case 1272:
+                    // Reset stack so user cant return to login screen without logging out
+                    navigation.dispatch(
+                        CommonActions.reset({
+                          index: 0,
+                          routes: [{ name: 'AppBottomTabs', params: { screen: 'Home' } }],
+                        })
+                      )
+                    break
+                case 1273:
+                    setContact(contact)
+                    setContactType("email")
+                    navigateToEmailVerifying()
+                    break
             }
-        } else if (response.status === 202) { // Succesfully logged, but additional confirmation required
+        } else if (response.status === 202) {
             // Set the state of "staySignedIn" to storage
             await storageService.StoreValue("staysignedin", String(staySignedIn))
-
-            if (jsonBody.code === 450) {
-                navigateToMfaVerifying()
+            switch (code) {
+                case 1270:
+                    setContact(contact)
+                    setContactType("phone")
+                    break
+                case 1271:
+                    setContact(contact)
+                    setContactType("email")
+                    break
             }
+            navigateToMfaVerifying()
         } else if (response.status === 401) { // Login was unsuccesful
-            if (jsonBody.code === 410) {
-                setTimeout(() => {
-                    // Add delay so the notification component renders properly
-                    setErrorMessage("Couldn't find user matching login details")
-                    setDisplayError(true)
-                }, 500)
-            } else if (jsonBody.code === 411) {
-                setTimeout(() => {
-                    // Add delay so the notification component renders properly
-                    setErrorMessage("Incorrect password")
-                    setDisplayError(true)
-                }, 500)
+            switch (code) {
+                case 1230:
+                    setTimeout(() => {
+                        // Add delay so the notification component renders properly
+                        setErrorMessage("Couldn't find user matching login details")
+                        setDisplayError(true)
+                    }, 500)
+                    break
+                case 1231:
+                    setTimeout(() => {
+                        // Add delay so the notification component renders properly
+                        setErrorMessage("Incorrect password")
+                        setDisplayError(true)
+                    }, 500)
+                    break
             }
         } else if (response.status === 403) {
-            if (jsonBody.code == 412) {
-                // Display user suspended modal
-
-            } else if (jsonBody.code === 413) {
-                // Display user permanently suspended modal
-
+            switch (code) {
+                case 1233:
+                    // Display user suspended modal
+                    break;
+                case 1232: 
+                    // Display user permanently suspended modal
+                    break;
             }
         }
     }
@@ -141,12 +177,7 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
                     mode="flat"
                     activeOutlineColor="#0330fc"
                     placeholder="Password" 
-                    right={passwordField && 
-                        <TextInput.Icon
-                            icon={blurPassword ? "eye" : "eye-off"}
-                            onPress={() => setBlurPassword(!blurPassword)}
-                        />
-                    }
+                    right={passwordField && <TextInput.Icon icon={() => <Octicons name={blurPassword ? "eye" : "eye-closed"} size={25} color="rgb(63, 118, 198)" />} onPress={() => setBlurPassword(!blurPassword)} />}
                     left={<TextInput.Icon icon={() => <Octicons name="lock" size={25} color="rgb(63, 118, 198)" />} />} 
                     
                 />
@@ -180,7 +211,7 @@ const Login: React.FC<Props> = ({ navigation, navigateToRecovery, navigateToRegi
                 <View style={auth.secondaryBtnWrapper}>
                     {/* Reset errorbox when navigating to other screens */}
                     <Pressable style={auth.secondaryBtn} onPress={() => {navigateToRegistering(); setDisplayError(false)}}> 
-                        <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'rgba(50, 200, 205, 1)' }}>Sign up!</Text></Text>
+                        <Text style={auth.secondaryBtnText}>Don't have an account? <Text style={{ color: 'rgba(50, 225, 225, 1)' }}>Sign up!</Text></Text>
                     </Pressable>
                 </View>
             </View>

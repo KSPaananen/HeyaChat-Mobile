@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable } from 'react-native'
 import { TextInput, Checkbox } from "react-native-paper"
+import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorBox from '../../CommonComponents/ErrorBox'
+import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
 
 interface Props {
     navigateToLogin: () => void // Return
@@ -25,11 +26,10 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
 
     // Check if both password fields match
     const matchPasswords = (value: string) => {
-        if (passwordField.length <= value.length && passwordField !== value) {
+        if (passwordField !== "" && passwordField.length <= value.length && passwordField !== value) {
             setErrorMessage("Passwords do not match")
             setDisplayError(true)
-        } else if (passwordField.length > value.length) {
-            setErrorMessage("Passwords do not match")
+        } else if (passwordField !== "" && passwordField.length > value.length) {
             setDisplayError(false)
         } else if (passwordField.length == value.length && passwordField === value) {
             setDisplayError(false)
@@ -41,30 +41,45 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
         setDisplayError(false)
 
         if (passwordField === repeatPasswordField && passwordField.length >= passwordMinLength) {
-            let api = new AuthorizationAPI()
-            let response = await api.ChangePassword(passwordField, repeatPasswordField)
+            let response: any
 
-            if (response === null) {
-                setErrorMessage("Something went wrong :(")
-                setDisplayError(true)
+            try {
+                let api = new AuthorizationAPI()
+                response = await api.ChangePassword(passwordField, repeatPasswordField)
+            } catch {
+                setTimeout(() => {
+                    setErrorMessage("Something went wrong :(")
+                    setDisplayError(true)
+                }, 500)
                 return
             }
-
+            
+            // Response body structure
+            // Code: 0,
+            // Details: ""
             let jsonBody = await response.json()
             let code = jsonBody.code
 
             if (response.status === 201) {
-                if (code === 950) {
-                    navigateToLogin()
+                switch (code) {
+                    case 1870:
+                        navigateToLogin()
+                        break
                 }
             } else if (response.status === 304) {
-                if (code === 910) {
-                    setErrorMessage("Passwords do not match")
-                    setDisplayError(true)
+                switch (code) {
+                    case 1830:
+                        setTimeout(() => {
+                            setErrorMessage("Passwords don't match")
+                            setDisplayError(true)
+                        }, 500)
+                        break
                 }
             } else {
-                setErrorMessage("Something went wrong :(")
-                setDisplayError(true)
+                setTimeout(() => { // Email didn't match, but display as something went wrong. Shouldn't even be possible unless app is bugging
+                    setErrorMessage("Something went wrong :(")
+                    setDisplayError(true)
+                }, 500)
             }
         }
     }
@@ -72,19 +87,20 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
     return (
     <View>
 
-        <View style={{ ...auth.head, ...{ height: "20%"} }}>
+        <View style={{ ...auth.head, ...{ height: "23%"} }}>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={auth.title}>Enter a new password</Text>
+                <Text style={auth.title}>Create a new password</Text>
             </View>
         </View>
 
-        <View style={{ ...auth.body, ...{ height: "70%" } }}>
-            <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 25 }}>
-                <Text style={auth.description}></Text>
+        <View style={{ ...auth.body, ...{ height: "67%" } }}>
+            <View style={{ flex: 0.25, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
                 <Text style={auth.description}></Text>
             </View>
-            <View style={{ flex: 0.65 }}>
-                {displayError && <Text style={auth.errorText}>{errorMessage}</Text>}
+            <View style={{ flex: 0.75 }}>
+                <View style={auth.notificationWrapper}>
+                    {displayError && <ErrorNotification message={errorMessage} />}
+                </View>
                 <View style={auth.inputWrapper}>
                     <TextInput 
                         style={auth.input}
@@ -97,9 +113,14 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
                         mode="flat"
                         activeOutlineColor="#0330fc"
                         placeholder="New password"
-                        left={<TextInput.Icon icon="eye" style={{ }} />} 
+                        left={<TextInput.Icon icon={() => <Octicons name="key" size={23} color="rgb(63, 118, 198)" />} />} 
                     />
                 </View>
+
+                <View style={auth.notificationWrapper}>
+                
+                </View>
+
                 <View style={auth.inputWrapper}>
                     <TextInput 
                         style={auth.input}
@@ -112,18 +133,13 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
                         mode="flat"
                         activeOutlineColor="#0330fc"
                         placeholder="Re-enter password" 
-                        right={repeatPasswordField && 
-                            <TextInput.Icon
-                                icon={blurPassword ? "eye" : "eye-off"}
-                                onPress={() => setBlurPassword(!blurPassword)}
-                            />
-                        }
-                        left={<TextInput.Icon icon="eye" style={{ }} />} 
+                        right={passwordField && <TextInput.Icon icon={() => <Octicons name={blurPassword ? "eye" : "eye-closed"} size={25} color="rgb(63, 118, 198)" />} onPress={() => setBlurPassword(!blurPassword)} />}
+                        left={<TextInput.Icon icon={() => <Octicons name="lock" size={23} color="rgb(63, 118, 198)" />} />} 
                     />
                 </View>
 
-                <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 40} }}>
-                    <Pressable style={passwordField != "" || repeatPasswordField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={passwordField == "" || repeatPasswordField == ""} onPress={() => onSubmit()} >
+                <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
+                    <Pressable style={passwordField !== "" && repeatPasswordField !== "" && passwordField === repeatPasswordField ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={passwordField === "" && repeatPasswordField === "" && passwordField !== repeatPasswordField} onPress={() => onSubmit()} >
                         <Text style={auth.primaryBtnText}>Submit</Text>
                     </Pressable>
                 </View>
