@@ -82,13 +82,12 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
     return (
         <View style={auth.container} onLayout={OnLayout}>
           <LinearGradient
-            // colors={['rgb(78, 50, 170)', 'rgb(67, 113, 180)', 'rgb(55, 175, 189)']}
             colors={['rgb(72, 35, 195)', 'rgb(63, 118, 198)', 'rgb(55, 200, 200)']}
             style={auth.background}
             locations={[0, position, 1]}
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 0 }}
-            />
+          />
             <View style={auth.wrapper}>
 
                 {loginPage && <Login 
@@ -188,7 +187,7 @@ export const auth = StyleSheet.create({
       marginHorizontal: 5,
     },
     separatorWrapper: {
-      flexDirection: 'row',  
+      flexDirection: 'row', 
     },
     separator: {
         flex: 1,
@@ -198,8 +197,8 @@ export const auth = StyleSheet.create({
         marginHorizontal: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'black',
-      },
+        backgroundColor: 'rgb(245, 245, 245)'
+    },
     inputWrapper: {
         marginHorizontal: 5, 
         borderRadius: 100, 
@@ -211,7 +210,7 @@ export const auth = StyleSheet.create({
     },
     primaryBtnWrapper: {
         flexDirection: 'row',
-        marginTop: 40,
+        marginTop: 30,
         marginHorizontal: 30, 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -292,11 +291,15 @@ export const auth = StyleSheet.create({
       width: 75,
       marginTop: 15,
     },
+    loadingIcon: {
+      height: 35,
+      width: 35
+    },
     notificationWrapper: {
       justifyContent: 'center',
       marginTop: 2,
       marginBottom: 6,
       height: 20,
-      
-    }
+    },
+    
   })

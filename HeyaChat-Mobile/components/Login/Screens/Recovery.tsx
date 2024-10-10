@@ -5,7 +5,7 @@ import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     setContact: any
@@ -21,6 +21,7 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
     // GUI 
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
+    const [processing, setProcessing] = useState<boolean>(false)
 
     // Field restrictions
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -28,6 +29,10 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
     const onSubmit = async () => {
         // Reset displayable errors
         setDisplayError(false)
+
+        // Set processing to true
+        // After we get a response, set it to false
+        setProcessing(true)
 
         let response: any
 
@@ -40,8 +45,11 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
                 setErrorMessage("Something went wrong :(")
                 setDisplayError(true)
             }, 500)
+            setProcessing(false)
             return
         }
+
+        setProcessing(false)
         
         // Response body structure
         // Contact: ""
@@ -49,9 +57,9 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
         //    Code: 0
         //    Details: ""
         // }
-        let jsonBody = await response.json()
+        let jsonBody:ContactDTO = await response.json()
         let contact = jsonBody.Contact
-        let code = jsonBody.AuthDetails.code
+        let code = jsonBody.Details?.Code
 
         if (response.status === 200) {
             // Set contact type according to code. Can be either email or phone
@@ -118,8 +126,9 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
                     </View>
 
                     <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
-                        <Pressable style={emailField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={emailField == ""} onPress={() => onSubmit()} >
-                            <Text style={auth.primaryBtnText}>Recover</Text>
+                        <Pressable style={emailField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={emailField == "" || processing} onPress={() => onSubmit()} >
+                            {processing && <Image style={auth.loadingIcon} source={require('../../../assets/icons/loadingicon.gif')} />}
+                            {processing === false && <Text style={auth.primaryBtnText}>Recover</Text>}
                         </Pressable>
                     </View>
 

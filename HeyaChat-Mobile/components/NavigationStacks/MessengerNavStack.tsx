@@ -29,7 +29,7 @@ const MessengerNavStack = () => {
 
     function onSubmit() {
         if (query != "") {
-            navigation.navigate("Modal", { param: query, Component: Search })
+            navigation.navigate("LargeModal", { param: query, Component: Search })
             setQuery("")
         } 
     }

@@ -5,7 +5,7 @@ import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     navigateToLogin: () => void // Return
@@ -23,6 +23,7 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
+    const [processing, setProcessing] = useState<boolean>(false)
 
     // Check if both password fields match
     const matchPasswords = (value: string) => {
@@ -41,6 +42,10 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
         setDisplayError(false)
 
         if (passwordField === repeatPasswordField && passwordField.length >= passwordMinLength) {
+            // Set processing to true
+            // After we get a response, set it to false
+            setProcessing(true)
+
             let response: any
 
             try {
@@ -51,14 +56,17 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
                     setErrorMessage("Something went wrong :(")
                     setDisplayError(true)
                 }, 500)
+                setProcessing(false)
                 return
             }
+
+            setProcessing(false)
             
             // Response body structure
             // Code: 0,
             // Details: ""
-            let jsonBody = await response.json()
-            let code = jsonBody.code
+            let jsonBody: DetailsDTO = await response.json()
+            let code = jsonBody.Code
 
             if (response.status === 201) {
                 switch (code) {
@@ -139,8 +147,9 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
                 </View>
 
                 <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
-                    <Pressable style={passwordField !== "" && repeatPasswordField !== "" && passwordField === repeatPasswordField ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={passwordField === "" && repeatPasswordField === "" && passwordField !== repeatPasswordField} onPress={() => onSubmit()} >
-                        <Text style={auth.primaryBtnText}>Submit</Text>
+                    <Pressable style={passwordField !== "" && repeatPasswordField !== "" && passwordField === repeatPasswordField ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={passwordField === "" || repeatPasswordField === "" || passwordField !== repeatPasswordField || processing} onPress={() => onSubmit()} >
+                        {processing && <Image style={auth.loadingIcon} source={require('../../../assets/icons/loadingicon.gif')} />}
+                        {processing === false && <Text style={auth.primaryBtnText}>Submit</Text>}
                     </Pressable>
                 </View>
 

@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import { legal } from '../../../assets/styles/legalTextsSheet'
+import { StyleSheet, View, Text } from 'react-native'
+import { legal } from '../../../assets/styles/Legal'
 
 type Props = {
 

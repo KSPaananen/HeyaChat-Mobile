@@ -18,8 +18,10 @@ import { DeviceService } from './services/DeviceService'
 import { AuthorizationAPI } from './services/APIService'
 
 import LoginNavStack from './components/NavigationStacks/LoginNavStack'
-import Modal from './components/CommonComponents/Modals/Modal'
-import FullscreenModal from './components/CommonComponents/Modals/FullscreenModal'
+import FullscreenModal from './components/Reusables/Modals/FullscreenModal'
+import LargeModal from './components/Reusables/Modals/LargeModal'
+import MediumModal from './components/Reusables/Modals/MediumModal'
+import SmallModal from './components/Reusables/Modals/SmallModal'
 
 //                             - Nav stack structure -
 //
@@ -38,11 +40,21 @@ export type RootStackParams = {
   Login: {
     loggedIn: boolean
   }
-  Modal: {
+  FullscreenModal: {
     param?: any
     Component: React.ComponentType<any>
   }
-  FullscreenModal: {
+  LargeModal: {
+    param?: any
+    Component: React.ComponentType<any>
+  }
+  MediumModal: {
+    param1?: any
+    param2?: any
+    param3?: any
+    Component: React.ComponentType<any>
+  }
+  SmallModal: {
     param?: any
     Component: React.ComponentType<any>
   }
@@ -51,7 +63,7 @@ export type RootStackParams = {
 const Stack = createStackNavigator<RootStackParams>()
 
 // Prevent the splashscreen from auto hiding while we fetch resources
-// SplashScreen is hidden in either AppBottomTabNavStacks home page or LoginNavStacks Authorization page
+// SplashScreen is unhidden in either AppBottomTabNavStacks home page or LoginNavStacks Authorization page
 SplashScreen.preventAutoHideAsync()
 
 const App = () => {
@@ -100,7 +112,11 @@ const App = () => {
           />
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
-          <Stack.Screen name="Modal" component={Modal} 
+          <Stack.Screen name="LargeModal" component={LargeModal} 
+          />
+          <Stack.Screen name="MediumModal" component={MediumModal} 
+          />
+          <Stack.Screen name="SmallModal" component={SmallModal} 
           />
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true, presentation: "modal"  }}>

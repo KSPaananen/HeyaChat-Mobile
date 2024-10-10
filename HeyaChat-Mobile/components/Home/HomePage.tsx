@@ -28,11 +28,11 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
       
         <View style={home.ol}>
           {/* Friend requests */}
-          <TouchableOpacity style={{ right: 10, bottom: 30 }} onPress={() => navigation.navigate("Modal", { Component: FriendRequests })} >
+          <TouchableOpacity style={{ right: 10, bottom: 30 }} onPress={() => navigation.navigate("LargeModal", { Component: FriendRequests })} >
             <Image style={{ height: 100, width: 45, borderColor: 'green', borderWidth: 3, borderRadius: 100 }} source={require('../../assets/icons/icon.png')} />
           </TouchableOpacity>
           {/* Summary of met users */}
-          <TouchableOpacity style={{ right: 10, bottom: 20 }} onPress={() => navigation.navigate("Modal", { Component: Summary })} >
+          <TouchableOpacity style={{ right: 10, bottom: 20 }} onPress={() => navigation.navigate("LargeModal", { Component: Summary })} >
             <Image style={{ height: 140, width: 45, borderColor: 'red', borderWidth: 3, borderRadius: 100 }} source={require('../../assets/icons/icon.png')} />
           </TouchableOpacity>
         </View>

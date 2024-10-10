@@ -7,7 +7,8 @@ import { AuthorizationAPI } from '../../../services/APIService'
 import { StorageService } from '../../../services/StorageService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
+import Suspension from '../ModalContent/Suspension'
 
 interface Props {
     setContact: any
@@ -29,15 +30,15 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [blurPassword, setBlurPassword] = useState<boolean>(true)
+    const [processing, setProcessing] = useState<boolean>(false)
 
     const onSubmit = async () => {
         // Reset all displayable errors on GUI
         setDisplayError(false)
 
-        setContact("wwwww.wwww@www.ww")
-                    setContactType("email")
-                    navigateToEmailVerifying()
-                    return
+        // Set processing to true to alter GUI state
+        // After we get a response, set processing to false
+        setProcessing(true)
 
         let response: any
 
@@ -52,18 +53,25 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
                 setErrorMessage("Something went wrong :(")
                 setDisplayError(true)
             }, 500)
+            setProcessing(false)
             return
         }
 
+        setProcessing(false)
+
         // Response body structure
         // Contact: ""
+        // Suspension: {
+        //    Reason: "",
+        //    Expires: ""
+        // }
         // Details: {
         //    Code: 0,
         //    Details: ""
         // }
-        let jsonBody = await response.json()
-        let contact = jsonBody.contact
-        let code = jsonBody.details.code
+        let jsonBody: LoginDTO = await response.json()
+        let contact = jsonBody.Contact
+        let code = jsonBody.Details?.Code
 
         let storageService = new StorageService()
 
@@ -123,9 +131,11 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
             switch (code) {
                 case 1233:
                     // Display user suspended modal
+                    navigation.navigate("MediumModal", { Component: Suspension, param1: false, param2: jsonBody.Suspension?.Expires, param3: jsonBody.Suspension?.Reason })
                     break;
                 case 1232: 
-                    // Display user permanently suspended modal
+                    // Display user suspended modal. Set param1 to true to signify a permanent suspension
+                    navigation.navigate("MediumModal", { Component: Suspension, param1: true, param2: jsonBody.Suspension?.Expires, param3: jsonBody.Suspension?.Reason })
                     break;
             }
         }
@@ -194,8 +204,9 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
                 <Text style={auth.checkboxText}>Stay signed in</Text>
             </View>
             <View style={auth.primaryBtnWrapper}>
-                <Pressable style={loginField != "" && passwordField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} onPress={() => onSubmit()} >
-                    <Text style={auth.primaryBtnText}>Login</Text>
+                <Pressable style={loginField != "" && passwordField != "" ? auth.primaryBtn : auth.primaryBtnDisabled} disabled={processing === true || loginField == "" || passwordField == ""} onPress={() => onSubmit()} >
+                    {processing && <Image style={auth.loadingIcon} source={require('../../../assets/icons/loadingicon.gif')} />}
+                    {processing === false && <Text style={auth.primaryBtnText}>Login</Text>}
                 </Pressable>
             </View>
             <View style={auth.secondaryBtnWrapper}>

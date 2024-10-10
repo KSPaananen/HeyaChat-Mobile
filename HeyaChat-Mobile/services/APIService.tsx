@@ -41,9 +41,7 @@ export class AuthorizationAPI {
             // 302: Username or email already in use or blocked
             // 406: Regex check failed
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Store received token to storage from authorization header
             if (res.status === 201) {
@@ -94,9 +92,7 @@ export class AuthorizationAPI {
             // 401: Login unsuccesful
             // 403: User suspended
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Store received token to storage from authorization header
             // Store token with 403, because permanently suspended users get a token in order to delete their accounts
@@ -132,7 +128,7 @@ export class AuthorizationAPI {
             let token = await storageService.ReadValue("jsonwebtoken")
 
             if (token === null) {
-                return null
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: LogOut()")
             }
         
             // Create request
@@ -151,9 +147,7 @@ export class AuthorizationAPI {
             // 200: User logged out
             // 404: Token doesn't belong to user
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Remove token from storage
             await storageService.Delete("jsonwebtoken")
@@ -184,7 +178,7 @@ export class AuthorizationAPI {
             let token = await storageService.ReadValue("jsonwebtoken")
 
             if (token === null) {
-                return null
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: PingBackend()")
             }
         
             // Create request
@@ -202,9 +196,7 @@ export class AuthorizationAPI {
 
             // 200: Ping succesful
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Store authorization header if response was 200
             if (res.status === 200) {
@@ -237,9 +229,9 @@ export class AuthorizationAPI {
 
             const storageService = new StorageService()
             let token = await storageService.ReadValue("jsonwebtoken")
-
+            
             if (token === null) {
-                return null
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: VerifyEmail()")
             }
             
             const req = new Request(baseUri + "/Verification/VerifyEmail", {
@@ -258,9 +250,7 @@ export class AuthorizationAPI {
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             return res
         } catch (e) {
@@ -297,9 +287,7 @@ export class AuthorizationAPI {
             // 200: Code was valid
             // 404: Incorrect code
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Backend will respond with temporary token which is required for changing user details
             if (res.status === 200) {
@@ -345,9 +333,7 @@ export class AuthorizationAPI {
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Save token to storage from authorization header
             if (res.status === 200) {
@@ -393,9 +379,7 @@ export class AuthorizationAPI {
             // 200: Login matched a user. Code sent
             // 404: User matching login couldnt be found
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             return res
         } catch (e) {
@@ -421,7 +405,7 @@ export class AuthorizationAPI {
             let token = await storageService.ReadValue("jsonwebtoken")
 
             if (token === null) {
-                return null
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: ChangePassword()")
             }
             
             const req = new Request(baseUri + "/Account/ChangePassword", {
@@ -441,9 +425,7 @@ export class AuthorizationAPI {
             // 201: Password changes
             // 304: Passwords didn't match
             // 500: Internal server error
-            const res = await fetch(req, {
-                signal: AbortSignal.timeout(this.Timeout)
-            })
+            const res = await fetch(req)
 
             // Don't store token here. Make user login again
 

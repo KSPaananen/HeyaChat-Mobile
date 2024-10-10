@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 type Props = {
@@ -15,7 +15,7 @@ let passCounter = 0
 const ErrorNotification: React.FC<Props> = ({ message }) => {
     // Animation
     const [countDown, setCountDown] = useState<number>(0)
-    const [position, setPosition] = useState<number>(-5)
+    const [position, setPosition] = useState<number>(-9)
     const [direction, setDirection] = useState<number>(1) // 1 increases, -1 decreases
 
     useEffect(() => {
@@ -28,28 +28,34 @@ const ErrorNotification: React.FC<Props> = ({ message }) => {
                     passCounter++
                 }
 
-                if (passCounter >= 3 && passCounter <= 5) {
-                    start = -9
-                    end = 9
-                    delay = 2
-                } else if (passCounter >= 6 && passCounter < 9) {
-                    start = -6
-                    end = 9
-                    delay = 6
-                } else if (passCounter >= 10 && passCounter <= 13) {
-                    start = -3
-                    end = 3
-                    delay = 4
-                } else if (passCounter >= 14 && passCounter <= 17) {
-                    start = -1
-                    end = 1
-                    delay = 5
-                } else if (passCounter >= 18) {
-                    clearInterval(interval)
-                    passCounter = 0
-                    return 0
+                switch (passCounter) {
+                    case 3:
+                        start = -9
+                        end = 9
+                        delay = 2
+                        break
+                    case 6:
+                        start = -6
+                        end = 9
+                        delay = 6
+                        break
+                    case 10:
+                        start = -3
+                        end = 3
+                        delay = 4
+                        break
+                    case 14:
+                        start = -1
+                        end = 1
+                        delay = 5
+                        break
+                    case 18:
+                        clearInterval(interval)
+                        passCounter = 0
+                        return 0
+                        break
                 }
-            
+
                 if (newValue >= end) {
                     setDirection(-1)
                     return end
@@ -68,7 +74,7 @@ const ErrorNotification: React.FC<Props> = ({ message }) => {
     return (
         <View style={error.container}>
             <View style={{ left: position }}>
-                <Text>{message}</Text>
+                <Text style={{ color: 'white' }}>{message}</Text>
             </View>
         </View>
   )

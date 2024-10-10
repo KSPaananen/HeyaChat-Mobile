@@ -4,15 +4,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../App'
 import { CommonActions } from '@react-navigation/native'
 
-type Props = NativeStackScreenProps<RootStackParams, "Modal">
+type Props = NativeStackScreenProps<RootStackParams, "LargeModal">
 
-const Modal: React.FC<Props> = ({ route, navigation }) => {
+const LargeModal: React.FC<Props> = ({ route, navigation }) => {
   const { param, Component } = route.params
-
-  useEffect(() => {
-    // Take userId and get user data from db
-    
-  })
 
   return (
     <TouchableWithoutFeedback onPress={() => navigation.dispatch(CommonActions.goBack())}>
@@ -38,7 +33,7 @@ const Modal: React.FC<Props> = ({ route, navigation }) => {
   )
 }
 
-export default Modal
+export default LargeModal
 
 export const modal = StyleSheet.create({
   shadow: {
@@ -50,15 +45,9 @@ export const modal = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 1,
     borderColor: '#000000',
-    backgroundColor: '#fff',
-    marginTop: 60,
-    marginRight: 25,
-    marginBottom: 120,
-    marginLeft: 25,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 0,
-    paddingLeft: 10,
+    height: 400,
+    width: 300,
+    backgroundColor: 'rgb(63, 118, 198)',
   },
   ol: { // Overlay
     position: 'absolute', 

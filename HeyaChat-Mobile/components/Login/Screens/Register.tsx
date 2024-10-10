@@ -5,9 +5,9 @@ import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import Terms from '../../CommonComponents/LegalTexts/Terms'
-import EULA from '../../CommonComponents/LegalTexts/EULA'
-import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+import Terms from '../../Reusables/LegalTexts/Terms'
+import EULA from '../../Reusables/LegalTexts/EULA'
+import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     setContact: any
@@ -43,6 +43,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
     const [displayEmailError, setDisplayEmailError] = useState<boolean>(false)
     const [passwordError, setPasswordError] = useState<string>("")
     const [displayPasswordError, setDisplayPasswordError] = useState<boolean>(false)
+    const [processing, setProcessing] = useState<boolean>(false)
 
     // Ensure username fits criteria and display errors accordingly
     const handleUsername = (value: string) => {
@@ -138,6 +139,10 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
 
         // Send post request to API if everything is ok
         if (usernameField.length <= usernameMaxLength && passwordField === passwordRepeatField && passwordField.length >= passwordMinLength && agreeTerms && agreeEULA) {
+            // Set processing to true
+            // After we get a response, set it to false
+            setProcessing(true)
+
             let response: any
 
             // Post to API
@@ -150,14 +155,17 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
                     setGeneralError(`Something went wrong :(`)
                     setDisplayGeneralError(true)
                 }, 500)
+                setProcessing(false)
                 return
             }
+
+            setProcessing(false)
 
             // Response body structure
             // Code: 0,
             // Details: ""
-            let jsonBody = await response.json()
-            let code = jsonBody.code
+            let jsonBody: DetailsDTO = await response.json()
+            let code = jsonBody.Code
 
             if (response.status === 201) {
                 switch (code) {
@@ -315,9 +323,9 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
                         uncheckedColor={'rgba(50, 200, 205, 1)'}
                     />
                 </Pressable>
-                <Text style={auth.checkboxText}>I'm over the age of {minimumAge} and agree to the</Text>
+                <Text style={auth.checkboxText}>I have read and agree to the</Text>
                 <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
-                    <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>terms</Text>
+                    <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>Terms Of Service</Text>
                 </Pressable>
             </View>
             <View style={auth.checkboxBtnWrapper}>
@@ -335,8 +343,9 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
                 </Pressable>
             </View>
             <View style={auth.primaryBtnWrapper}>
-                <Pressable style={!usernameField || !emailField || !passwordField  || !passwordRepeatField || !agreeEULA || !agreeTerms ? auth.primaryBtnDisabled : auth.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA && !agreeTerms}>
-                    <Text style={auth.primaryBtnText}>Register</Text>
+                <Pressable style={!usernameField || !emailField || !passwordField  || !passwordRepeatField || !agreeEULA || !agreeTerms ? auth.primaryBtnDisabled : auth.primaryBtn} onPress={() => onSubmit()} disabled={!agreeEULA || !agreeTerms || processing}>
+                    {processing && <Image style={auth.loadingIcon} source={require('../../../assets/icons/loadingicon.gif')} />}
+                    {processing === false && <Text style={auth.primaryBtnText}>Register</Text>}
                 </Pressable>
             </View>
         </View>

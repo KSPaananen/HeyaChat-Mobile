@@ -6,7 +6,7 @@ import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
 
-import ErrorNotification from '../../CommonComponents/Notifications/ErrorNotification'
+import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     contact: string
@@ -22,6 +22,7 @@ const VerifyMFA: React.FC<Props> = ({ contact, contactType, navigation, navigate
     const [codeField, setCodeField] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
+    const [processing, setProcessing] = useState<boolean>(false)
 
     const requestCode = () => {
         // Set code requesting on cooldown to prevent spam
@@ -31,6 +32,10 @@ const VerifyMFA: React.FC<Props> = ({ contact, contactType, navigation, navigate
     const onSubmit = async () => {
         // Reset all displayable errors on submit
         setDisplayError(false)
+
+        // Set processing to true to alter GUI state
+        // After we get a response, set processing to false
+        setProcessing(true)
 
         let response: any
 
@@ -42,14 +47,17 @@ const VerifyMFA: React.FC<Props> = ({ contact, contactType, navigation, navigate
                 setErrorMessage("Something went wrong :(")
                 setDisplayError(true)
             }, 500)
+            setProcessing(false)
             return
         }
+
+        setProcessing(false)
 
         // Response body structure
         // Code: 0,
         // Details: ""
-        let jsonBody = await response.json()
-        let code = jsonBody.code
+        let jsonBody: DetailsDTO = await response.json()
+        let code = jsonBody.Code
 
         if (response.status === 200) {
             switch (code) {
@@ -119,8 +127,9 @@ const VerifyMFA: React.FC<Props> = ({ contact, contactType, navigation, navigate
                     </View>
 
                     <View style={{ ...auth.primaryBtnWrapper, ...{ marginTop: 50} }}>
-                        <Pressable style={codeField != "" ? auth.primaryBtn : auth.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == ""}>
-                            <Text style={auth.primaryBtnText}>Verify code</Text>
+                        <Pressable style={codeField != "" ? auth.primaryBtn : auth.primaryBtnDisabled } onPress={() => onSubmit()} disabled={codeField == "" || processing}>
+                            {processing && <Image style={auth.loadingIcon} source={require('../../../assets/icons/loadingicon.gif')} />}
+                            {processing === false && <Text style={auth.primaryBtnText}>Verify code</Text>}
                         </Pressable>
                     </View>
                     <View style={auth.secondaryBtnWrapper}>
