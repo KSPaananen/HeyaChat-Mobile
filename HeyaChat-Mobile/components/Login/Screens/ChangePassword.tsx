@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Text, View, Image, Pressable } from 'react-native'
-import { TextInput, Checkbox } from "react-native-paper"
+import { useEffect, useState, useCallback } from 'react'
+import { Text, View, Image, Pressable, BackHandler } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
+import { TextInput, Checkbox } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { auth } from '../AuthorizationPage'
@@ -8,10 +9,11 @@ import { auth } from '../AuthorizationPage'
 import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
+    navigation: any
     navigateToLogin: () => void // Return
 }
 
-const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
+const ChangePassword: React.FC<Props> = ({ navigation, navigateToLogin }) => {
     // Fields
     const [passwordField, setPasswordField] = useState<string>("")
     const [repeatPasswordField, setRepeatPasswordField] = useState<string>("")
@@ -24,6 +26,36 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [processing, setProcessing] = useState<boolean>(false)
+    const [countDown, setCountDown] = useState<number>(5)
+    const [success, setSuccess] = useState<boolean>(false)
+
+    // Add custom back press handling
+    useFocusEffect(
+        useCallback(() => {
+          const onBackPress = () => {
+            navigateToLogin()
+            return true
+          }
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          // Remove eventlistener when backpress is executed
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    )
+
+    const startCountDown = () => {
+        let count = 5
+
+        let interval = setInterval(() => {
+            count--
+            setCountDown(count)
+  
+            if(count === 0) {
+                clearInterval(interval)
+            }
+        }, 1000)
+    }
 
     // Check if both password fields match
     const matchPasswords = (value: string) => {
@@ -71,7 +103,12 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
             if (response.status === 201) {
                 switch (code) {
                     case 1870:
-                        navigateToLogin()
+                        setSuccess(true)
+                        startCountDown()
+                        setTimeout(() => {
+                            // "Refresh" AuthorizationPage here to go back to login. Looks better than going back with conditional rendering
+                            navigation.replace("AuthorizationPage")
+                        }, 5500)
                         break
                 }
             } else if (response.status === 304) {
@@ -102,9 +139,12 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
         </View>
 
         <View style={{ ...auth.body, ...{ height: "67%" } }}>
+
             <View style={{ flex: 0.25, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
-                <Text style={auth.description}></Text>
+                {success && <Text style={auth.description}>Password changed. Returning to login in {countDown}...</Text>}
+                {success === false && <Text style={auth.description}>Secure your account with a strong password. You'll have to login again after changing your password.</Text>}
             </View>
+
             <View style={{ flex: 0.75 }}>
                 <View style={auth.notificationWrapper}>
                     {displayError && <ErrorNotification message={errorMessage} />}
@@ -160,7 +200,7 @@ const ChangePassword: React.FC<Props> = ({ navigateToLogin }) => {
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <View style={auth.secondaryBtnWrapper}>
                     <Pressable style={auth.secondaryBtn} onPress={() => navigateToLogin()}>
-                        <Text style={auth.secondaryBtnText}>Back to login</Text>
+                        <Text style={auth.secondaryBtnText}>Return</Text>
                     </Pressable>
                 </View>
             </View>

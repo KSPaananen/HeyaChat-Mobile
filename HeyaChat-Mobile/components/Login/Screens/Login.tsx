@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { Text, View, Image, Pressable } from 'react-native'
 import { CommonActions } from '@react-navigation/native'
 import { TextInput, Checkbox } from "react-native-paper"
@@ -39,6 +39,11 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
         // Set processing to true to alter GUI state
         // After we get a response, set processing to false
         setProcessing(true)
+
+        setTimeout(() => {
+            setProcessing(false)
+            return
+        }, 5000)
 
         let response: any
 

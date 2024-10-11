@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { View } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -7,6 +8,7 @@ import { RootStackParams } from '../../App'
 
 import AuthorizationPage from '../Login/AuthorizationPage'
 import AppBottomTabNavStack from './AppBottomTabNavStack'
+// import { View } from 'react-native-reanimated/lib/typescript/Animated'
 
 type Props = NativeStackScreenProps<RootStackParams, "Login">
 

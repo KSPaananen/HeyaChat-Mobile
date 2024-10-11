@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { Text, View, Image, Pressable } from 'react-native'
+import { useEffect, useState, useCallback } from 'react'
+import { Text, View, Image, Pressable, BackHandler } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import { TextInput, Checkbox } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
@@ -25,6 +26,21 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
 
     // Field restrictions
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+    // Add custom back press handling
+    useFocusEffect(
+        useCallback(() => {
+          const onBackPress = () => {
+            navigateToLogin()
+            return true
+          }
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          // Remove eventlistener when backpress is executed
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    )
 
     const onSubmit = async () => {
         // Reset displayable errors
@@ -102,8 +118,7 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
 
             <View style={{ ...auth.body, ...{ height: "67%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
-                    <Text style={auth.description}>Enter the email address associated with your account.</Text>
-                    <Text style={auth.description}>You'll receive a code shortly after.</Text>
+                    <Text style={auth.description}>Enter the email address associated with your account. You'll receive a code shortly after.</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     <View style={auth.notificationWrapper}>

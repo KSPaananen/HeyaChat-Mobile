@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Text, View, Image, Pressable } from 'react-native'
+import { useEffect, useState, useCallback } from 'react'
+import { Text, View, Image, Pressable, BackHandler } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import { TextInput, Checkbox } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
@@ -23,6 +24,21 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
     const [processing, setProcessing] = useState<boolean>(false)
+
+    // Add custom back press handling
+    useFocusEffect(
+        useCallback(() => {
+          const onBackPress = () => {
+            navigateToLogin()
+            return true
+          }
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          // Remove eventlistener when backpress is executed
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    )
 
     const requestCode = () => {
         // Set code requesting on cooldown to prevent spam
@@ -95,11 +111,14 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
             </View>
 
             <View style={{ ...auth.body, ...{ height: "67%" } }}>
+
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
-                    <Text style={auth.description}>Please enter the verification code we have sent to your</Text>
-                    {contactType === "email" && <Text style={auth.description}>email address {contact}</Text>}
-                    {contactType === "phone" && <Text style={auth.description}>phone number {contact}</Text>}
+                    <Text style={auth.description}>Please enter the verification code we have sent to your 
+                        {contactType === "email" && <Text style={auth.description}> email address {contact}</Text>}
+                        {contactType === "phone" && <Text style={auth.description}> phone number {contact}</Text>}
+                    </Text>
                 </View>
+
                 <View style={{ flex: 0.65 }}>
                     
                     <View style={auth.notificationWrapper}>
@@ -128,12 +147,14 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
                             {processing === false && <Text style={auth.primaryBtnText}>Verify code</Text>}
                         </Pressable>
                     </View>
+
                     <View style={auth.secondaryBtnWrapper}>
                         <Pressable style={auth.secondaryBtn} onPress={() => requestCode()} disabled={requestCodeCoolDown}>
-                            <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'rgba(50, 225, 225, 1)'  }} : { color: 'gray'}}>Request </Text>a new one</Text>
-                            {requestCodeCoolDown && <Text style={auth.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
+                            <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'rgba(50, 225, 225, 1)'  }} : { ...auth.secondaryBtnDisabledText }}>Request </Text>a new one</Text>
+                            {requestCodeCoolDown && <Text style={auth.secondaryBtnText}>Next request avaible in {countDown}</Text>}
                         </Pressable>
                     </View>
+                    
                 </View>
             </View>
 

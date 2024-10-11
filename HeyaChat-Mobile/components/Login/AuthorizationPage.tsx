@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, View, Animated } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { LoginStackParams } from '../NavigationStacks/LoginNavStack'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -115,6 +115,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
                 />}
 
                 {changePasswordPage && <ChangePassword 
+                  navigation={navigation}
                   navigateToLogin={() => {setChangePasswordPage(false); setLoginPage(true)}} // Return to login
                 />}
 
@@ -249,8 +250,8 @@ export const auth = StyleSheet.create({
         color: 'rgba(245, 245, 245, 0.9)'
     },
     secondaryBtnDisabledText : {
-      fontSize: 12,
-      color: 'gray'
+      fontSize: 13,
+      color: 'rgba(165, 165, 165, 1)'
     },
     checkboxBtnWrapper: {
       paddingTop: 2,
@@ -282,8 +283,9 @@ export const auth = StyleSheet.create({
       color: 'rgba(245, 245, 245, 0.9)'
     },
     description: {
-      fontSize: 13,
+      fontSize: 14,
       marginLeft: 10,
+      textAlign: 'center',
       color: 'rgba(245, 245, 245, 1)'
     },
     icon: {

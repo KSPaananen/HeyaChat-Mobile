@@ -10,7 +10,7 @@
 import './gesture-handler'
 import { useState, useEffect } from 'react'
 import { View, LogBox } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import * as SplashScreen from 'expo-splash-screen'
 import { StorageService } from './services/StorageService'
@@ -22,6 +22,7 @@ import FullscreenModal from './components/Reusables/Modals/FullscreenModal'
 import LargeModal from './components/Reusables/Modals/LargeModal'
 import MediumModal from './components/Reusables/Modals/MediumModal'
 import SmallModal from './components/Reusables/Modals/SmallModal'
+import PopupNotification from './components/Reusables/Notifications/PopupNotification'
 
 //                             - Nav stack structure -
 //
@@ -57,6 +58,9 @@ export type RootStackParams = {
   SmallModal: {
     param?: any
     Component: React.ComponentType<any>
+  }
+  PopupNotification: {
+    message: string
   }
 }
 
@@ -103,9 +107,17 @@ const App = () => {
     HandleLoginState()
   }, [])
 
+  const myTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: 'rgb(63, 118, 198)',
+    },
+  };
+
   return (
-    <View style={{flex: 1}}>
-    <NavigationContainer>
+    <View style={{ flex: 1 }}>
+    <NavigationContainer theme={myTheme}>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Group>
           <Stack.Screen name="Login" component={LoginNavStack} initialParams={{ loggedIn: tokenValid }} 
@@ -117,6 +129,8 @@ const App = () => {
           <Stack.Screen name="MediumModal" component={MediumModal} 
           />
           <Stack.Screen name="SmallModal" component={SmallModal} 
+          />
+          <Stack.Screen name="PopupNotification" component={PopupNotification} 
           />
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: true, presentation: "modal"  }}>

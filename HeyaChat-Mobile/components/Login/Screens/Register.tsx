@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Text, View, Image, Pressable } from 'react-native'
+import { useState, useCallback,  } from 'react'
+import { Text, View, Image, Pressable, BackHandler } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import { TextInput, Checkbox } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
@@ -27,7 +28,6 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
     const usernameMaxLength: number = 20
     const usernameMinLength: number = 3
     const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    const minimumAge: number = 16
     const passwordMinLength: number = 8
 
     // Button enabling booleans
@@ -45,6 +45,21 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
     const [displayPasswordError, setDisplayPasswordError] = useState<boolean>(false)
     const [processing, setProcessing] = useState<boolean>(false)
 
+    // Add custom back press handling
+    useFocusEffect(
+        useCallback(() => {
+          const onBackPress = () => {
+            navigateToLogin()
+            return true
+          }
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          // Remove eventlistener when backpress is executed
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    )
+    
     // Ensure username fits criteria and display errors accordingly
     const handleUsername = (value: string) => {
         const validChars: string[] = [
