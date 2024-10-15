@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { View } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'

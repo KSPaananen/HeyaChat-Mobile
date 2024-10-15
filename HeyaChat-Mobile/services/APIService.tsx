@@ -422,7 +422,7 @@ export class AuthorizationAPI {
                 })
             })
 
-            // 201: Password changes
+            // 201: Password changed
             // 304: Passwords didn't match
             // 500: Internal server error
             const res = await fetch(req)
@@ -433,6 +433,94 @@ export class AuthorizationAPI {
         } catch (e) {
             console.log(e)
             throw new Error("ERROR: Unable to post to backend in AuthorizationAPI: ChangePassword()")
+        }
+    }
+
+    RequestDelete = async (): Promise<Response | null> => {
+        try {
+            // Read device information from storage
+            let device = await this.StorageService.ReadObject("userdevice")
+            
+            if (device === null) {
+                // Figure out something here as to not soft lock the user
+                throw new Error("ERROR: Couldn't read userdevice from storage in AuthorizationAPI: RequestDelete()")
+            }
+
+            let parsedDevice = JSON.parse(device) as UserDevice
+            let baseUri = await GetBaseUri()
+
+            const storageService = new StorageService()
+            let token = await storageService.ReadValue("jsonwebtoken")
+
+            if (token === null) {
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: RequestDelete()")
+            }
+            
+            const req = new Request(baseUri + "/Account/RequestDelete", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": token,
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    UserDevice: parsedDevice
+                })
+            })
+
+            // 201: Delete request created in DB
+            // 500: Internal server error
+            const res = await fetch(req)
+
+            return res
+
+        } catch (e) {
+            console.log(e)
+            throw new Error("ERROR: Unable to post to backend in AuthorizationAPI: RequestDelete()")
+        }
+    }
+
+    UndoRequestDelete = async (): Promise<Response | null> => {
+        try {
+            // Read device information from storage
+            let device = await this.StorageService.ReadObject("userdevice")
+            
+            if (device === null) {
+                // Figure out something here as to not soft lock the user
+                throw new Error("ERROR: Couldn't read userdevice from storage in AuthorizationAPI: RequestDelete()")
+            }
+
+            let parsedDevice = JSON.parse(device) as UserDevice
+            let baseUri = await GetBaseUri()
+
+            const storageService = new StorageService()
+            let token = await storageService.ReadValue("jsonwebtoken")
+
+            if (token === null) {
+                throw new Error("ERROR: Couldn't read jsonwebtoken from storage in AuthorizationAPI: RequestDelete()")
+            }
+            
+            const req = new Request(baseUri + "/Account/UndoRequestDelete", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": token,
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    UserDevice: parsedDevice
+                })
+            })
+
+            // 201: Delete request created in DB
+            // 500: Internal server error
+            const res = await fetch(req)
+
+            return res
+
+        } catch (e) {
+            console.log(e)
+            throw new Error("ERROR: Unable to post to backend in AuthorizationAPI: RequestDelete()")
         }
     }
 

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Text, View, Image, Pressable } from 'react-native'
 import { CommonActions } from '@react-navigation/native'
-import { TextInput, Checkbox } from "react-native-paper"
+import { TextInput, Checkbox } from 'react-native-paper'
 import { Octicons } from '@expo/vector-icons'
 import { AuthorizationAPI } from '../../../services/APIService'
 import { StorageService } from '../../../services/StorageService'
 import { auth } from '../AuthorizationPage'
 
 import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
-import Suspension from '../ModalContent/Suspension'
+import Suspension from '../ModalContent/Suspensions/Suspension'
 
 interface Props {
     setContact: any
@@ -33,6 +33,8 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
     const [processing, setProcessing] = useState<boolean>(false)
 
     const onSubmit = async () => {
+        navigation.navigate("MediumModal", { Component: Suspension, Props: [navigation, true, "11/11/1111", "This and that isnt allowed!"] })
+        return
         // Reset all displayable errors on GUI
         setDisplayError(false)
 

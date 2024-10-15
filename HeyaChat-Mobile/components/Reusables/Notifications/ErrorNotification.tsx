@@ -19,7 +19,7 @@ const ErrorNotification: React.FC<Props> = ({ message }) => {
     const [direction, setDirection] = useState<number>(1) // 1 increases, -1 decreases
 
     useEffect(() => {
-        const interval = setInterval(() => {-
+        const interval = setInterval(() => {
             setPosition((pos) => {
                 const newValue = pos + direction * multiplier
 

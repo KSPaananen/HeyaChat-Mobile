@@ -50,9 +50,7 @@ export type RootStackParams = {
     Component: React.ComponentType<any>
   }
   MediumModal: {
-    param1?: any
-    param2?: any
-    param3?: any
+    Props?: any[]
     Component: React.ComponentType<any>
   }
   SmallModal: {
@@ -124,11 +122,11 @@ const App = () => {
           />
         </Stack.Group>
         <Stack.Group screenOptions={{ headerShown: false, presentation: "transparentModal"  }}>
-          <Stack.Screen name="LargeModal" component={LargeModal} 
+          <Stack.Screen name="LargeModal" component={LargeModal} options={{ animationEnabled: false }}
           />
-          <Stack.Screen name="MediumModal" component={MediumModal} 
+          <Stack.Screen name="MediumModal" component={MediumModal} options={{ animationEnabled: false }}
           />
-          <Stack.Screen name="SmallModal" component={SmallModal} 
+          <Stack.Screen name="SmallModal" component={SmallModal} options={{ animationEnabled: false }}
           />
           <Stack.Screen name="PopupNotification" component={PopupNotification} 
           />

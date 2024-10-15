@@ -1,85 +1,70 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
+import { useEffect, useState, useRef } from 'react';
+import { Animated, StyleSheet, View, TouchableOpacity, TouchableWithoutFeedback, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../../App'
 import { CommonActions } from '@react-navigation/native'
 
 type Props = NativeStackScreenProps<RootStackParams, "MediumModal">
 
-let passCounter: number = 0
-let speed = 20
-let start = 700
-let end = -50
-
 const MediumModal: React.FC<Props> = ({ route, navigation }) => {
-  const { param1, param2, param3, Component } = route.params 
+  const { Component, Props } = route.params 
 
-  // Animation
-  const [top, setTop] = useState<number>(start)
-  const [direction, setDirection] = useState<number>(1) // 1 increases, -1 decreases
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+
+  const componentProps = {
+    navigation: Props?.[0], 
+    arg1: Props?.[1], 
+    arg2: Props?.[2], 
+    arg3: Props?.[3],
+    arg4: Props?.[4],
+    arg5: Props?.[5],
+    arg6: Props?.[6],
+  }
+
+  const height = useRef(new Animated.Value(0)).current
+  const width = useRef(new Animated.Value(0)).current
+  const top = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTop((pos) => {
-        const newPos = pos - direction * speed
-        
-        if (newPos <= 5 && newPos >= -5) {
-          passCounter++
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(height, {
+          toValue: 25, 
+          duration: 250, 
+          useNativeDriver: false
+        }),
+        Animated.timing(width, {
+          toValue: 275, 
+          duration: 250, 
+          useNativeDriver: false
+        }),
+      ]),
+      Animated.timing(top, {
+          toValue: -187.5, 
+          duration: 300, 
+          useNativeDriver: false, 
         }
+      ),
+      Animated.parallel([
+        Animated.timing(top, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: false,
+        }),
+        Animated.timing(height, {
+          toValue: 400,
+          duration: 600,
+          useNativeDriver: false,
+        })
+      ])
+    ]).start(() => {
+      setModalVisible(true)
+    })
+  }, [])
 
-        switch (passCounter) {
-          case 1:
-            start = 65
-            end = -50
-            speed = 10
-            break
-          case 3:
-            start = 50
-            end = -35
-            speed = 5
-            break
-          case 5:
-            start = 35
-            end = -20
-            speed = 2.5
-            break
-          case 7:
-            start = 10
-            end = -5
-            speed = 1
-            break
-          case 9:
-            start = 5
-            end = -0
-            break
-          case 11:
-            passCounter = 0
-            start = 700
-            end = -50
-            speed = 25
-            clearInterval(interval)
-            return 0
-            break
-        }
-  
-        if (newPos <= end) {
-          setDirection(-1)
-          return end
-        } else if (newPos >= start) {
-          setDirection(1)
-          return start
-        }
-
-        return newPos
-      })
-    }, 1)
-  
-      return () => clearInterval(interval)
-    }, [direction])
-
-    const CloseModal = () => {
-      navigation.dispatch(CommonActions.goBack())
-    }
+  const CloseModal = () => {
+    navigation.dispatch(CommonActions.goBack())
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => CloseModal()}>
@@ -87,22 +72,17 @@ const MediumModal: React.FC<Props> = ({ route, navigation }) => {
       <View style={modal.shadow}>
         <TouchableWithoutFeedback>
         
-          <View style={{ ...modal.modal, ...{ top: top }}}>
+          <Animated.View style={{ ...modal.modal, ...{ top: top, height: height, width: width }}}>
         
-              <Component
-                param1={param1}
-                param2={param2}
-                param3={param3}
-                navigation={navigation}
-              />
+            <Component {...componentProps}/>
 
-            <View style={modal.ol}>
+            {modalVisible && <View style={modal.ol}>
               <TouchableOpacity style={modal.exitBtnWrapper} hitSlop={{top: 0, right: 0, bottom: 0, left: 0}} onPress={() => navigation.dispatch(CommonActions.goBack())} >
                 <Image style={modal.olExitBtn} source={require('../../../assets/icons/icon.png')} />
               </TouchableOpacity>
-            </View>
+            </View>}
 
-          </View>
+          </Animated.View>
         </TouchableWithoutFeedback>
       </View>
     </TouchableWithoutFeedback>
@@ -120,7 +100,7 @@ export const modal = StyleSheet.create({
     },
   modal: {
     height: 400,
-    width: 300,
+    width: 275,
     borderRadius: 15,
     backgroundColor: 'rgb(63, 118, 198)',
   },
