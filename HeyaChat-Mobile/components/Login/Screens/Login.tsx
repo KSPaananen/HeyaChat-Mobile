@@ -33,8 +33,6 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
     const [processing, setProcessing] = useState<boolean>(false)
 
     const onSubmit = async () => {
-        navigation.navigate("MediumModal", { Component: Suspension, Props: [navigation, true, "11/11/1111", "This and that isnt allowed!"] })
-        return
         // Reset all displayable errors on GUI
         setDisplayError(false)
 
@@ -138,11 +136,11 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
             switch (code) {
                 case 1233:
                     // Display user suspended modal
-                    navigation.navigate("MediumModal", { Component: Suspension, param1: false, param2: jsonBody.Suspension?.Expires, param3: jsonBody.Suspension?.Reason })
+                    navigation.navigate("MediumModal", { Component: Suspension, Props: [false, jsonBody.Suspension?.Expires, jsonBody.Suspension?.Reason] })
                     break;
                 case 1232: 
                     // Display user suspended modal. Set param1 to true to signify a permanent suspension
-                    navigation.navigate("MediumModal", { Component: Suspension, param1: true, param2: jsonBody.Suspension?.Expires, param3: jsonBody.Suspension?.Reason })
+                    navigation.navigate("MediumModal", { Component: Suspension, Props: [true, jsonBody.Suspension?.Expires, jsonBody.Suspension?.Reason] })
                     break;
             }
         }
@@ -160,7 +158,7 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
         <View style={{ ...auth.body, ...{ height: "42%"} }}>
 
             <View style={auth.notificationWrapper}>
-                {displayError && <ErrorNotification message={errorMessage} />}
+                {displayError && <ErrorNotification message={errorMessage} color={'white'} />}
             </View>
             
             <View style={auth.inputWrapper}>

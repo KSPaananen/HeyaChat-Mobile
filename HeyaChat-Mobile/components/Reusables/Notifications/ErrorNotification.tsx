@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native'
 
 type Props = {
     message: string
+    color: string
 }
 
 // Animation modifiers
@@ -12,7 +13,7 @@ let start = -12
 let end = 12
 let passCounter = 0
 
-const ErrorNotification: React.FC<Props> = ({ message }) => {
+const ErrorNotification: React.FC<Props> = ({ message, color }) => {
     // Animation
     const [countDown, setCountDown] = useState<number>(0)
     const [position, setPosition] = useState<number>(-9)
@@ -74,7 +75,7 @@ const ErrorNotification: React.FC<Props> = ({ message }) => {
     return (
         <View style={error.container}>
             <View style={{ left: position }}>
-                <Text style={{ color: 'white' }}>{message}</Text>
+                <Text style={{ color: color }}>{message}</Text>
             </View>
         </View>
   )
@@ -84,7 +85,6 @@ export default ErrorNotification
 
 export const error = StyleSheet.create({
   container: {
-    marginLeft: 12,
     backgroundColor: 'rgba(52, 52, 52, 0.0)'
   },
 })

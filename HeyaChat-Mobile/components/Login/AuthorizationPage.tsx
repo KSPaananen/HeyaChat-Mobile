@@ -300,6 +300,7 @@ export const auth = StyleSheet.create({
     notificationWrapper: {
       justifyContent: 'center',
       marginTop: 2,
+      marginLeft: 12,
       marginBottom: 6,
       height: 20,
     },

@@ -16,7 +16,7 @@ const HomePage: React.FC<Props> = ({ navigation }) => {
 
   const onLayout = async () => {
     // Hide splashscreen
-    await SplashScreen.hideAsync();
+    await SplashScreen.hideAsync()
   }
 
   return (

@@ -1,68 +1,82 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, Pressable, Image, ImageBackground } from 'react-native'
+import { useMediumModalContext } from '../../../Reusables/Modals/MediumModal'
 
-// This component should be hosted inside medium sized modal
+// This component should be hosted inside a modal
 
 import Terms from '../../../Reusables/LegalTexts/Terms'
 import RequestDelete from './RequestDelete'
 
 type Props = {
-    navigation: any
-    arg1: boolean// Permanent boolean
-    arg2: string // Expires date
-    arg3: string // Reason
+    navigation?: any
+    arg1?: boolean// Permanent boolean
+    arg2?: string // Expires date
+    arg3?: string // Reason
 }
 
-const Suspension: React.FC<Props> = ({ arg1, arg2, arg3, navigation }) => {
+const Suspension: React.FC<Props> = ({ navigation, arg1, arg2, arg3 }) => {
+  // Use parent components context to persist data
+  const { args, setArgs } = useMediumModalContext()
+  
   const [processing, setProcessing] = useState<boolean>(false)
+  const [permanent, setPermanent] = useState<boolean>(arg1 ?? args.arg1 ?? false)
+  const [expires, setExpires] = useState<string>(arg2 ?? args.arg2 ?? "")
+  const [reason, setReason] = useState<string>(arg3 ?? args.arg3 ?? "")
 
-  const permanent = arg1
-  const expires = arg2
-  const reason = arg3
+  useEffect(() => {
+    // Persist data to mediumModalContext
+    setArgs({ arg1, arg2, arg3 })
 
-    return (
-        <View style={susp.container}>
+  }, [])
+
+  return (
+    <View style={susp.container}>
             
-            <ImageBackground style={susp.background} imageStyle={{ flex: 1 }} source={require('../../../../assets/images/suspensionHeader.png')} resizeMode="cover" />
+      <ImageBackground style={susp.background} imageStyle={{ flex: 1 }} source={require('../../../../assets/images/suspensionHeader.png')} resizeMode="cover" />
 
-              <View style={susp.titleWrapper}>
-                <Text style={susp.title}>Account suspended</Text>
-              </View>
+      <View style={susp.titleWrapper}>
+        <Text style={susp.title}>Account suspended</Text>
+      </View>
 
-              <View style={susp.separatorWrapper} >
-                <View style={susp.separator} />
-              </View>
+      <View style={susp.separatorWrapper} >
+        <View style={susp.separator} />
+      </View>
 
-              <View style={susp.bodyWrapper}>
-                {permanent && <Text style={susp.text}>
-                  Your account has been permanently suspended for violating our
-                  <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
-                    <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
-                  </Pressable>   
-                </Text>}
-                {permanent === false && <Text style={susp.text}>
-                  Your account has been temporarily suspended {expires !== "" && <Text>until {expires}</Text>} for violating our 
-                  <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
-                    <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
-                  </Pressable>
-                  Repeat violations will result in longer suspensions.
-                  </Text>}
-                  {reason !== "" && <Text style={susp.text}>
-                    Reason: {reason}
-                  </Text>}
-              </View>
+      <View style={susp.bodyWrapper}>
 
-              <View style={susp.footerWrapper}>
-                {permanent &&  <Pressable style={{ ...susp.primaryBtn, ...{ backgroundColor: 'rgb(63, 118, 198)', borderColor: 'rgb(63, 118, 198)' } }} onPress={() => navigation.navigate("MediumModal", { Component: RequestDelete, Props:[navigation] })}>
-                  {processing === false && <Text style={{ fontSize: 15, color: 'rgba(250, 250, 250, 1)' }}>Delete account</Text>}
-                  {processing && <Image style={susp.loadingIcon} source={require('../../../../assets/icons/loadingicon.gif')} />}
-                </Pressable>}
-                {permanent === false &&  <Pressable style={{ ...susp.primaryBtn, ...{ backgroundColor: 'rgb(63, 118, 198)', borderColor: 'rgb(63, 118, 198)' } }} onPress={() => {}}>
-                  <Text style={{ fontSize: 15, color: 'rgba(250, 250, 250, 1)' }}>I understand</Text>
-                </Pressable>}
-              </View>
+        {permanent && <Text style={susp.text}>
+          Your account has been permanently suspended for violating our
+          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+            <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
+          </Pressable>   
+        </Text>}
 
-        </View>
+        {permanent=== false && <Text style={susp.text}>
+          Your account has been temporarily suspended {expires !== "" && <Text>until {expires}</Text>} for violating our 
+          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+            <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
+          </Pressable>
+          Repeat violations will result in longer suspensions.
+        </Text>}
+
+        {reason !== "" && <Text style={susp.text}>
+          Reason: {reason}
+        </Text>}
+
+      </View>
+
+      <View style={susp.footerWrapper}>
+        {permanent &&  <Pressable style={{ ...susp.primaryBtn, ...{ backgroundColor: 'rgb(63, 118, 198)', borderColor: 'rgb(63, 118, 198)' } }} onPress={() => navigation.navigate("MediumModal", { Component: RequestDelete, Props:[navigation] })}>
+          {processing === false && <Text style={{ fontSize: 15, color: 'rgba(250, 250, 250, 1)' }}>Delete account</Text>}
+          {processing && <Image style={susp.loadingIcon} source={require('../../../../assets/icons/loadingicon.gif')} />}
+        </Pressable>}
+
+        {permanent === false &&  <Pressable style={{ ...susp.primaryBtn, ...{ backgroundColor: 'rgb(63, 118, 198)', borderColor: 'rgb(63, 118, 198)' } }} onPress={() => {navigation.goBack()}}>
+          <Text style={{ fontSize: 15, color: 'rgba(250, 250, 250, 1)' }}>I understand</Text>
+        </Pressable>}
+      </View>
+
+    </View>
     )
 }
 
@@ -121,7 +135,7 @@ export const susp = StyleSheet.create({
     color: 'rgba(35, 35, 35, 1)'
    },
    text: {
-    paddingTop: 15,
+    paddingTop: 10,
     fontSize: 13,
     lineHeight: 17,
     textAlign: 'center',
