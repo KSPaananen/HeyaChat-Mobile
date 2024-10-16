@@ -138,10 +138,17 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
                     // Display user suspended modal
                     navigation.navigate("MediumModal", { Component: Suspension, Props: [false, jsonBody.Suspension?.Expires, jsonBody.Suspension?.Reason] })
                     break;
-                case 1232: 
+                case 1232:
                     // Display user suspended modal. Set param1 to true to signify a permanent suspension
                     navigation.navigate("MediumModal", { Component: Suspension, Props: [true, jsonBody.Suspension?.Expires, jsonBody.Suspension?.Reason] })
-                    break;
+                    break
+            }
+        } else if (response.status === 406) {
+            switch (code) {
+                case 1234:
+                    // Display active delete request modal
+                    
+                    break
             }
         }
     }

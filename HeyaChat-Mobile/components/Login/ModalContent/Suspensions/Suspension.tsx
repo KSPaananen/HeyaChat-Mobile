@@ -46,14 +46,14 @@ const Suspension: React.FC<Props> = ({ navigation, arg1, arg2, arg3 }) => {
 
         {permanent && <Text style={susp.text}>
           Your account has been permanently suspended for violating our
-          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { Component: Terms, Props: ["Terms Of Service"] })}>
             <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
           </Pressable>   
         </Text>}
 
         {permanent=== false && <Text style={susp.text}>
           Your account has been temporarily suspended {expires !== "" && <Text>until {expires}</Text>} for violating our 
-          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+          <Pressable style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 5 }} onPress={() => navigation.navigate("FullscreenModal", { Component: Terms, Props: ["Terms Of Service"] })}>
             <Text style={{ fontSize: 13, textDecorationLine: 'underline', top: 3, right: 2, color: 'rgba(50, 50, 50, 1)'  }}>Terms Of Service. </Text>
           </Pressable>
           Repeat violations will result in longer suspensions.

@@ -126,7 +126,7 @@ const VerifyMFA: React.FC<Props> = ({ contact, contactType, navigation, navigate
                 <View style={{ flex: 0.65 }}>
                     
                     <View style={auth.notificationWrapper}>
-                        {displayError && <ErrorNotification message={errorMessage} />}
+                        {displayError && <ErrorNotification message={errorMessage} color={'rgb(245, 245, 245)'} />}
                     </View>
 
                     <View style={auth.inputWrapper}>

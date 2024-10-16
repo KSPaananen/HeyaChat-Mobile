@@ -42,11 +42,11 @@ export type RootStackParams = {
     loggedIn: boolean
   }
   FullscreenModal: {
-    param?: any
+    Props?: any[]
     Component: React.ComponentType<any>
   }
   LargeModal: {
-    param?: any
+    Props?: any[]
     Component: React.ComponentType<any>
   }
   MediumModal: {
@@ -54,7 +54,7 @@ export type RootStackParams = {
     Component: React.ComponentType<any>
   }
   SmallModal: {
-    param?: any
+    Props?: any[]
     Component: React.ComponentType<any>
   }
   PopupNotification: {

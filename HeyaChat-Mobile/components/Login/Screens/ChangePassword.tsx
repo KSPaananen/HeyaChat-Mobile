@@ -147,7 +147,7 @@ const ChangePassword: React.FC<Props> = ({ navigation, navigateToLogin }) => {
 
             <View style={{ flex: 0.75 }}>
                 <View style={auth.notificationWrapper}>
-                    {displayError && <ErrorNotification message={errorMessage} />}
+                    {displayError && <ErrorNotification message={errorMessage} color={'rgb(245, 245, 245)'} />}
                 </View>
                 <View style={auth.inputWrapper}>
                     <TextInput 

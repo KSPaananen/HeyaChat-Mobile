@@ -339,7 +339,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>I have read and agree to the</Text>
-                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "Terms of service", Component: Terms })}>
+                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { Component: Terms, Props: ["Terms Of Service"] })}>
                     <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>Terms Of Service</Text>
                 </Pressable>
             </View>
@@ -353,7 +353,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
                     />
                 </Pressable>
                 <Text style={auth.checkboxText}>I have read and agree to the</Text>
-                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { param: "End User License Agreement", Component: EULA })}>
+                <Pressable style={auth.checkboxTextBtn} onPress={() => navigation.navigate("FullscreenModal", { Component: EULA, Props: ["End User License Agreement"] })}>
                     <Text style={{ ...auth.checkboxText, ...{ color: 'rgba(50, 225, 225, 1)' } }}>EULA</Text>
                 </Pressable>
             </View>
