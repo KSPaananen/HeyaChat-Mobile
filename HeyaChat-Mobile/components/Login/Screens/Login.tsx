@@ -12,6 +12,7 @@ import Suspension from '../ModalContent/Suspensions/Suspension'
 
 interface Props {
     setContact: any
+    setBlurredContact: any
     setContactType: any
     navigation: any
     navigateToRecovery: () => void // Navigate to recovery page
@@ -20,7 +21,7 @@ interface Props {
     navigateToEmailVerifying: () => void // Navigate to email verifying screen
 }
 
-const Login: React.FC<Props> = ({ setContact, setContactType, navigation, navigateToRecovery, navigateToRegistering, navigateToMfaVerifying, navigateToEmailVerifying }) => {
+const Login: React.FC<Props> = ({ setContact, setBlurredContact, setContactType, navigation, navigateToRecovery, navigateToRegistering, navigateToMfaVerifying, navigateToEmailVerifying }) => {
     // Fields/buttons
     const [loginField, setLoginField] = useState<string>("")
     const [passwordField, setPasswordField] = useState<string>("")
@@ -63,7 +64,6 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
         }
 
         setProcessing(false)
-
         // Response body structure
         // Contact: ""
         // Suspension: {
@@ -75,9 +75,9 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
         //    Details: ""
         // }
         let jsonBody: LoginDTO = await response.json()
-        let contact = jsonBody.Contact
-        let code = jsonBody.Details?.Code
-
+        let contact = jsonBody.contact
+        let code = jsonBody.details?.code
+        
         let storageService = new StorageService()
 
         // setContact and setContactType are for displaying users blurred details in other screens if they're required
@@ -96,7 +96,10 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
                       )
                     break
                 case 1273:
-                    setContact(contact)
+                    // Set actual username or email to this for re-requesting codes
+                    setContact(loginField)
+                    // Response will include a censored version of users email
+                    setBlurredContact(contact)
                     setContactType("email")
                     navigateToEmailVerifying()
                     break
@@ -106,11 +109,13 @@ const Login: React.FC<Props> = ({ setContact, setContactType, navigation, naviga
             await storageService.StoreValue("staysignedin", String(staySignedIn))
             switch (code) {
                 case 1270:
-                    setContact(contact)
+                    setContact(loginField)
+                    setBlurredContact(contact)
                     setContactType("phone")
                     break
                 case 1271:
-                    setContact(contact)
+                    setContact(loginField)
+                    setBlurredContact(contact)
                     setContactType("email")
                     break
             }

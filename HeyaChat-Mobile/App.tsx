@@ -75,7 +75,7 @@ const App = () => {
     const storageService = new StorageService()
     const deviceService = new DeviceService()
     const apiService = new AuthorizationAPI()
-
+    
     // Store basic information about device into application storage
     const HandleDeviceInformation = async () => {
       await deviceService.SetDevicesBasicInformation()

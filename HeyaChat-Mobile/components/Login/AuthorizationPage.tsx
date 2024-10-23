@@ -31,6 +31,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
     // Passable variables
     const [contact, setContact] = useState<string>("")
+    const [blurredContact, setBlurredContact] = useState<string>("")
     const [contactType, setContactType] = useState<string>("")
 
     // Animation
@@ -81,6 +82,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
     return (
         <View style={auth.container} onLayout={OnLayout}>
+
           <LinearGradient
             colors={['rgb(72, 35, 195)', 'rgb(63, 118, 198)', 'rgb(55, 200, 200)']}
             style={auth.background}
@@ -88,10 +90,12 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 0 }}
           />
+          
             <View style={auth.wrapper}>
 
                 {loginPage && <Login 
                   setContact={setContact}
+                  setBlurredContact={setBlurredContact}
                   setContactType={setContactType}
                   navigation={navigation}
                   navigateToRecovery={() => {setLoginPage(false); setRecoveryPage(true)}} // Navigate to account recovery 
@@ -109,6 +113,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
                 {recoveryPage && <Recovery 
                   setContact={setContact}
+                  setBlurredContact={setBlurredContact}
                   setContactType={setContactType}
                   navigateToCodeVerifying={() => {setRecoveryPage(false); setVerifyCodePage(true)}} // Navigate to code verifying screen
                   navigateToLogin={() => {setRecoveryPage(false); setLoginPage(true)}} // Return to login screen
@@ -121,6 +126,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
                 {verifyMFAPage && <VerifyMFA
                   contact={contact}
+                  blurredContact={blurredContact}
                   contactType={contactType}
                   navigation={navigation}
                   navigateToLogin={() => {setVerifyMFAPage(false); setLoginPage(true)}}
@@ -131,6 +137,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
                 {verifyEmailPage && <VerifyEmail
                   contact={contact}
+                  blurredContact={blurredContact}
                   navigation={navigation}
                   navigateToLogin={() => {setVerifyEmailPage(false); setLoginPage(true)}}
                   requestCodeCoolDown={requestCodeCoolDown} // Boolean for displaying cooldown
@@ -140,6 +147,7 @@ const AuthorizationPage: React.FC<Props> = ({ navigation }) => {
 
                 {verifyCodePage && <VerifyCode
                   contact={contact}
+                  blurredContact={blurredContact}
                   contactType={contactType}
                   navigation={navigation}
                   navigateToPasswordChange={() => {setVerifyCodePage(false); setChangePasswordPage(true)}}

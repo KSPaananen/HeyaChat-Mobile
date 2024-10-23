@@ -1,5 +1,5 @@
 class DetailsDTO {
-    Code: number = 0
+    code: number = 0
 
-    Details: string | null = null
+    details: string | null = null
 }

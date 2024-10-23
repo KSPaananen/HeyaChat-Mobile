@@ -98,7 +98,7 @@ const ChangePassword: React.FC<Props> = ({ navigation, navigateToLogin }) => {
             // Code: 0,
             // Details: ""
             let jsonBody: DetailsDTO = await response.json()
-            let code = jsonBody.Code
+            let code = jsonBody.code
 
             if (response.status === 201) {
                 switch (code) {

@@ -112,6 +112,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
 
     const onSubmit = async () => {
         // Hide all errors on submit
+        setDisplayGeneralError(false)
         setDisplayUsernameError(false)
         setDisplayEmailError(false)
         setDisplayPasswordError(false)
@@ -180,7 +181,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             // Code: 0,
             // Details: ""
             let jsonBody: DetailsDTO = await response.json()
-            let code = jsonBody.Code
+            let code = jsonBody.code
 
             if (response.status === 201) {
                 switch (code) {
@@ -244,8 +245,8 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
         <View style={{ ...auth.body, ...{ height: "75%" }}}>
             
             <View style={auth.notificationWrapper}>
-                {displayGeneralError && <ErrorNotification message={generalError} />}
-                {displayUsernameError && <ErrorNotification message={usernameError} />}
+                {displayGeneralError && <ErrorNotification message={generalError} color={'rgb(245, 245, 245)'} />}
+                {displayUsernameError && <ErrorNotification message={usernameError} color={'rgb(245, 245, 245)'} />}
             </View>
             
             <View style={auth.inputWrapper}>
@@ -265,7 +266,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             </View>
 
             <View style={auth.notificationWrapper}>
-                {displayEmailError && <ErrorNotification message={emailError} />}
+                {displayEmailError && <ErrorNotification message={emailError} color={'rgb(245, 245, 245)'} />}
             </View>
             
             <View style={auth.inputWrapper}>
@@ -289,7 +290,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             </View>
 
             <View style={auth.notificationWrapper}>
-                {displayPasswordError && <ErrorNotification message={passwordError} />}
+                {displayPasswordError && <ErrorNotification message={passwordError} color={'rgb(245, 245, 245)'} />}
             </View>
             
             <View style={auth.inputWrapper}>

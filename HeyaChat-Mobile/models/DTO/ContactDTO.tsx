@@ -1,5 +1,5 @@
 class ContactDTO {
-    Contact: string | null = null
+    contact: string | null = null
 
-    Details: DetailsDTO | null = null
+    details: DetailsDTO | null = null
 }

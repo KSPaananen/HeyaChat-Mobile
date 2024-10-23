@@ -33,7 +33,7 @@ export class AuthorizationAPI {
                     Username: username,
                     Password: password,
                     Email: email,
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -83,7 +83,7 @@ export class AuthorizationAPI {
                     Login: login,
                     Password: password,
                     BiometricsKey: biometricsKey ?? "",
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -135,12 +135,12 @@ export class AuthorizationAPI {
             const req = new Request(baseUri + "/Authorization/LogOut", {
                 method: "POST",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -183,14 +183,14 @@ export class AuthorizationAPI {
         
             // Create request
             const req = new Request(baseUri + "/Authorization/PingBackend", {
-                method: "GET",
+                method: "POST",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -226,7 +226,7 @@ export class AuthorizationAPI {
 
             let parsedDevice = JSON.parse(device) as UserDevice
             let baseUri = await GetBaseUri()
-
+            
             const storageService = new StorageService()
             let token = await storageService.ReadValue("jsonwebtoken")
             
@@ -237,21 +237,21 @@ export class AuthorizationAPI {
             const req = new Request(baseUri + "/Verification/VerifyEmail", {
                 method: "POST",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     Code: code,
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
-
+            console.log(req)
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
             const res = await fetch(req)
-
+            
             return res
         } catch (e) {
             console.log(e)
@@ -259,7 +259,7 @@ export class AuthorizationAPI {
         }
     }
 
-    VerifyCode = async (code: string): Promise<Response | null> => {
+    VerifyCode = async (code: string, email: string): Promise<Response | null> => {
         try {
             // Read device information from storage
             let device = await this.StorageService.ReadObject("userdevice")
@@ -280,7 +280,8 @@ export class AuthorizationAPI {
                 },
                 body: JSON.stringify({
                     Code: code,
-                    UserDevice: parsedDevice
+                    Email: email,
+                    Device: parsedDevice
                 })
             })
 
@@ -297,7 +298,7 @@ export class AuthorizationAPI {
                     this.StorageService.StoreValue("jsonwebtoken", token)
                 }
             }
-
+            
             return res
         } catch (e) {
             console.log(e)
@@ -305,7 +306,7 @@ export class AuthorizationAPI {
         }
     }
 
-    VerifyMFA = async (code: string): Promise<Response | null> => {
+    VerifyMFA = async (code: string, email: string): Promise<Response | null> => {
         try {
             // Read device information from storage
             let device = await this.StorageService.ReadObject("userdevice")
@@ -326,7 +327,8 @@ export class AuthorizationAPI {
                 },
                 body: JSON.stringify({
                     Code: code,
-                    UserDevice: parsedDevice
+                    Email: email,
+                    Device: parsedDevice
                 })
             })
 
@@ -351,7 +353,7 @@ export class AuthorizationAPI {
         }
     }
 
-    Recover = async (email: string): Promise<Response | null> => {
+    Recover = async (contact: string): Promise<Response | null> => {
         try {
             // Read device information from storage
             let device = await this.StorageService.ReadObject("userdevice")
@@ -371,13 +373,13 @@ export class AuthorizationAPI {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    Email: email,
-                    UserDevice: parsedDevice
+                    Contact: contact,
+                    Device: parsedDevice
                 })
             })
 
-            // 200: Login matched a user. Code sent
-            // 404: User matching login couldnt be found
+            // 200: Contact matched a user. Code sent
+            // 404: User matching contact couldnt be found
             // 500: Internal server error
             const res = await fetch(req)
 
@@ -385,6 +387,43 @@ export class AuthorizationAPI {
         } catch (e) {
             console.log(e)
             throw new Error("ERROR: Unable to post to backend in AuthorizationAPI: Recover()");
+        }
+    }
+
+    RequestNewCode = async (contact: string): Promise<Response | null> => {
+        try {
+            // Read device information from storage
+            let device = await this.StorageService.ReadObject("userdevice")
+            
+            if (device === null) {
+                // Figure out something here as to not soft lock the user
+                throw new Error("ERROR: Couldn't read userdevice from storage in AuthorizationAPI: RequestNewCode()")
+            }
+
+            let parsedDevice = JSON.parse(device) as UserDevice
+            let baseUri = await GetBaseUri()
+
+            const req = new Request(baseUri + "/Recovery/RequestNewCode", {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    Contact: contact,
+                    Device: parsedDevice
+                })
+            })
+
+            // 200: New code sent
+            // 404: User matching contact couldnt be found
+            // 500: Internal server error
+            const res = await fetch(req)
+
+            return res
+        } catch (e) {
+            console.log(e)
+            throw new Error("ERROR: Unable to post to backend in AuthorizationAPI: RequestNewCode()");
         }
     }
 
@@ -411,14 +450,14 @@ export class AuthorizationAPI {
             const req = new Request(baseUri + "/Account/ChangePassword", {
                 method: "POST",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     Password: newPassword,
                     PasswordRepeat: newPasswordRepeat,
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -459,12 +498,12 @@ export class AuthorizationAPI {
             const req = new Request(baseUri + "/Account/RequestDelete", {
                 method: "DELETE",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -503,12 +542,12 @@ export class AuthorizationAPI {
             const req = new Request(baseUri + "/Account/UndoRequestDelete", {
                 method: "DELETE",
                 headers: {
-                    "Authorization": token,
+                    "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    UserDevice: parsedDevice
+                    Device: parsedDevice
                 })
             })
 
@@ -549,31 +588,31 @@ const GetBaseUri = async (): Promise<string | null> => {
     // Set api baseurl based on users continent
     switch (continent) {
         case "europe":
-            return "http://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "north-america-east":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "north-america-west":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "south-america":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "middle-east":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "asia":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         case "oceania":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break;
         case "africa":
-            return "https://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
         default:    // Default to europe if user doesn't have continent assigned yet
-            return "http://10.0.2.2:55024/api"
+            return "https://heyachat-authorization20241021134752.azurewebsites.net/api"
             break
     }
 

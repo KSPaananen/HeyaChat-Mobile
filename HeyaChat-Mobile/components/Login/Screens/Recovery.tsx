@@ -10,12 +10,13 @@ import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     setContact: any
+    setBlurredContact: any
     setContactType: any
     navigateToCodeVerifying: () => void // Navigate to verification screen
     navigateToLogin: () => void // Return to login screen
 }
 
-const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeVerifying, navigateToLogin }) => {
+const Recovery: React.FC<Props> = ({ setContact, setBlurredContact, setContactType, navigateToCodeVerifying, navigateToLogin }) => {
     // Fields
     const [emailField, setEmailField] = useState<string>("")
 
@@ -35,10 +36,10 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
             return true
           }
     
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+          BackHandler.addEventListener('hardwareBackPress', onBackPress)
     
           // Remove eventlistener when backpress is executed
-          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
         }, [])
     )
 
@@ -82,13 +83,15 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
             switch (code) {
                 case 1070:
                     setContactType("email")
-                    break;
+                    break
                 case 1071:
                     setContactType("phone")
-                    break;
+                    break
             }
-            // Set contact string from response body and navigate to code verifying
-            setContact(contact)
+            // Set contact from emailField so we can re-request later
+            setContact(emailField)
+            // Set contact from api response to blurred contact. This can either be a censored phone number or email
+            setBlurredContact(contact)
             navigateToCodeVerifying()
         } else if (response.status === 404) {
             switch (code) {
@@ -97,7 +100,7 @@ const Recovery: React.FC<Props> = ({ setContact, setContactType, navigateToCodeV
                         setErrorMessage("User matching login couldn't be found")
                         setDisplayError(true)
                     }, 500)
-                    break;
+                    break
             }
         } else {
             setTimeout(() => {

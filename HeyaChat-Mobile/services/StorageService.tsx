@@ -1,5 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
-import { ClassType } from 'react';
+import * as SecureStore from 'expo-secure-store'
 
 // Use Sqlite for the following:
 // - Messages

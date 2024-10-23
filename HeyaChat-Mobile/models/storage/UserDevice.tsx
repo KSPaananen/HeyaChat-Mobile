@@ -7,5 +7,5 @@ class UserDevice {
 
     DeviceIdentifier: string | number[] = ""// Guid
 
-    CountryCode: string | null = null   // Max length 3
+    CountryCode: string | null = null  // Max length 3
 }

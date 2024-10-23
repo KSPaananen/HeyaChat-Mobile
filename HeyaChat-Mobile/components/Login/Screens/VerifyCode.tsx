@@ -10,6 +10,7 @@ import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     contact: string
+    blurredContact: any
     contactType: string
     navigation: any
     navigateToPasswordChange: () => void
@@ -19,7 +20,7 @@ interface Props {
     setCoolDown: Function // Method call for starting countdown and disabling further requests for a set time
 }
 
-const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigateToPasswordChange, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
+const VerifyCode: React.FC<Props> = ({ contact, blurredContact, contactType, navigation, navigateToPasswordChange, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
     const [codeField, setCodeField] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
@@ -40,11 +41,59 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
         }, [])
     )
 
-    const requestCode = () => {
+    const RequestCode = async (userContact: string) => {
         // Set code requesting on cooldown to prevent spam
         setCoolDown(true)
 
-        // Request a new code
+        // Reset displayable errors
+        setDisplayError(false)
+
+        // Set processing to true
+        // After we get a response, set it to false
+        setProcessing(true)
+
+        let response: any
+
+        try {
+            let api = new AuthorizationAPI()
+            response = await api.RequestNewCode(userContact)
+        } catch {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
+            setProcessing(false)
+            return
+        }
+
+        setProcessing(false)
+        
+        // Response body structure
+        // Contact: ""
+        // Details: {
+        //    Code: 0
+        //    Details: ""
+        // }
+        let jsonBody:DetailsDTO = await response.json()
+        let code = jsonBody.code
+
+        if (response.status === 200) {
+            // Do nothing, user should be checking his email/texts by now
+        } else if (response.status === 404) {
+            switch (code) {
+                case 2130:
+                    setTimeout(() => {
+                        setErrorMessage("User matching contact couldn't be found")
+                        setDisplayError(true)
+                    }, 500)
+                    break
+            }
+        } else {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
+        }
     }
 
     const onSubmit = async () => {
@@ -59,7 +108,7 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
 
         try {
             let api = new AuthorizationAPI()
-            response = await api.VerifyCode(codeField)
+            response = await api.VerifyCode(codeField, contact)
         } catch {
             setTimeout(() => {
                 setErrorMessage("Something went wrong :(")
@@ -76,7 +125,7 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
         // Details: ""
 
         let jsonBody: DetailsDTO = await response.json()
-        let code = jsonBody.Code
+        let code = jsonBody.code
 
         if (response.status == 200) {
             switch (code) {
@@ -114,8 +163,8 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
 
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
                     <Text style={auth.description}>Please enter the verification code we have sent to your 
-                        {contactType === "email" && <Text style={auth.description}> email address {contact}</Text>}
-                        {contactType === "phone" && <Text style={auth.description}> phone number {contact}</Text>}
+                        {contactType === "email" && <Text style={auth.description}> email address {blurredContact}</Text>}
+                        {contactType === "phone" && <Text style={auth.description}> phone number {blurredContact}</Text>}
                     </Text>
                 </View>
 
@@ -149,7 +198,7 @@ const VerifyCode: React.FC<Props> = ({ contact, contactType, navigation, navigat
                     </View>
 
                     <View style={auth.secondaryBtnWrapper}>
-                        <Pressable style={auth.secondaryBtn} onPress={() => requestCode()} disabled={requestCodeCoolDown}>
+                        <Pressable style={auth.secondaryBtn} onPress={() => RequestCode(contact)} disabled={requestCodeCoolDown}>
                             <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'rgba(50, 225, 225, 1)'  }} : { ...auth.secondaryBtnDisabledText }}>Request </Text>a new one</Text>
                             {requestCodeCoolDown && <Text style={auth.secondaryBtnText}>Next request avaible in {countDown}</Text>}
                         </Pressable>

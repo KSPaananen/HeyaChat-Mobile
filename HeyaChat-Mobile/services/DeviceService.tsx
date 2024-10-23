@@ -14,19 +14,21 @@ export class DeviceService {
     SetDevicesBasicInformation = async () => {
          // Get devices location with geography api or assume based on localization
          const req = new Request("http://ip-api.com/json/?fields=countryCode", {
-            method: "GET"
+            method: "POST"
         })
 
         let regionCode: string = ""
-
+        
         try {
             // fetch from api
             const res = await fetch(req)
-
+            
             if (res.status === 200) { // On succesful api response get region code from response body
                 let data = await res.json()
 
-                regionCode = data.regionCode
+                if (data !== undefined && data !== null) {
+                    regionCode = data.countryCode
+                }
             } else { // Get region code with devices localization. Better than nothing
                 let locales = Localization.getLocales()
 
@@ -34,7 +36,7 @@ export class DeviceService {
                     regionCode = locales[0].regionCode
                 }
             }
-
+            
             // Set continent to storage
             if (europeanCountryTags.indexOf(regionCode) > -1) {
                 this.StorageService.StoreValue("continent", "europe")
@@ -71,7 +73,7 @@ export class DeviceService {
             let newDevice: UserDevice = {
                 DeviceName: `${Device.brand} ${Device.deviceName}`,
                 DeviceIdentifier: uuid.v4(),
-                CountryCode: regionCode
+                CountryCode: regionCode ?? ""
             }
 
             this.StorageService.StoreObject("userdevice", newDevice)

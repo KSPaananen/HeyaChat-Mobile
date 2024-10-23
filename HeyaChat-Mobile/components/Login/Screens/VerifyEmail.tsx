@@ -11,6 +11,7 @@ import ErrorNotification from '../../Reusables/Notifications/ErrorNotification'
 
 interface Props {
     contact: string
+    blurredContact: string
     navigation: any
     navigateToLogin: () => void
     requestCodeCoolDown: boolean // Boolean for displaying cooldown
@@ -18,7 +19,7 @@ interface Props {
     setCoolDown: Function // Method call for starting countdown and disabling further requests for a set time
 }
 
-const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
+const VerifyEmail: React.FC<Props> = ({ contact, blurredContact, navigation, navigateToLogin, requestCodeCoolDown, countDown, setCoolDown }) => {
     const [codeField, setCodeField] = useState<string>("")
     const [displayError, setDisplayError] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>("")
@@ -32,16 +33,66 @@ const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, re
             return true
           }
     
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+          BackHandler.addEventListener('hardwareBackPress', onBackPress)
     
           // Remove eventlistener when backpress is executed
-          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
         }, [])
     )
 
-    const requestCode = () => {
+    const RequestCode = async (userContact: string) => {
         // Set code requesting on cooldown to prevent spam
         setCoolDown(true)
+
+        // Reset displayable errors
+        setDisplayError(false)
+
+        // Set processing to true
+        // After we get a response, set it to false
+        setProcessing(true)
+
+        let response: any
+
+        try {
+            let api = new AuthorizationAPI()
+            response = await api.RequestNewCode(userContact)
+        } catch {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
+            setProcessing(false)
+            return
+        }
+
+        setProcessing(false)
+        
+        // Response body structure
+        // Contact: ""
+        // Details: {
+        //    Code: 0
+        //    Details: ""
+        // }
+        let jsonBody:DetailsDTO = await response.json()
+        let code = jsonBody.Code
+
+        if (response.status === 200) {
+            // Do nothing, user should be checking his email/texts by now
+        } else if (response.status === 404) {
+            switch (code) {
+                case 2130:
+                    setTimeout(() => {
+                        setErrorMessage("User matching contact couldn't be found")
+                        setDisplayError(true)
+                    }, 500)
+                    break
+            }
+        } else {
+            setTimeout(() => {
+                setErrorMessage("Something went wrong :(")
+                setDisplayError(true)
+            }, 500)
+        }
     }
 
     const onSubmit = async () => {
@@ -53,7 +104,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, re
         setProcessing(true)
 
         let response: any
-
+        
         try {
             let api = new AuthorizationAPI()
             response = await api.VerifyEmail(codeField)
@@ -72,7 +123,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, re
         // Code: 0,
         // Details: ""
         let jsonBody: DetailsDTO = await response.json()
-        let code = jsonBody.Code
+        let code = jsonBody.code
 
         if (response.status === 200) {
             switch (code) {
@@ -115,7 +166,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, re
 
             <View style={{ ...auth.body, ...{ height: "67%" } }}>
                 <View style={{ flex: 0.35, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 10 }}>
-                    <Text style={auth.description}>Please enter the verification code we have sent to your email address {contact}</Text>
+                    <Text style={auth.description}>Please enter the verification code we have sent to your email address {blurredContact}</Text>
                 </View>
                 <View style={{ flex: 0.65 }}>
                     
@@ -146,7 +197,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, navigation, navigateToLogin, re
                         </Pressable>
                     </View>
                     <View style={auth.secondaryBtnWrapper}>
-                        <Pressable style={auth.secondaryBtn} onPress={() => requestCode()} disabled={requestCodeCoolDown}>
+                        <Pressable style={auth.secondaryBtn} onPress={() => RequestCode(contact)} disabled={requestCodeCoolDown}>
                         <Text style={!requestCodeCoolDown ? auth.secondaryBtnText : auth.secondaryBtnDisabledText}>Didn't receive your code? <Text style={!requestCodeCoolDown ? { ...auth.secondaryBtnText, ...{ color: 'rgba(50, 225, 225, 1)'  }} : { ...auth.secondaryBtnDisabledText }}>Request </Text>a new one</Text>
                             {requestCodeCoolDown && <Text style={auth.secondaryBtnDisabledText}>Next request avaible in {countDown}</Text>}
                         </Pressable>

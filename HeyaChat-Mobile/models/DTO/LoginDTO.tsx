@@ -1,7 +1,7 @@
 class LoginDTO {
-    Contact: string | null = null
+    contact: string | null = null
 
-    Suspension: SuspensionDTO | null = null
+    suspension: SuspensionDTO | null = null
 
-    Details: DetailsDTO | null = null
+    details: DetailsDTO | null = null
 }

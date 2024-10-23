@@ -1,5 +1,5 @@
 class SuspensionDTO {
-    Reason: string | null = null
+    reason: string | null = null
 
-    Expires: string | null = null
+    expires: string | null = null
 }
