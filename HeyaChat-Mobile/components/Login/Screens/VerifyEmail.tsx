@@ -74,7 +74,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, blurredContact, navigation, nav
         //    Details: ""
         // }
         let jsonBody:DetailsDTO = await response.json()
-        let code = jsonBody.Code
+        let code = jsonBody.code
 
         if (response.status === 200) {
             // Do nothing, user should be checking his email/texts by now

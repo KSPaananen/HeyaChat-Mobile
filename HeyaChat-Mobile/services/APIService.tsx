@@ -246,7 +246,7 @@ export class AuthorizationAPI {
                     Device: parsedDevice
                 })
             })
-            console.log(req)
+            
             // 200: Code verified
             // 404: Code expired or doesnt belong to user
             // 500: Internal server error
