@@ -159,7 +159,7 @@ const VerifyEmail: React.FC<Props> = ({ contact, blurredContact, navigation, nav
 
             <View style={{ ...auth.head, ...{ height: "23%"} }}>
                 <View style={auth.titleWrapper}>
-                    <Text style={auth.title}>Email verification</Text>
+                    <Text testID="verifyEmailTitle" style={auth.title}>Email verification</Text>
                     <Text style={auth.title}>required</Text>
                 </View>
             </View>

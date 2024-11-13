@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, View, ScrollView,Pressable, TouchableOpacity, Image } from 'react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../../NavigationStacks/MessengerNavStack'
@@ -45,12 +45,38 @@ const ChatPage: React.FC<Props> = ({ route, navigation }) => {
       contentContainerStyle={{ justifyContent: 'flex-end' }} 
       keyboardDismissMode="on-drag"
       >
-        {/* Add marginBottom: 65 to the last MessageCard */}
         {<MessageCard 
           messageId={0}
           messageType="sent"
           chatType="direct"
           message="Sent direct message"
+          onPress={(value: number) => onPress(value)}
+          onHold={(value: number) => onHold(value)}
+        />}
+
+        {<MessageCard 
+          messageId={0}
+          messageType="received"
+          chatType="direct"
+          message="Received direct message"
+          onPress={(value: number) => onPress(value)}
+          onHold={(value: number) => onHold(value)}
+        />}
+
+        {<MessageCard 
+          messageId={0}
+          messageType="sent"
+          chatType="group"
+          message="Sent group message"
+          onPress={(value: number) => onPress(value)}
+          onHold={(value: number) => onHold(value)}
+        />}
+
+        {<MessageCard 
+          messageId={0}
+          messageType="received"
+          chatType="group"
+          message="Received group message"
           onPress={(value: number) => onPress(value)}
           onHold={(value: number) => onHold(value)}
         />}
@@ -84,7 +110,7 @@ export default ChatPage
 export const messager = StyleSheet.create({
   container: {
     flex: 1,
-    
+    backgroundColor: 'rgb(245, 245, 245)'
   },
   body: {
     marginBottom: 0

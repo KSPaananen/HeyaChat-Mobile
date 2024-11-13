@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 type Props = {
   param?: number
@@ -8,7 +8,7 @@ type Props = {
 const LiteUserDetails: React.FC<Props> = ({ param, navigation }) => {
 
   return (
-    <View>
+    <View style={userDetails.container}>
         <Text>userId: {param}</Text>
         <Text>Lite version of user details modal</Text>
     </View>
@@ -16,3 +16,12 @@ const LiteUserDetails: React.FC<Props> = ({ param, navigation }) => {
 }
 
 export default LiteUserDetails
+
+export const userDetails = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: 'rgb(245, 245, 245)'
+  }
+})

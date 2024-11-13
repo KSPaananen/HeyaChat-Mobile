@@ -1,4 +1,4 @@
-import * as Device from 'expo-device';
+import * as Device from 'expo-device'
 import * as Localization from 'expo-localization'
 import uuid from 'react-native-uuid'
 import { StorageService } from './StorageService'
@@ -62,7 +62,7 @@ export class DeviceService {
         // Check if device data has already been saved
         let foundDevice = await this.StorageService.ReadObject("userdevice")
         
-        if (foundDevice !== null && foundDevice !== "") { // Update other details except DeviceIdentifer
+        if (foundDevice !== null && foundDevice !== "" && foundDevice !== undefined) { // Update other details except DeviceIdentifer
             let parsedFoundDev = JSON.parse(foundDevice) as UserDevice
             
             parsedFoundDev.DeviceName = `${Device.brand} ${Device.deviceName}`
@@ -89,22 +89,22 @@ const europeanCountryTags: string[] = [
     'GE', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'XK', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 
     'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH','TR', 
     'UA', 'GB', 'VA'  
-];
+]
 
 const northAmericanCountryCodes: string[] = [
     'AG', 'BS', 'BB', 'BZ', 'CA', 'CR', 'CU', 'DM', 'DO', 'GD', 'HT', "FK", "GF",
     'JM', 'KN', 'LC', 'VC', 'PA', 'TT', 'GT', 'HN', 'MX', 'NI', 'SV', 'US', "GL", 
     "BM", "PM", "PR", "GP", "MQ", "AW", "SX", "BL", "KY", "VG", "TC", "MS"
-];
+]
 
 const southAmericanCountryCodes: string[] = [
     'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE'
-];
+]
 
 const middleEasternCountryCodes: string[] = [
     'BH', 'CY', 'EG', 'IR', 'IQ', 'IL', 'JO', 'KW', 'LB', 'OM', 'PS', 'QA', 'SA', 'SY', 
     'TR', 'AE', 'YE'
-];
+]
 
 const africanCountryCodes: string[] = [
     'DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CV', 'CM', 'CF', 'TD', 'KM', 'CG', 'CD', 
@@ -112,15 +112,15 @@ const africanCountryCodes: string[] = [
     'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'MA', 'MZ', 'NA', 'NE', 'NG', 
     'RW', 'ST', 'SN', 'SC', 'SL', 'SO', 'ZA', 'SS', 'SD', 'TZ', 'TG', 'TN', 'UG', 
     'ZM', 'ZW', "SH", "YT", "RE", "EH"
-];
+]
 
 const asianCountryCodes: string[] = [
     'AF', 'BD', 'BT', 'BN', 'KH', 'CN', 'IN', 'ID', 'JP', 'KP', 
     'KR', 'KG', 'LA', 'MY', 'MV', 'MN', 'MM', 'NP', 'PK', 'PH', 'SG', 'LK', 'TJ', 
     'TH', 'TL', 'TM', 'UZ', 'VN'
-];
+]
 
 const oceanianCountryCodes: string[] = [
     'AU', 'FJ', 'KI', 'MH', 'FM', 'NR', 'NZ', 'PW', 'PG', 'WS', 'SB', 'TO', 'TV', 'VU',
     "NC", "PF", "WF", "MP", "AS", "GU"
-];
+]

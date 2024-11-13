@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Octicons } from '@expo/vector-icons'
 
 import HomeNavStack from '../NavigationStacks/HomeNavStack'
 import MessengerNavStack from './MessengerNavStack'
@@ -20,12 +21,28 @@ const AppBottomTabNavStack = () => {
         headerShown: false,
       }}
       >
-        <Tab.Screen name="Home" component={HomeNavStack} />
-        <Tab.Screen name="Messenger" component={MessengerNavStack} options={{ 
-          tabBarBadge: 1 
+        <Tab.Screen name="Home" component={HomeNavStack} options={{ 
+          tabBarLabel: 'Messenger',
+          tabBarIcon: () => (
+            <Octicons name="home" size={20} color="rgb(63, 118, 198)" />
+          ),
           }}
         />
-        <Tab.Screen name="Profile" component={ProfileNavStack} />
+        <Tab.Screen name="Messenger" component={MessengerNavStack} options={{ 
+          tabBarBadge: 1,
+          tabBarLabel: 'Messenger',
+          tabBarIcon: () => (
+            <Octicons name="comment" size={20} color="rgb(63, 118, 198)" />
+          ),
+          }}
+        />
+        <Tab.Screen name="Profile" component={ProfileNavStack} options={{ 
+          tabBarLabel: 'Messenger',
+          tabBarIcon: () => (
+            <Octicons name="person" size={20} color="rgb(63, 118, 198)" />
+          ),
+          }}
+        />
       </Tab.Navigator>
     )
 }

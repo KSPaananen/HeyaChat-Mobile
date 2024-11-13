@@ -20,7 +20,7 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
   }
 
   return (
-    <View>
+    <View style={search.container}>
       {!layer && <View>
         <View style={search.header}>
           <Text style={search.title}>Search results for {param}</Text>
@@ -51,6 +51,11 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
 export default Search
 
 export const search = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderRadius: 15,
+    backgroundColor: 'rgb(245, 245, 245)'
+  },
   header: {
     marginTop: 10,
     marginRight: 5,

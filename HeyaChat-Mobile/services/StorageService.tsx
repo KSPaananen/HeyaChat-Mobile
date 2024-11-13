@@ -20,18 +20,18 @@ export class StorageService {
             await SecureStore.setItemAsync(key, value)
         } catch (e) {
             console.log(e)
-            throw new Error("ERROR: Unable to store value in StorageService: StoreValue()");
+            throw new Error("ERROR: Unable to store value in StorageService: StoreValue()")
         }
     }
 
     StoreObject = async (key: string, object: any): Promise<void> => {
         try {
             let jsonString = JSON.stringify(object)
-    
+            
             await SecureStore.setItemAsync(key, jsonString)
         } catch (e) {
             console.log(e)
-            throw new Error("ERROR: Unable to store object in StorageService: StoreObject()");
+            throw new Error("ERROR: Unable to store object in StorageService: StoreObject()")
         }
     }
 
@@ -46,7 +46,7 @@ export class StorageService {
             return null
         } catch (e) {   
             console.log(e)
-            throw new Error("ERROR: Unable to read value in StorageService: ReadValue()");
+            throw new Error("ERROR: Unable to read value in StorageService: ReadValue()")
         }
     }
 
@@ -55,7 +55,7 @@ export class StorageService {
     ReadObject = async (key: string): Promise<string | null> => {
         try {
             let result = await SecureStore.getItemAsync(key)
-
+            
             if (result !== null && result !== "") {
                 return result
             }
@@ -63,7 +63,7 @@ export class StorageService {
             return null
         } catch (e) {
             console.log(e)
-            throw new Error("ERROR: Unable to read object in StorageService: ReadObject()");
+            throw new Error("ERROR: Unable to read object in StorageService: ReadObject()")
         }
     }
 
@@ -72,7 +72,7 @@ export class StorageService {
             let result = await SecureStore.deleteItemAsync(key)
         } catch (e) {
             console.log(e)
-            throw new Error("ERROR: Unable to delete value in StorageService: Delete()");
+            throw new Error("ERROR: Unable to delete value in StorageService: Delete()")
         }
     }
 

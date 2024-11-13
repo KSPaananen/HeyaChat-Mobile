@@ -1,7 +1,6 @@
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { MessengerTopTabStackParams } from '../../NavigationStacks/MessengerTopTabNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { user } from '../../../models/sqlite/models'
 import { testUser } from '../../../models/testUser'
 
 import UserCard from './UserCard'
@@ -12,7 +11,7 @@ const UserPage: React.FC<Props> = ({ navigation }) => {
 
 
   return (
-    <View>
+    <View style={userPage.container}>
         <UserCard 
         user={testUser}
         onPress1={(value) => {
@@ -27,3 +26,10 @@ const UserPage: React.FC<Props> = ({ navigation }) => {
 }
 
 export default UserPage
+
+export const userPage = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgb(245, 245, 245)'
+  }
+})

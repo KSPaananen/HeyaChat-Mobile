@@ -26,7 +26,7 @@ const LoginNavStack: React.FC<Props> = ({ route }) => {
     // Navigate to AppBottomTabs if loggedIn is true
     if (loggedIn) {
       navigation.navigate("AppBottomTabs")
-    } 
+    }
 
     
   }, [])

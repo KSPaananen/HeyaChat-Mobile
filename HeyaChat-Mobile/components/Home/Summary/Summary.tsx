@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { testUser } from '../../../models/testUser'
 
 import SummaryCard from './SummaryCard'
 import UserDetails from '../../UserDetails/UserDetails'
-
 
 type Props = {
   navigation: any
@@ -14,7 +13,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
 
-  const usersList: users[] = []
+  const usersList = []
   usersList.push(testUser)
   usersList.push(testUser)
 
@@ -34,7 +33,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   }
 
   return (
-    <View>
+    <View style={summary.container}>
       {!layer && <ScrollView>
         <Text style={summary.title}>{titles[0]}</Text>
           {usersList.map((user, index) => (
@@ -55,12 +54,18 @@ const Summary: React.FC<Props> = ({ navigation }) => {
         />
       </ScrollView>}
     </View>
-  );
+  )
 }
 
 export default Summary
 
 export const summary = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderRadius: 15,
+    padding: 5,
+    backgroundColor: 'rgb(245, 245, 245)'
+  },
   title: {
     alignItems: 'flex-start',
     fontSize: 25,

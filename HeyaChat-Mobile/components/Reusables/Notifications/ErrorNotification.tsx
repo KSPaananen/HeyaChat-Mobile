@@ -75,7 +75,7 @@ const ErrorNotification: React.FC<Props> = ({ message, color }) => {
     return (
         <View style={error.container}>
             <View style={{ left: position }}>
-                <Text style={{ color: color }}>{message}</Text>
+                <Text testID="errorNotificationText" style={{ color: color }}>{message}</Text>
             </View>
         </View>
   )

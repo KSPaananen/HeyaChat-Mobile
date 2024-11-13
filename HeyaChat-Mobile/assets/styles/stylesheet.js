@@ -91,6 +91,7 @@ export const settings = StyleSheet.create({
   separator: {
     flex: 1,
     height: 1,
+    marginTop: 20,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',

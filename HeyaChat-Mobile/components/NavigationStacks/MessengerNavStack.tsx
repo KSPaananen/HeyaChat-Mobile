@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { View, Button, Alert } from 'react-native';
+import { useEffect, useState } from 'react'
+import { View, Button, Alert } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/core'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { TextInput } from "react-native-paper"
 import { header } from '../../assets/styles/stylesheet'
+import { Octicons } from '@expo/vector-icons'
 
 import MessengerTopTabNavStack from './MessengerTopTabNavStack'
 import ChatPage from '../Messenger/Chat/ChatPage'
@@ -51,7 +52,7 @@ const MessengerNavStack = () => {
                             mode="outlined"
                             activeOutlineColor="#0330fc"
                             placeholder="Search" 
-                            right={<TextInput.Icon icon="eye" style={header.inputIcon} />} 
+                            right={<TextInput.Icon icon={() => <Octicons name="search" size={23} color="rgb(63, 118, 198)" />} />} 
                             onSubmitEditing={() => onSubmit()}
                             />
                         </View>

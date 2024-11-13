@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { Text, View, ScrollView, Pressable, TouchableOpacity, ImageBackground, Image, ImageSourcePropType } from 'react-native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/core'
 import { LinearGradient } from 'expo-linear-gradient'
 import { ProfileStackParams } from '../NavigationStacks/ProfileNavStack'
 import { profile } from '../../assets/styles/profileSheet'
-import { user } from '../../models/sqlite/models'
 
 import { testUser } from '../../models/testUser'
 

@@ -238,7 +238,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
     <View>
         <View style={{ ...auth.head, ...{ height: "15%"}}}>
             <View style={{flex: 0.9, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={auth.title}>Create an account</Text>
+                <Text testID="registerPageTitle" style={auth.title}>Create an account</Text>
             </View>
         </View>
 
@@ -251,6 +251,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             
             <View style={auth.inputWrapper}>
                 <TextInput 
+                    testID='usernameField'
                     style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
@@ -271,6 +272,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             
             <View style={auth.inputWrapper}>
                 <TextInput 
+                    testID='emailField'
                     style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
@@ -295,6 +297,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             
             <View style={auth.inputWrapper}>
                 <TextInput 
+                    testID='passwordField'
                     style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
@@ -316,6 +319,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
 
             <View style={auth.inputWrapper}>
                 <TextInput 
+                    testID='repeatPasswordField'
                     style={auth.input}
                     contentStyle={{ paddingLeft: 15 }}
                     underlineStyle={{ height: 0 }}
@@ -333,6 +337,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             <View style={{ ...auth.checkboxBtnWrapper, ...{ marginTop: 10 } }}>
                 <Pressable style={auth.checkboxBtn} onPress={() => setAgreeTerms(!agreeTerms)}>
                     <Checkbox 
+                        testID='termsCheckbox'
                         onPress={() => setAgreeTerms(!agreeTerms)}
                         status={ agreeTerms ? "checked" : "unchecked"}
                         color={'rgba(50, 200, 205, 1)'}
@@ -347,6 +352,7 @@ const Register: React.FC<Props> = ({ setContact, navigation, navigateToEmailVeri
             <View style={auth.checkboxBtnWrapper}>
                 <Pressable style={auth.checkboxBtn} onPress={() => setAgreeEULA(!agreeEULA)}>
                     <Checkbox 
+                        testID='EULACheckbox'
                         onPress={() => setAgreeEULA(!agreeEULA)}
                         status={ agreeEULA ? "checked" : "unchecked"}
                         color={'rgba(50, 200, 205, 1)'}

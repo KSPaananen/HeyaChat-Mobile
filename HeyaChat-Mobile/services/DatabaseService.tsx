@@ -1,4 +1,4 @@
-import * as SQLite from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite'
 
 export class localDB {
     // Create db and its tables if they don't exist

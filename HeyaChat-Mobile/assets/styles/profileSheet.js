@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 export const profile = StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: 'rgb(245, 245, 245)'
     },
   
     // Head
