@@ -1,5 +1,5 @@
 # HeyaChat
-A little mobile app built with react native expo
+Mobile application for for Heya!Chat
 
 ## Running the project
 ### Android emulator
