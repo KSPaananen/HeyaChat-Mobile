@@ -2,13 +2,11 @@ import { View, StyleSheet } from 'react-native'
 import { MessengerTopTabStackParams } from '../../NavigationStacks/MessengerTopTabNavStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-
 import UserCard from './UserCard'
 
 type Props = NativeStackScreenProps<MessengerTopTabStackParams, "MetUsers" | "Chat">
 
 const UserPage: React.FC<Props> = ({ navigation }) => {
-
   const tempUser = {
     userId: 0,
     username: 'tempUser',
