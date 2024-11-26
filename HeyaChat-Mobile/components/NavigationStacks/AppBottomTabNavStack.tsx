@@ -22,7 +22,7 @@ const AppBottomTabNavStack = () => {
       }}
       >
         <Tab.Screen name="Home" component={HomeNavStack} options={{ 
-          tabBarLabel: 'Messenger',
+          tabBarLabel: 'Home',
           tabBarIcon: () => (
             <Octicons name="home" size={20} color="rgb(63, 118, 198)" />
           ),
@@ -37,7 +37,7 @@ const AppBottomTabNavStack = () => {
           }}
         />
         <Tab.Screen name="Profile" component={ProfileNavStack} options={{ 
-          tabBarLabel: 'Messenger',
+          tabBarLabel: 'Profile',
           tabBarIcon: () => (
             <Octicons name="person" size={20} color="rgb(63, 118, 198)" />
           ),

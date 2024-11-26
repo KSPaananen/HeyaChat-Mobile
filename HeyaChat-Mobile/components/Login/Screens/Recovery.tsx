@@ -75,8 +75,8 @@ const Recovery: React.FC<Props> = ({ setContact, setBlurredContact, setContactTy
         //    Details: ""
         // }
         let jsonBody:ContactDTO = await response.json()
-        let contact = jsonBody.Contact
-        let code = jsonBody.Details?.Code
+        let contact = jsonBody.contact
+        let code = jsonBody.details?.code
 
         if (response.status === 200) {
             // Set contact type according to code. Can be either email or phone
