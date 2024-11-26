@@ -69,7 +69,7 @@ const Stack = createStackNavigator<RootStackParams>()
 SplashScreen.preventAutoHideAsync()
 
 const App = () => {
-  const [tokenValid, setTokenValid] = useState<boolean>(false)
+  const [tokenValid, setTokenValid] = useState<boolean>(true)
 
   useEffect(() => {
     const storageService = new StorageService()

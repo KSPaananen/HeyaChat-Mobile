@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 
 type Props = {
@@ -16,7 +16,7 @@ const FriendRequests: React.FC<Props> = ({ navigation }) => {
     <View style={requests.container}>
       <Text>Friendrequests</Text>
     </View>
-  );
+  )
 }
 
 export default FriendRequests

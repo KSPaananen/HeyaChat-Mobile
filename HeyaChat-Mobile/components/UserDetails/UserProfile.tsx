@@ -4,9 +4,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { MessengerStackParams } from '../NavigationStacks/MessengerNavStack'
 import { LinearGradient } from 'expo-linear-gradient'
 import { profile } from '../../assets/styles/profileSheet'
-import { user } from '../../models/sqlite/models'
-
-import { testUser } from '../../models/testUser'
 
 type Props = NativeStackScreenProps<MessengerStackParams, "UserProfile">
 
@@ -18,7 +15,20 @@ const UserProfile: React.FC<Props> = ({ route, navigation }) => {
   const [expandedDescription, setExpandedDescription] = useState<boolean>(false)
   const [fadeHeight, setFadeHeight] = useState<number>(60)
 
-  const [user, setUser] = useState<user>(testUser)
+  const tempUser = {
+    userId: 0,
+    username: 'tempUser',
+    profile: {
+      icon: require('../../assets/icons/icon.png'),
+      banner: require('../../assets/icons/icon.png'),
+      title: "testTitle",
+      displayname: 'displayName',
+      description: 'test description'
+    },
+
+  }
+
+  const [user, setUser] = useState(tempUser)
 
   // User related variables
   const [icon, setIcon] = useState<ImageSourcePropType>(user.profile?.icon ?? require('../../assets/icons/icon.png'))
