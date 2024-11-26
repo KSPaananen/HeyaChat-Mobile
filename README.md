@@ -1,2 +1,7 @@
 # HeyaChat
-Heya!Chat is a 3DS Streetpass type application for mobile devices with snapchat like chat features
+Mobile application for for Heya!Chat
+
+## Running the project
+### Android emulator
+1. Run command `npm i` to install packages
+2. Run command `npx expo start --android` to start the project
