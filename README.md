@@ -1,5 +1,5 @@
 # HeyaChat
-Mobile application for for Heya!Chat
+Mobile application for Heya!Chat
 
 ## Running the project
 ### Android emulator
