@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { testUser } from '../../../models/testUser'
 
 import SearchCard from './SearchCard'
 import UserDetails from '../../UserDetails/UserDetails'
@@ -13,6 +12,10 @@ type Props = {
 const Search: React.FC<Props> = ({ param, navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
+
+  const tempUser = {
+    userId: 0
+  }
   
   function OpenUserDetails(userId: number) {
     setUserId(userId)
@@ -28,7 +31,7 @@ const Search: React.FC<Props> = ({ param, navigation }) => {
       </View>
       <ScrollView>
         <SearchCard 
-          userId={testUser.userId}
+          userId={tempUser.userId}
           onPress={(userId) => {
             OpenUserDetails(userId)
           }}

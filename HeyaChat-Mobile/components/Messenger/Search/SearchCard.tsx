@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native'
-import { user } from '../../../models/sqlite/models'
-
-import { testUser } from '../../../models/testUser'
 
 interface Props {
   userId: number
@@ -10,16 +7,27 @@ interface Props {
 }
 
 const SearchCard: React.FC<Props> = ({ userId, onPress }) => {
-    // Placeholder user object
-    let user: user = testUser
+  // Placeholder user object
+  const tempUser = {
+    userId: 0,
+    username: 'tempUser',
+    profile: {
+      icon: require('../../../assets/icons/icon.png'),
+      banner: require('../../../assets/icons/icon.png'),
+      title: "testTitle",
+      displayname: 'displayName',
+      description: 'test description'
+    },
+
+  }
 
   return (
-    <TouchableHighlight onPress={() => onPress(user.userId)}>
+    <TouchableHighlight onPress={() => onPress(tempUser.userId)}>
       <View style={card.card}>
         <View style={card.cardItem}>
           <View style={card.itemLeft}>
-            <Text style={card.username}>{user.username}</Text>
-            <Text style={card.title}>{user.profile?.title}</Text>
+            <Text style={card.username}>{tempUser.username}</Text>
+            <Text style={card.title}>{tempUser.profile?.title}</Text>
           </View>
           <View style={card.itemRight}>
             <Image style={card.icon} source={require('../../../assets/icons/favicon.png')} />

@@ -6,9 +6,6 @@ import { SelectList } from 'react-native-dropdown-select-list'
 import { TextInput } from "react-native-paper"
 import { settings } from '../../../assets/styles/stylesheet'
 
-import { testUser } from '../../../models/testUser'
-
-
 type Props = NativeStackScreenProps<SettingsStackParams, "ProfileSettings">
 
 const ProfileSettingsPage: React.FC<Props> = ({ navigation }) => {
@@ -16,15 +13,30 @@ const ProfileSettingsPage: React.FC<Props> = ({ navigation }) => {
   const [profileButtons, setProfileButtons] = useState<boolean>(false)
   const [mfaStatus, setMfaStatus] = useState<boolean>(false)
 
+  const tempUser = {
+    userId: 0,
+    username: 'tempUser',
+    email: 'test.email@example.com',
+    phone: '+1234567890',
+    profile: {
+      icon: require('../../../assets/icons/icon.png'),
+      banner: require('../../../assets/icons/icon.png'),
+      title: "testTitle",
+      displayname: 'displayName',
+      description: 'test description'
+    },
+
+  }
+
   // New values
-  const [displayname, setDisplayname] = useState<string>(testUser.username)
-  const [description, setDescription] = useState<string>(testUser.profile?.description ?? "")
-  const [title, setTitle] = useState<string>(testUser.profile?.title ?? "")
-  const [username, setUsername] = useState<string>(testUser.username)
-  const [email, setEmail] = useState<string>(testUser.email)
-  const [phone, setPhone] = useState<string>(testUser.phone)
-  const [icon, setIcon] = useState<ImageSourcePropType>(testUser.profile?.icon ?? require('../../../assets/icons/icon.png'))
-  const [banner, setBanner] = useState<ImageSourcePropType>(testUser.profile?.banner ?? require('../../../assets/icons/icon.png'))
+  const [displayname, setDisplayname] = useState<string>(tempUser.username)
+  const [description, setDescription] = useState<string>(tempUser.profile?.description ?? "")
+  const [title, setTitle] = useState<string>(tempUser.profile?.title ?? "")
+  const [username, setUsername] = useState<string>(tempUser.username)
+  const [email, setEmail] = useState<string>(tempUser.email)
+  const [phone, setPhone] = useState<string>(tempUser.phone)
+  const [icon, setIcon] = useState<ImageSourcePropType>(tempUser.profile?.icon ?? require('../../../assets/icons/icon.png'))
+  const [banner, setBanner] = useState<ImageSourcePropType>(tempUser.profile?.banner ?? require('../../../assets/icons/icon.png'))
 
   // Old values
   const [oldDisplayname, setOldDisplayname] = useState<string>(displayname)

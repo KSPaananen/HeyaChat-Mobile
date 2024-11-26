@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { testUser } from '../../../models/testUser'
 
 import SummaryCard from './SummaryCard'
 import UserDetails from '../../UserDetails/UserDetails'
@@ -13,9 +12,22 @@ const Summary: React.FC<Props> = ({ navigation }) => {
   const [layer, setLayer] = useState(false)
   const [userId, setUserId] = useState(0)
 
+  const tempUser = {
+    userId: 0,
+    username: 'tempUser',
+    profile: {
+      icon: require('../../../assets/icons/icon.png'),
+      banner: require('../../../assets/icons/icon.png'),
+      title: "testTitle",
+      displayname: 'displayName',
+      description: 'test description'
+    },
+
+  }
+
   const usersList = []
-  usersList.push(testUser)
-  usersList.push(testUser)
+  usersList.push(tempUser)
+  usersList.push(tempUser)
 
   const titles: string[] = [
     "Woah! You've met a lot of people today!", 
@@ -41,7 +53,7 @@ const Summary: React.FC<Props> = ({ navigation }) => {
               key={index}
               user={user}
               onPress={(userId) => {
-                OpenUserDetails(user.userID)
+                OpenUserDetails(user.userId)
               }}
             />
           ))}
